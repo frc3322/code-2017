@@ -1,0 +1,31 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.0.7"
+}
+
+frc {
+    team = "3322"
+    robotClass = "org.usfirst.frc.team3322.Robot"
+}
+
+dependencies {
+    compile wpilib()
+    compile talonSrx()
+    compile files('lib/navx_frc.jar')
+}
+
+def robotManifest = {
+  attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+  attributes 'Robot-Class': frc.robotClass
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
+}
