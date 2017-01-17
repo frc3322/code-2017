@@ -14,7 +14,7 @@ public class OI {
 			tech = new Joystick(2);
 
 	// Assign button variables to reasonable names
-	int ABUTTON = 1,
+	public static final int ABUTTON = 1,
 		BBUTTON = 2,
 		XBUTTON = 3,
 		YBUTTON = 4,
@@ -22,10 +22,10 @@ public class OI {
 		RBUMPER = 6,
 		BACK = 7,
 		START = 8,
-		LSTICKP = 9,
-		RSTICKP = 10,
-		DPADVERT = 7,
-		DPADSIDE = 6;
+		LSTICK = 9,
+		RSTICK = 10,
+		DPADVERT = 7, // not reliable
+		DPADHORIZ = 6;
 
 	// TODO: Implement button state methods
 	// Returns true when button is initially pressed
