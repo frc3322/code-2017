@@ -8,7 +8,7 @@ package org.usfirst.frc.team3322;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class OI {
+public class Xbox {
 	// Define joystick
 	Joystick driver = new Joystick(1),
 			tech = new Joystick(2);
