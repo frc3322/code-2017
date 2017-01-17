@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3322;
 
+import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -15,8 +16,9 @@ public class Robot extends IterativeRobot {
     private Joystick driver, tech;
     private AHRS navx;
     Drivetrain drivetrain;
+    //GearCollection gearCollection;
     Compressor compressor;
-
+    CANTalon w1,w2; //CANTalons for winch
     @Override
     public void robotInit() {
         //init our compressor as PCM number 1
@@ -27,7 +29,11 @@ public class Robot extends IterativeRobot {
         //NavX gyroscope init
         navx = new AHRS(SerialPort.Port.kUSB);
         drivetrain = new Drivetrain();
+        //gearCollection = new GearCollection();
+        //gearCollection.init();
         drivetrain.init(true,false);
+        w1 = new CANTalon(40);
+        w2 = new CANTalon(41);
     }
     @Override
     public void disabledPeriodic() {}
@@ -36,7 +42,17 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {}
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        drivetrain.drive(driver.getX(),driver.getY());
+        if(driver.getRawButton(XBox.ABUTTON)){
+            w1.set(1);
+            w2.set(1);
+        }
+        else{
+            w1.set(0);
+            w2.set(0);
+        }
+    }
 
     @Override
     public void disabledInit() {}

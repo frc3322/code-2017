@@ -15,11 +15,11 @@ public class Drivetrain {
     Drivetrain(){
     }
     void init(boolean invert_left, boolean invert_right) {
-        drive_left_1 = new CANTalon(1);
-        drive_left_2 = new CANTalon(2);
+        drive_left_1 = new CANTalon(20);
+        drive_left_2 = new CANTalon(21);
         drive_left_3 = new CANTalon(3);
-        drive_right_1 = new CANTalon(4);
-        drive_right_2 = new CANTalon(5);
+        drive_right_1 = new CANTalon(22);
+        drive_right_2 = new CANTalon(23);
         drive_right_3 = new CANTalon(6);
 
         //invert our motors according to our inversion variables
