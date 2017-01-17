@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c0b5a05-2aa8-4f8f-99c5-98331867689e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/code-2017.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/code-2017_main.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/code-2017_test.iml" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/GearCollection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code-2017.ipr" afterPath="$PROJECT_DIR$/code-2017.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code-2017.iws" afterPath="$PROJECT_DIR$/code-2017.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/Robot.java" afterPath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/Robot.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -1090,7 +1085,14 @@
       <option name="project" value="LOCAL" />
       <updated>1484410904067</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Remove unnecessary calls to super">
+      <created>1484684947100</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1484684947100</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1181,7 +1183,8 @@
     <MESSAGE value="Organized code a little better. CANTalons for drivetrain are now local vars, as is the compressor." />
     <MESSAGE value="Second git fix?" />
     <MESSAGE value="Removed necesary gradle stuff from gitignore, and added it as a versioned file.  Made code more object oriented by making a Drivetrain object.  Compressor now should start closed loop funtions in teleop init." />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Remove unnecessary calls to super" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove unnecessary calls to super" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
