@@ -66,6 +66,12 @@
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
   </component>
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value />
+    </option>
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (1)" />
+  </component>
   <component name="ProjectDictionaryState">
     <dictionary name="sneki">
       <words>
@@ -76,10 +82,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017_main.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017_main.iml" group="code-2017" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017_main.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017_main.iml" group="code-2017" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017_test.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017_test.iml" group="code-2017" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/code-2017_test.iml" filepath="$PROJECT_DIR$/.idea/modules/code-2017_test.iml" group="code-2017" />
     </modules>
   </component>

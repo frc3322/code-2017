@@ -19,7 +19,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-        super.robotInit();
         //init our compressor as PCM number 1
         compressor = new Compressor(1);
         //init the driver joystick as number 0, and tech as number 1
@@ -31,33 +30,22 @@ public class Robot extends IterativeRobot {
         drivetrain.init(true,false);
     }
     @Override
-    public void disabledPeriodic() {
-        super.disabledPeriodic();
-    }
+    public void disabledPeriodic() {}
 
     @Override
-    public void autonomousPeriodic() {
-        super.autonomousPeriodic();
-    }
+    public void autonomousPeriodic() {}
 
     @Override
-    public void teleopPeriodic() {
-        super.teleopPeriodic();
-    }
+    public void teleopPeriodic() {}
 
     @Override
-    public void disabledInit() {
-        super.disabledInit();
-    }
+    public void disabledInit() {}
 
     @Override
-    public void autonomousInit() {
-        super.autonomousInit();
-    }
+    public void autonomousInit() {}
 
     @Override
     public void teleopInit() {
-        super.teleopInit();
         compressor.start();
     }
 }
