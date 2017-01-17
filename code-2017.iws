@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0c0b5a05-2aa8-4f8f-99c5-98331867689e" name="Default" comment="Update to match standards">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/OI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code-2017.ipr" afterPath="$PROJECT_DIR$/code-2017.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code-2017.iws" afterPath="$PROJECT_DIR$/code-2017.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/Robot.java" afterPath="$PROJECT_DIR$/src/main/java/org/usfirst/frc/team3322/Robot.java" />
     </list>
@@ -947,7 +946,14 @@
       <option name="project" value="LOCAL" />
       <updated>1484692682970</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Don't spell check code">
+      <created>1484692799793</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1484692799793</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1042,7 +1048,8 @@
     <MESSAGE value="Remove unnecessary calls to super" />
     <MESSAGE value="Add GearCollection class" />
     <MESSAGE value="Update to match standards" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update to match standards" />
+    <MESSAGE value="Don't spell check code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Don't spell check code" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
