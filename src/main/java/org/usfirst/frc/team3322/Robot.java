@@ -37,7 +37,9 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {}
 
     @Override
-    public void autonomousInit() {}
+    public void autonomousInit() {
+	    // foo
+    }
 
     @Override
     public void teleopInit() {
