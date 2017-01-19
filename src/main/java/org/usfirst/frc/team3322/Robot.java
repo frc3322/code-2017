@@ -39,6 +39,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
 	    // foo
+        // moar foo
     }
 
     @Override
