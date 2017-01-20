@@ -17,9 +17,12 @@ public class Climber {
     }
 
     public void climb(boolean climbStatus) {
-        if (joystick.getRawButton(Xbox.LBUMPER)) {
+        if (climbStatus) {
             Climb_talon_1.set(climbRate);
             Climb_talon_2.set(climbRate);
+        } else {
+            Climb_talon_1.set(0);
+            Climb_talon_2.set(0);
         }
     }
 }

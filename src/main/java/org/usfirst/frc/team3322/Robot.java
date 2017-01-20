@@ -40,6 +40,7 @@ public class Robot extends IterativeRobot {
 	    if(joystick.getRawButton(Xbox.LBUMPER)) {
             climber.climb(true);
         }
+        else climber.climb(false);
     }
     @Override
     public void disabledInit() {}
