@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Xbox extends Robot {
 	// Define joystick
 	Joystick driver = new Joystick(1),
-             tech = new Joystick(2);
+				tech = new Joystick(2);
 
 	// Assign button variables to reasonable names
 	public static final int ABUTTON = 1,
