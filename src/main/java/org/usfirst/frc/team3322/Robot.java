@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * Created by snekiam on 1/10/2017.
- * Main Robot class for 3322's 2017 SteamWorks robot
+ * Main Robot class for team 3322's 2017 SteamWorks robot
  */
 public class Robot extends IterativeRobot {
     // Define our global variables
