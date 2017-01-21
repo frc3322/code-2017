@@ -20,13 +20,14 @@ public class Robot extends IterativeRobot {
 
 	@Override
     public void robotInit() {
+	    // Initialize required object classes
+        drivetrain = new Drivetrain(true, false);
+        climber = new Climber();
+
         // Init our compressor as PCM number 1
         compressor = new Compressor(1);
-        // NavX gyroscope init
+        // Init NavX gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
-        drivetrain = new Drivetrain(3000.0, 4500.0);
-        drivetrain.init(true,false);
-        climber = new Climber();
         joystick = new Joystick(1);
     }
     @Override
