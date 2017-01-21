@@ -12,11 +12,11 @@ public class Gear {
 	}
 
 	public void extendHolder() {
-        gearSolenoid2.set(DoubleSolenoid.Value.kForward);
+        gearSolenoid1.set(DoubleSolenoid.Value.kForward);
         gearSolenoid2.set(DoubleSolenoid.Value.kForward);
     }
     public void retractHolder(){
-        gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
+        gearSolenoid1.set(DoubleSolenoid.Value.kReverse);
         gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
 	}
 }
