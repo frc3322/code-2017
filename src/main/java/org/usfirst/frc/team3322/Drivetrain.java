@@ -12,9 +12,8 @@ public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1,drive_left_2,drive_left_3,drive_right_1,drive_right_2,drive_right_3;
-    Drivetrain(){
-    }
-    void init(boolean invert_left, boolean invert_right) {
+
+    public Drivetrain(boolean invert_left, boolean invert_right) {
         drive_left_1 = new CANTalon(20);
         drive_left_2 = new CANTalon(21);
         drive_left_3 = new CANTalon(3);
@@ -35,7 +34,8 @@ public class Drivetrain {
         shifter = new DoubleSolenoid(0,1);
 
     }
-    void drive(double x, double y){
-        drive.arcadeDrive(x,y);
+
+    void drive(double x, double y) {
+        drive.arcadeDrive(x, y);
     }
 }

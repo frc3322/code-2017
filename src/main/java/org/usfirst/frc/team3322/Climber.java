@@ -11,7 +11,7 @@ public class Climber {
     Joystick joystick;
     double climbRate = 1.0;
 
-    void init() {
+    public Climber() {
         Climb_talon_1 = new CANTalon(77);
         Climb_talon_2 = new CANTalon(78);
     }
