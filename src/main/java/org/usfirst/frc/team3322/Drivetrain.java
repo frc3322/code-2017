@@ -59,7 +59,8 @@ public class Drivetrain {
         //shifter for our gearboxes
         shifter = new DoubleSolenoid(1,3);
 
-        leftEnc = new Encoder(0, 1); rightEnc = new Encoder(2, 3);
+        leftEnc = new Encoder(0, 1); 
+        rightEnc = new Encoder(2, 3);
     }
 
     public void getSample() {
