@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
         compressor = new Compressor(1);
         // NavX gyroscope init
         navx = new AHRS(SerialPort.Port.kUSB);
-        drivetrain = new Drivetrain();
+        drivetrain = new Drivetrain(3000.0, 4500.0);
         drivetrain.init(true,false);
         climber = new Climber();
         joystick = new Joystick(1);
