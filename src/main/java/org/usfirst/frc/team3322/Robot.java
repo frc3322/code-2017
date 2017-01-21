@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
 	@Override
     public void robotInit() {
 	    // Initialize required object classes
-        drivetrain = new Drivetrain(true, false);
+        drivetrain = new Drivetrain(3000.0, 4000.0,true, false);
         climber = new Climber();
 
         // Init our compressor as PCM number 1
