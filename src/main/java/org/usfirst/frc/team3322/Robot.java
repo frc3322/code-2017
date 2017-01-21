@@ -16,6 +16,7 @@ public class Robot extends IterativeRobot {
     Compressor compressor;
     Climber climber;
     Joystick joystick;
+    Gear gear;
 	private AHRS navx;
 
 	@Override
@@ -25,10 +26,13 @@ public class Robot extends IterativeRobot {
         climber = new Climber();
 
         // Init our compressor as PCM number 1
-        compressor = new Compressor(1);
+        compressor = new Compressor(0);
         // Init NavX gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
         joystick = new Joystick(1);
+        gear = new Gear();
+        //TODO what RPM should these be?
+        //drivetrain = new Drivetrain(1000,2500,true, false);
     }
     @Override
     public void disabledPeriodic() {}
@@ -42,6 +46,12 @@ public class Robot extends IterativeRobot {
             climber.climb(true);
         }
         else climber.climb(false);
+	    if(joystick.getRawButton(Xbox.ABUTTON)){
+	        gear.extendHolder();
+        }
+        else{
+	        gear.retractHolder();
+        }
     }
     @Override
     public void disabledInit() {}

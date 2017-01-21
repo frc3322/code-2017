@@ -57,7 +57,7 @@ public class Drivetrain {
         //initialize our RobotDrive object - this could (should) be replaced with something like our 2016 gyro driving code
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
         //shifter for our gearboxes
-        shifter = new DoubleSolenoid(0,1);
+        shifter = new DoubleSolenoid(1,3);
 
         leftEnc = new Encoder(0, 1); rightEnc = new Encoder(2, 3);
     }

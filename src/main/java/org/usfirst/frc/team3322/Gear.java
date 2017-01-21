@@ -3,23 +3,20 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Gear {
-	DoubleSolenoid gearSolenoid; // Main solenoid to control linear actuator
-	DoubleSolenoid pitchSolenoid; // Controls pitch of collection assembly
+	DoubleSolenoid gearSolenoid1; // Main solenoids to control linear actuator
+	DoubleSolenoid gearSolenoid2;
 
 	public Gear() {
-		gearSolenoid = new DoubleSolenoid(0, 1);
-		pitchSolenoid = new DoubleSolenoid(2, 3);
-	}
-
-	void toggleSolenoid(DoubleSolenoid solenoid) {
-		if (solenoid.get() == DoubleSolenoid.Value.kReverse) {
-			solenoid.set(DoubleSolenoid.Value.kForward);
-		} else {
-			solenoid.set(DoubleSolenoid.Value.kReverse);
-		}
+        gearSolenoid1 = new DoubleSolenoid(0, 2);
+        gearSolenoid2 = new DoubleSolenoid(4, 6);
 	}
 
 	public void extendHolder() {
-	    toggleSolenoid(gearSolenoid);
+        gearSolenoid2.set(DoubleSolenoid.Value.kForward);
+        gearSolenoid2.set(DoubleSolenoid.Value.kForward);
     }
+    public void retractHolder(){
+        gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
+        gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
+	}
 }
