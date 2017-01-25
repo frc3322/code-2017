@@ -23,14 +23,13 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	    // Initialize required object classes
         drivetrain = new Drivetrain(3000.0, 4000.0,true, false);
-        climber = new Climber();
-
         // Init our compressor as PCM number 1
         compressor = new Compressor(0);
-        // Init NavX gyroscope
-        navx = new AHRS(SerialPort.Port.kUSB);
+        climber = new Climber();
         joystick = new Joystick(1);
         gear = new Gear();
+        // Init NavX gyroscope
+        navx = new AHRS(SerialPort.Port.kUSB);
         //TODO what RPM should these be?
         //drivetrain = new Drivetrain(1000,2500,true, false);
     }
@@ -42,14 +41,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-	    if(joystick.getRawButton(Xbox.LBUMPER)) {
+	    if (joystick.getRawButton(Xbox.LBUMPER)) {
             climber.climb(true);
+        } else {
+	        climber.climb(false);
         }
-        else climber.climb(false);
-	    if(joystick.getRawButton(Xbox.ABUTTON)){
+	    if (joystick.getRawButton(Xbox.ABUTTON)) {
 	        gear.extendHolder();
-        }
-        else{
+        } else {
 	        gear.retractHolder();
         }
     }
