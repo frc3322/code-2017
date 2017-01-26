@@ -10,8 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Xbox extends Robot {
 	// Define joystick
-	Joystick driver = new Joystick(1),
-				tech = new Joystick(2);
+	Joystick xbox = new Joystick(1);
 
 	// Assign button variables to reasonable names
 	public static final int ABUTTON = 1,
@@ -27,14 +26,19 @@ public class Xbox extends Robot {
 		DPADVERT = 7, // not reliable
 		DPADHORIZ = 6;
 
-	// TODO: Implement button state methods
-	// Returns true when button is initially pressed
-	public boolean getButton() {
-		return false;
+    boolean buttonDown = false;
+
+    // Returns true if button is held down during call
+    public boolean getButton(int button) {
+		 return xbox.getRawButton(button);
 	}
 
-	// Returns true if button is held down during call
-	public boolean getButtonDown() {
-		return false;
+    // Returns true when button is initially pressed
+    public boolean getButtonDown(int button) {
+        if (!buttonDown && xbox.getRawButton(button)) {
+            buttonDown = true;
+            return true;
+        } else
+	    return false;
 	}
 }

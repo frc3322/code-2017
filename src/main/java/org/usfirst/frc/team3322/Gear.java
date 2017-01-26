@@ -3,7 +3,8 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Gear {
-	DoubleSolenoid gearSolenoid1; // Main solenoids to control linear actuator
+    // Main solenoids to control linear actuator
+	DoubleSolenoid gearSolenoid1;
 	DoubleSolenoid gearSolenoid2;
 
 	public Gear() {

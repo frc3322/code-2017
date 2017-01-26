@@ -17,7 +17,8 @@ public class Robot extends IterativeRobot {
     Climber climber;
     Joystick joystick;
     Gear gear;
-	private AHRS navx;
+	AHRS navx;
+    Auton auton;
 
 	@Override
     public void robotInit() {
@@ -38,7 +39,8 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {}
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
     public void teleopPeriodic() {
@@ -46,7 +48,7 @@ public class Robot extends IterativeRobot {
             climber.climb(true);
         }
         else climber.climb(false);
-	    if(joystick.getRawButton(Xbox.ABUTTON)){
+	    if(joystick.getRawButton(Xbox.ABUTTON)) {
 	        gear.extendHolder();
         }
         else{
@@ -57,7 +59,9 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {}
 
     @Override
-    public void autonomousInit() {}
+    public void autonomousInit() {
+
+    }
 
     @Override
     public void teleopInit() {
