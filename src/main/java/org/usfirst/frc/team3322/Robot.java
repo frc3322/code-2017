@@ -17,29 +17,29 @@ public class Robot extends IterativeRobot {
     Gear gear;
 	AHRS navx;
     Auton auton;
-    Ultrasonic sonar;
+    AnalogInput sonar;
 
 	@Override
     public void robotInit() {
 	    // Initialize required object classes
         drivetrain = new Drivetrain(3000.0, 4000.0,true, false);
         climber = new Climber();
-        sonar = new Ultrasonic(6, 6);
         // Init our compressor as PCM number 1
         compressor = new Compressor(0);
         // Init NavX gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
         joystick = new Joystick(1);
         gear = new Gear();
+        sonar = new AnalogInput(0);
         //TODO what RPM should these be?
         //drivetrain = new Drivetrain(1000,2500,true, false);
     }
+
     @Override
     public void disabledInit() {}
 
     @Override
     public void autonomousInit() {
-	    SmartDashboard.putString("test", "testvalue");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-	    SmartDashboard.putNumber("Sonar distance", sonar.getRangeInches());
+	    SmartDashboard.putNumber("Sonar distance", sonar.getValue());
     }
 
     @Override
