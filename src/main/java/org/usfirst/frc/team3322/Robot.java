@@ -1,10 +1,8 @@
 package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Created by snekiam on 1/10/2017.
@@ -19,13 +17,14 @@ public class Robot extends IterativeRobot {
     Gear gear;
 	AHRS navx;
     Auton auton;
+    Ultrasonic sonar;
 
 	@Override
     public void robotInit() {
 	    // Initialize required object classes
         drivetrain = new Drivetrain(3000.0, 4000.0,true, false);
         climber = new Climber();
-
+        sonar = new Ultrasonic(6, 6);
         // Init our compressor as PCM number 1
         compressor = new Compressor(0);
         // Init NavX gyroscope
@@ -36,10 +35,24 @@ public class Robot extends IterativeRobot {
         //drivetrain = new Drivetrain(1000,2500,true, false);
     }
     @Override
+    public void disabledInit() {}
+
+    @Override
+    public void autonomousInit() {
+	    SmartDashboard.putString("test", "testvalue");
+    }
+
+    @Override
+    public void teleopInit() {
+        compressor.start();
+    }
+
+    @Override
     public void disabledPeriodic() {}
 
     @Override
     public void autonomousPeriodic() {
+	    SmartDashboard.putNumber("Sonar distance", sonar.getRangeInches());
     }
 
     @Override
@@ -54,17 +67,5 @@ public class Robot extends IterativeRobot {
         else{
 	        gear.retractHolder();
         }
-    }
-    @Override
-    public void disabledInit() {}
-
-    @Override
-    public void autonomousInit() {
-
-    }
-
-    @Override
-    public void teleopInit() {
-        compressor.start();
     }
 }
