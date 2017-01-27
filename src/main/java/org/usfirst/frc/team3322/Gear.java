@@ -3,7 +3,7 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Gear {
-    // Main solenoids to control linear actuator
+    // Main solenoids to control linear actuators
 	DoubleSolenoid gearSolenoid1;
 	DoubleSolenoid gearSolenoid2;
 
@@ -16,7 +16,7 @@ public class Gear {
         gearSolenoid1.set(DoubleSolenoid.Value.kForward);
         gearSolenoid2.set(DoubleSolenoid.Value.kForward);
     }
-    public void retractHolder(){
+    public void retractHolder() {
         gearSolenoid1.set(DoubleSolenoid.Value.kReverse);
         gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
 	}
