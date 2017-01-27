@@ -1,9 +1,12 @@
 package org.usfirst.frc.team3322;
 
+import java.lang.Math;
 import com.ctre.CANTalon;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * Created by sneki on 1/15/2017.
@@ -15,6 +18,7 @@ public class Drivetrain {
     public static final boolean SHIFT_LOW  = false;
     private static final int NUM_SAMPLES = 20;
     private static final int SHIFT_THRESHOLD = 3;
+    public static AHRS navx;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
@@ -61,6 +65,8 @@ public class Drivetrain {
 
         leftEnc = new Encoder(0, 1); 
         rightEnc = new Encoder(2, 3);
+
+        navx = new AHRS(SerialPort.Port.kUSB);
     }
 
     public void getSample() {
@@ -72,6 +78,20 @@ public class Drivetrain {
 
     void drive(double x, double y){
         drive.arcadeDrive(x,y);
+    }
+    void driveAngle(double targetAngle, double speed) { // in degrees
+        double pTerm = .2; // a constant that controls the sensitivity of the angle follower - has not been tuned
+        double angle = navx.getAngle() % 360;
+        double turn = (targetAngle-angle)*pTerm;
+        // if robot corrects in wrong direction, either switch targetAngle with angle or make k negative
+        drive.arcadeDrive(speed, turn);
+    }
+    void driveAngleDistance(double targetAngle, double speed, double distance) { //distance in meters, angle in degrees
+        double distToEncoder = 7.5 * .3 * Math.PI; //7.5 for encoder gearing, .3 needs to be adjusted - should equal diameter of wheel in meters, pi to compute circumference
+        double initEncoderValue = leftEnc.getDistance();
+        while(distance*distToEncoder + initEncoderValue >= drive_left_1.getEncPosition()) {
+            driveAngle(targetAngle, speed);
+        }
     }
 
     public boolean isHigh() {
