@@ -93,6 +93,7 @@ public class Climber {
         }
 */
     }
+
     private void iterator() {
         current[iterator] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent())/2;
         if (iterator < 5){
