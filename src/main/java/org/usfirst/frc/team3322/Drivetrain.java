@@ -82,7 +82,7 @@ public class Drivetrain {
     void driveAngle(double targetAngle, double speed) { // in degrees
         double pTerm = .2; // a constant that controls the sensitivity of the angle follower - has not been tuned
         double angle = navx.getAngle() % 360;
-        double turn = (targetAngle-angle)*pTerm;
+        double turn = (targetAngle - angle) * pTerm;
         // if robot corrects in wrong direction, either switch targetAngle with angle or make k negative
         drive.arcadeDrive(speed, turn);
     }
