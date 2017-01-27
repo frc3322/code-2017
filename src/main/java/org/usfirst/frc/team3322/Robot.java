@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Created by snekiam on 1/10/2017.
  * Main Robot class for team 3322's 2017 SteamWorks robot
  */
 public class Robot extends IterativeRobot {
@@ -13,31 +12,25 @@ public class Robot extends IterativeRobot {
     Drivetrain drivetrain;
     Compressor compressor;
     Climber climber;
-    Joystick joystick;
+    OI xbox;
     Gear gear;
-	AHRS navx;
+    AHRS navx;
     Auton auton;
     AnalogInput sonar;
     DoubleSolenoid doubleSolenoid1;
     DoubleSolenoid doubleSolenoid2;
     DigitalInput ir;
-	@Override
+
+    @Override
     public void robotInit() {
-	    // Initialize required object classes
-        drivetrain = new Drivetrain(3000.0, 4000.0,true, false);
+        // Initialize required object classes
+        drivetrain = new Drivetrain(3000.0, 4000.0,true, false); // TODO what RPM should these be?
         climber = new Climber();
-        // Init our compressor as PCM number 1
         compressor = new Compressor(0);
-        //Init navx gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
-        joystick = new Joystick(1); //port 1 of computer
+        xbox = new OI(1); //port 1 of computer
         gear = new Gear();
         sonar = new AnalogInput(0); //put it in analog
-        //TODO what RPM should these be?
-        //drivetrain = new Drivetrain(1000,2500,true, false)
-        doubleSolenoid1 = new DoubleSolenoid();
-        doubleSolenoid2 = new DoubleSolenoid();
-        //both solenoids are working together
         ir = new DigitalInput(1);
     }
 
@@ -66,15 +59,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-	    if(joystick.getRawButton(Xbox.LBUMPER)) {
-            climber.climb(true);
-        }
-        else climber.climb(false);
-	    if(joystick.getRawButton(Xbox.ABUTTON)) {
+        climber.climb(xbox.getButtonDown(OI.LBUMPER));
+
+	    if (xbox.getButton(OI.ABUTTON)) {
 	        gear.extendHolder();
-        }
-        else{
+	    } else {
 	        gear.retractHolder();
-        }
+	    }
     }
 }

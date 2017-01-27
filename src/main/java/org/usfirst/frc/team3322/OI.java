@@ -1,18 +1,19 @@
 package org.usfirst.frc.team3322;
 
-/**
- * This class can be used to allocate controller buttons to methods. Hopefully we can use this to unify us all!
- *
- *
- */
-
 import edu.wpi.first.wpilibj.Joystick;
 
-public class Xbox extends Robot {
-	// Define joystick
-	Joystick xbox = new Joystick(1);
+/*
+  This class can be used to allocate controller buttons to methods.
+ */
+public class OI extends Robot {
 
-	// Assign button variables to reasonable names
+    Joystick xbox;
+
+    public OI(int port) {
+        xbox = new Joystick(port);
+    }
+
+	// Assign button values to variables
 	public static final int ABUTTON = 1,
 		BBUTTON = 2,
 		XBUTTON = 3,
@@ -28,12 +29,12 @@ public class Xbox extends Robot {
 
     boolean buttonDown = false;
 
-    // Returns true if button is held down during call
+    // Returns true when button is initially tapped
     public boolean getButton(int button) {
 		 return xbox.getRawButton(button);
 	}
 
-    // Returns true when button is initially pressed
+    // Returns true while button is held
     public boolean getButtonDown(int button) {
         if (!buttonDown && xbox.getRawButton(button)) {
             buttonDown = true;
