@@ -18,7 +18,9 @@ public class Robot extends IterativeRobot {
 	AHRS navx;
     Auton auton;
     AnalogInput sonar;
-
+    DoubleSolenoid doubleSolenoid1;
+    DoubleSolenoid doubleSolenoid2;
+    DigitalInput ir;
 	@Override
     public void robotInit() {
 	    // Initialize required object classes
@@ -26,13 +28,17 @@ public class Robot extends IterativeRobot {
         climber = new Climber();
         // Init our compressor as PCM number 1
         compressor = new Compressor(0);
-        // Init NavX gyroscope
+        //Init navx gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
-        joystick = new Joystick(1);
+        joystick = new Joystick(1); //port 1 of computer
         gear = new Gear();
-        sonar = new AnalogInput(0);
+        sonar = new AnalogInput(0); //put it in analog
         //TODO what RPM should these be?
-        //drivetrain = new Drivetrain(1000,2500,true, false);
+        //drivetrain = new Drivetrain(1000,2500,true, false)
+        doubleSolenoid1 = new DoubleSolenoid();
+        doubleSolenoid2 = new DoubleSolenoid();
+        //both solenoids are working together
+        ir = new DigitalInput(1);
     }
 
     @Override
@@ -40,6 +46,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+	    compressor.start();
     }
 
     @Override
@@ -53,6 +60,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
 	    SmartDashboard.putNumber("Sonar distance", sonar.getValue());
+	    SmartDashboard.putBoolean("Ir state", ir.get());
+
     }
 
     @Override
