@@ -70,8 +70,8 @@ public class Drivetrain {
             sampleIndex = 0;
     }
 
-    void drive(double x, double y){
-        drive.arcadeDrive(x,y);
+    void drive(double power, double turnPower){
+        drive.arcadeDrive(power, turnPower);
     }
 
     public boolean isHigh() {
