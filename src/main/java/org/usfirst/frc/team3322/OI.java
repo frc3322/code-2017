@@ -2,11 +2,8 @@ package org.usfirst.frc.team3322;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-/*
-  This class can be used to allocate controller buttons to methods.
- */
-public class OI extends Robot {
 
+public class OI extends Robot {
     Joystick xbox;
 
     public OI(int port) {

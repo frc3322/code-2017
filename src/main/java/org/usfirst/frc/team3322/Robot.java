@@ -16,10 +16,6 @@ public class Robot extends IterativeRobot {
     Gear gear;
     AHRS navx;
     Auton auton;
-    AnalogInput sonar;
-    DoubleSolenoid doubleSolenoid1;
-    DoubleSolenoid doubleSolenoid2;
-    DigitalInput ir;
 
     @Override
     public void robotInit() {
@@ -28,10 +24,9 @@ public class Robot extends IterativeRobot {
         climber = new Climber();
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
-        xbox = new OI(1); //port 1 of computer
+        xbox = new OI(1);
         gear = new Gear();
-        sonar = new AnalogInput(0); //put it in analog
-        ir = new DigitalInput(1);
+        auton = new Auton();
     }
 
     @Override
@@ -52,9 +47,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-	    SmartDashboard.putNumber("Sonar distance", sonar.getValue());
-	    SmartDashboard.putBoolean("Ir state", ir.get());
+	    SmartDashboard.putNumber("Sonar distance", auton.sonar.getValue());
+	    SmartDashboard.putBoolean("Ir state", auton.ir.get());
 
+	    if (auton.sonar.getVoltage() > 0.1) {
+	        drivetrain.drive(1, 0);
+        }
     }
 
     @Override
