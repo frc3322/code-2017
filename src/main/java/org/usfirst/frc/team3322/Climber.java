@@ -17,6 +17,7 @@ public class Climber {
     double climbDistance =0;
     double totalCurrent = 0;
     double avgCurrent = 0;
+//  double altitude = 0;
     double[] current;
     int iterator = 0;
 
@@ -28,6 +29,8 @@ public class Climber {
     }
 
     public void climb (boolean climbStatus) {
+    // Climb using current spike and encoder
+/*
         climber.iterator();
         if (avgCurrent > 50) {
             currentSpike = true;
@@ -48,6 +51,47 @@ public class Climber {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
+*/
+    // Climb using only current
+/*
+        climber.iterator();
+        if (climbStatus && avgCurrent > 50 && avgCurrent < 100) {
+            climb_talon_1.set(climbRate);
+            climb_talon_2.set(climbRate);
+        } else {
+            climb_talon_1.set(0);
+            climb_talon_2.set(0);
+        }
+*/
+    // Climb using altitude and encoder
+/*
+        altitude = Robot.navx.getAltitude();
+        if (altitude > 5 & climbStartStatus) {
+            climbEncoder.reset();
+            climbStartStatus = false;
+        }
+        if (!climbStartStatus) {
+            climbDistance = climbEncoder.getDistance();
+        }
+        if (climbStatus && climbDistance < 100) {
+            climb_talon_1.set(climbRate);
+            climb_talon_2.set(climbRate);
+        } else {
+            climb_talon_1.set(0);
+            climb_talon_2.set(0);
+        }
+*/
+    // Climb using only altitude
+/*
+        altitude = Robot.navx.getAltitude();
+        if (climbStatus && altitude > 5 && altitude < 50) {
+            climb_talon_1.set(climbRate);
+            climb_talon_2.set(climbRate);
+        } else {
+            climb_talon_1.set(0);
+            climb_talon_2.set(0);
+        }
+*/
     }
     private void iterator() {
         current[iterator] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent())/2;

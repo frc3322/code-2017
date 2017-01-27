@@ -17,7 +17,7 @@ public class Robot extends IterativeRobot {
     Climber climber;
     Joystick joystick;
     Gear gear;
-	private AHRS navx;
+    static AHRS navx;
 
 	@Override
     public void robotInit() {
