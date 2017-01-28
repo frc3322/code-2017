@@ -4,6 +4,7 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 
 
 public class Drivetrain {
@@ -15,7 +16,7 @@ public class Drivetrain {
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
-    private CANTalon drive_left_1, drive_left_2, drive_left_3, drive_right_1, drive_right_2, drive_right_3;
+    private Talon drive_left_1, drive_left_2, drive_left_3, drive_right_1, drive_right_2, drive_right_3;
     private Encoder leftEnc, rightEnc;
 
     private double lowGear, highGear;
@@ -24,12 +25,12 @@ public class Drivetrain {
     int highCounter = 0, lowCounter = 0;
 
     Drivetrain(double low, double high, boolean left_inv, boolean right_inv){
-        drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
-        drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
-        drive_left_3 = new CANTalon(RobotMap.driveLeft_3);
-        drive_right_1 = new CANTalon(RobotMap.driveRight_1);
-        drive_right_2 = new CANTalon(RobotMap.driveRight_2);
-        drive_right_3 = new CANTalon(RobotMap.driveRight_3);
+        drive_left_1 = new Talon(RobotMap.driveLeft_1);
+        drive_left_2 = new Talon(RobotMap.driveLeft_2);
+        drive_left_3 = new Talon(RobotMap.driveLeft_3);
+        drive_right_1 = new Talon(RobotMap.driveRight_1);
+        drive_right_2 = new Talon(RobotMap.driveRight_2);
+        drive_right_3 = new Talon(RobotMap.driveRight_3);
 
         // Invert our motors according to our inversion variables
         drive_left_1.setInverted(left_inv);

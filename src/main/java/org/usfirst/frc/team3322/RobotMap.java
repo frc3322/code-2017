@@ -9,16 +9,16 @@ public class RobotMap {
             techPort = 1,
 
             // Talons
-            driveLeft_1 = 20,
-            driveLeft_2 = 21,
-            driveLeft_3 = 3,
+            driveLeft_1 = 0,
+            driveLeft_2 = 1,
+            driveLeft_3 = 2,
 
-            driveRight_1 = 22,
-            driveRight_2 = 23,
-            driveRight_3 = 6,
+            driveRight_1 = 3,
+            driveRight_2 = 4,
+            driveRight_3 = 5,
 
-            climbTalon_1 = 77,
-            climbTalon_2 = 78,
+            climbTalon_1 = 6,
+            climbTalon_2 = 7,
 
             // Solenoids
             shifter_1 = 1,
