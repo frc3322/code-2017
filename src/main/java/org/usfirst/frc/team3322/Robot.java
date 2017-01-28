@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
         climber = new Climber();
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
-        xbox = new OI(1);
+        xbox = new OI();
         gear = new Gear();
         auton = new Auton();
     }
@@ -43,7 +43,9 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        xbox.controllerTest();
+    }
 
     @Override
     public void autonomousPeriodic() {

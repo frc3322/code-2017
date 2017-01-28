@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3322;
 
 import edu.wpi.first.wpilibj.Joystick;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 public class OI {
@@ -55,5 +56,9 @@ public class OI {
     // Returns true while button is held
     public boolean getTechButtonDown(int button) {
         return tech.getRawButton(button);
+    }
+
+    public void controllerTest() {
+        NotImplementedException
     }
 }
