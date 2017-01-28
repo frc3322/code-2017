@@ -4,6 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+
 /**
  * Main Robot class for team 3322's 2017 SteamWorks robot
  */
@@ -16,6 +19,8 @@ public class Robot extends IterativeRobot {
     Gear gear;
     AHRS navx;
     Auton auton;
+    ArrayList<Float> xValues = new ArrayList<>(500);
+    ArrayList<Float> yValues = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
@@ -30,7 +35,12 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        navx.resetDisplacement();
+        xValues.add(0.0f);
+        yValues.add(0.0f);
+        while(!xbox.getButton(xbox.ABUTTON)){}
+    }
 
     @Override
     public void autonomousInit() {
@@ -45,6 +55,23 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         xbox.controllerTest();
+        int i = xValues.size();
+        float xCurrent = navx.getDisplacementX();
+        float yCurrent = navx.getDisplacementY();
+        if (drivetrain.distance(xValues.get(i - 1), yValues.get(i - 1), xCurrent, yCurrent) > .025) {
+            xValues.add(navx.getDisplacementX());
+            yValues.add(navx.getDisplacementY());
+        }
+        if(xbox.getButton(xbox.ABUTTON)) {
+            try{
+                PrintStream printstream = new PrintStream("AutonPath");
+                for(int j = 0; j<xValues.size(); ++j) {
+                    printstream.println(xValues.get(j) + " " + yValues.get(j));
+                }
+            } catch (Exception e) {
+                //fix me - file is a directory
+            }
+        }
     }
 
     @Override
