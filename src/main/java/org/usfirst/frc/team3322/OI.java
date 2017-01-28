@@ -4,10 +4,11 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class OI {
-    Joystick stick;
+    Joystick driver, tech;
 
-    public OI(int port) {
-        stick = new Joystick(port);
+    public OI() {
+        driver = new Joystick(RobotMap.driverPort);
+        tech = new Joystick(RobotMap.techPort);
     }
 
 	// Assign button values to variables
@@ -28,16 +29,31 @@ public class OI {
 
     // Returns true when button is initially tapped
     public boolean getButton(int button) {
-		 return stick.getRawButton(button);
-	}
-
-    // Returns true while button is held
-    public boolean getButtonDown(int button) {
-        if (!buttonDown && stick.getRawButton(button)) {
+        if (!buttonDown && driver.getRawButton(button)) {
             buttonDown = true;
             return true;
         } else {
 			return false;
 		}
 	}
+
+    // Returns true while button is held
+    public boolean getButtonDown(int button) {
+        return driver.getRawButton(button);
+    }
+
+    // Returns true when button is initially tapped
+    public boolean getTechButton(int button) {
+        if (!buttonDown && tech.getRawButton(button)) {
+            buttonDown = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Returns true while button is held
+    public boolean getTechButtonDown(int button) {
+        return tech.getRawButton(button);
+    }
 }
