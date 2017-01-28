@@ -19,6 +19,10 @@ public class RobotMap {
             // Solenoids
             shifter_1 = 1,
             shifter_2 = 3,
+            gearLeft_1 = 0,
+            gearLeft_2 = 2,
+            gearRight_1 = 4,
+            gearRight_2 = 6,
 
             // Digital
             encoderLeft_A = 0,
@@ -31,8 +35,4 @@ public class RobotMap {
             sonarFrontRight = 1,
 
             irTest = 0; // not sure if analog or digital
-    /*
-        leftEnc = new Encoder(0, 1);
-        rightEnc = new Encoder(2, 3);
-     */
 }

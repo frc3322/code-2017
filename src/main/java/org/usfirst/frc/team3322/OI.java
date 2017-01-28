@@ -36,7 +36,8 @@ public class OI {
         if (!buttonDown && stick.getRawButton(button)) {
             buttonDown = true;
             return true;
-        } else
-	    return false;
+        } else {
+			return false;
+		}
 	}
 }

@@ -8,8 +8,8 @@ public class Gear {
 	DoubleSolenoid gearSolenoidRight;
 
 	public Gear() {
-        gearSolenoidLeft = new DoubleSolenoid(0, 2);
-        gearSolenoidRight = new DoubleSolenoid(4, 6);
+        gearSolenoidLeft = new DoubleSolenoid(RobotMap.gearLeft_1, RobotMap.gearLeft_2);
+        gearSolenoidRight = new DoubleSolenoid(RobotMap.gearRight_1, RobotMap.gearRight_2);
 	}
 
 	public void extendHolder() {
