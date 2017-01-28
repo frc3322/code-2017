@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class OI {
-    Joystick xbox;
+    Joystick stick;
 
     public OI(int port) {
-        xbox = new Joystick(port);
+        stick = new Joystick(port);
     }
 
 	// Assign button values to variables
@@ -28,12 +28,12 @@ public class OI {
 
     // Returns true when button is initially tapped
     public boolean getButton(int button) {
-		 return xbox.getRawButton(button);
+		 return stick.getRawButton(button);
 	}
 
     // Returns true while button is held
     public boolean getButtonDown(int button) {
-        if (!buttonDown && xbox.getRawButton(button)) {
+        if (!buttonDown && stick.getRawButton(button)) {
             buttonDown = true;
             return true;
         } else
