@@ -59,6 +59,6 @@ public class OI {
     }
 
     public void controllerTest() {
-        NotImplementedException
+        // not implemented
     }
 }
