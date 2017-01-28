@@ -9,7 +9,7 @@ public class Auton {
     DigitalInput ir;
 
     public Auton() {
-        sonar = new AnalogInput(0);
-        ir = new DigitalInput(0); // Digital not working for some reason
+        sonar = new AnalogInput(RobotMap.sonarFrontLeft);
+        ir = new DigitalInput(RobotMap.irTest); // Digital not working for some reason
     }
 }

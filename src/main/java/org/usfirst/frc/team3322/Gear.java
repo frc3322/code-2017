@@ -4,20 +4,20 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Gear {
     // Main solenoids to control linear actuators
-	DoubleSolenoid gearSolenoid1;
-	DoubleSolenoid gearSolenoid2;
+	DoubleSolenoid gearSolenoidLeft;
+	DoubleSolenoid gearSolenoidRight;
 
 	public Gear() {
-        gearSolenoid1 = new DoubleSolenoid(0, 2);
-        gearSolenoid2 = new DoubleSolenoid(4, 6);
+        gearSolenoidLeft = new DoubleSolenoid(0, 2);
+        gearSolenoidRight = new DoubleSolenoid(4, 6);
 	}
 
 	public void extendHolder() {
-        gearSolenoid1.set(DoubleSolenoid.Value.kForward);
-        gearSolenoid2.set(DoubleSolenoid.Value.kForward);
+        gearSolenoidLeft.set(DoubleSolenoid.Value.kForward);
+        gearSolenoidRight.set(DoubleSolenoid.Value.kForward);
     }
     public void retractHolder() {
-        gearSolenoid1.set(DoubleSolenoid.Value.kReverse);
-        gearSolenoid2.set(DoubleSolenoid.Value.kReverse);
+        gearSolenoidLeft.set(DoubleSolenoid.Value.kReverse);
+        gearSolenoidRight.set(DoubleSolenoid.Value.kReverse);
 	}
 }

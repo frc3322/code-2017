@@ -3,7 +3,7 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.Joystick;
 
 
-public class OI extends Robot {
+public class OI {
     Joystick xbox;
 
     public OI(int port) {

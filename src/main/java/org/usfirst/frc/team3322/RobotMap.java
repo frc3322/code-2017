@@ -4,7 +4,7 @@ package org.usfirst.frc.team3322;
 public class RobotMap {
     // Assign ids to integers for easier electrical rewiring
     public static final int
-            // Drivetrain talons
+            // Talons
             driveLeft_1 = 20,
             driveLeft_2 = 21,
             driveLeft_3 = 3,
@@ -13,7 +13,11 @@ public class RobotMap {
             driveRight_2 = 23,
             driveRight_3 = 6,
 
-            // Climber talons
             climbTalon_1 = 77,
-            climbTalon_2 = 78;
+            climbTalon_2 = 78,
+
+            // Sensors
+            irTest = 0,
+            sonarFrontLeft = 0,
+            sonarFrontRight = 1;
 }

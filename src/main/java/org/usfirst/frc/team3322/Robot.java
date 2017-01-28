@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
     // Define our global variables
+    OI xbox;
     Drivetrain drivetrain;
     Compressor compressor;
     Climber climber;
-    OI xbox;
     Gear gear;
     AHRS navx;
     Auton auton;
