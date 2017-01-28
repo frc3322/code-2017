@@ -43,10 +43,10 @@ public class Drivetrain {
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
 
         // Shifter for our gearboxes
-        shifter = new DoubleSolenoid(1,3);
+        shifter = new DoubleSolenoid(RobotMap.shifter_1, RobotMap.shifter_2);
 
-        leftEnc = new Encoder(0, 1);
-        rightEnc = new Encoder(2, 3);
+        leftEnc = new Encoder(RobotMap.encoderLeft_A, RobotMap.encoderLeft_B);
+        rightEnc = new Encoder(RobotMap.encoderRight_A, RobotMap.encoderRight_B);
 
         lowGear = low;
         highGear = high;
