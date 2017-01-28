@@ -43,7 +43,9 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        xbox.controllerTest();
+    }
 
     @Override
     public void autonomousPeriodic() {
