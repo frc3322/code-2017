@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
         climber = new Climber();
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
-        xbox = new OI(1);
+        xbox = new OI();
         gear = new Gear();
         auton = new Auton();
     }
@@ -58,6 +58,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         climber.climb(xbox.getButtonDown(OI.LBUMPER));
+
+        if (xbox.getButton(OI.XBUTTON))
+            drivetrain.shiftHigh();
+        else if (xbox.getButton(OI.YBUTTON))
+            drivetrain.shiftLow();
 
 	    if (xbox.getButton(OI.ABUTTON)) {
 	        gear.extendHolder();
