@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Joystick;
 public class OI {
     Joystick driver, tech;
 
+    boolean buttonDown = false;
+
     // Assign vague integers to variables
     public static final int
             // Buttons
@@ -36,6 +38,21 @@ public class OI {
     public boolean getButton(int button) {
         return driver.getRawButton(button);
 	}
+
+	// Returns true only once, and will not return true again until the button is released and pressed again.
+	public boolean getButtonDown(int button) {
+        if (getButton(button)) {
+            if (!buttonDown) {
+                buttonDown = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            buttonDown = false;
+            return false;
+        }
+    }
 
 	public double getAxis(int axis) {
         return driver.getRawAxis(axis);
