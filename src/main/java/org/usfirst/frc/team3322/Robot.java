@@ -2,9 +2,9 @@ package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.io.PrintStream;
+import java.awt.geom.Point2D;
+import java.io.*;
 import java.util.ArrayList;
 
 
@@ -16,8 +16,7 @@ public class Robot extends IterativeRobot {
     AHRS navx;
     Compressor compressor;
     Auton auton;
-    ArrayList<Float> xValues = new ArrayList<>(500);
-    ArrayList<Float> yValues = new ArrayList<>(500);
+    ArrayList<Point2D.Float> coords = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
@@ -36,8 +35,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        xValues.add(0.0f);
-        yValues.add(0.0f);
+        coords.add(new Point2D.Float(0.0f, 0.0f));
     }
 
     @Override
@@ -52,33 +50,44 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        int i = xValues.size();
-        float xCurrent = navx.getDisplacementX();
-        float yCurrent = navx.getDisplacementY();
+        int i = coords.size();
+        float x = navx.getDisplacementX();
+        float y = navx.getDisplacementY();
 
-        if (drivetrain.distance(xValues.get(i - 1), yValues.get(i - 1), xCurrent, yCurrent) > .025) {
-            xValues.add(navx.getDisplacementX());
-            yValues.add(navx.getDisplacementY());
+
+        // Record a new point for every inch moved
+        if (Point2D.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
+            coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
         }
 
-        if (xbox.getButton(OI.ABUTTON)) {
-            try{
-                PrintStream printstream = new PrintStream("AutonPath");
-                for (int j = 0; j < xValues.size(); ++j) {
-                    printstream.println(xValues.get(j) + " " + yValues.get(j));
+        // Start recording points to file
+        if (xbox.getButtonDown(OI.ABUTTON)) {
+            try {
+                PrintStream out = new PrintStream("AutonPath");
+
+                for (Point2D.Float coord : coords) {
+                    out.println(coord.x + " " + coord.y);
                 }
             } catch (Exception e) {
-                //fix me - file is a directory
+                // TODO fix me - file is a directory
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        // TODO Parse the coordinate stream for reassembly
+        try {
+            InputStream in = new FileInputStream("AutonPath");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void teleopPeriodic() {
-        drivetrain.drive(xbox.getAxis(1), xbox.getAxis(4));
+        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
 
         if (xbox.getButton(OI.XBUTTON)) {
