@@ -36,7 +36,5 @@ public class RobotMap {
 
             // Analog
             sonarFrontLeft = 0,
-            sonarFrontRight = 1,
-
-            irTest = 0; // not sure if analog or digital
+            sonarFrontRight = 1;
 }
