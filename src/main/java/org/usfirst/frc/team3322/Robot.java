@@ -7,31 +7,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-/**
- * Main Robot class for team 3322's 2017 SteamWorks robot
- */
+
 public class Robot extends IterativeRobot {
-    // Define our global variables
     OI xbox;
     Drivetrain drivetrain;
-    Compressor compressor;
     Climber climber;
     Gear gear;
     AHRS navx;
+    Compressor compressor;
     Auton auton;
     ArrayList<Float> xValues = new ArrayList<>(500);
     ArrayList<Float> yValues = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
-        // Initialize required object classes
-        drivetrain = new Drivetrain(3000.0, 4000.0,true, false); // TODO what RPM should these be?
+        // Object init
+        xbox = new OI();
+        drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
+        gear = new Gear();
         climber = new Climber();
+        auton = new Auton();
+
+        // Component init
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
-        xbox = new OI();
-        gear = new Gear();
-        auton = new Auton();
     }
 
     @Override
@@ -39,7 +38,6 @@ public class Robot extends IterativeRobot {
         navx.resetDisplacement();
         xValues.add(0.0f);
         yValues.add(0.0f);
-        while(!xbox.getButton(xbox.ABUTTON)){}
     }
 
     @Override
@@ -54,18 +52,19 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        xbox.controllerTest();
         int i = xValues.size();
         float xCurrent = navx.getDisplacementX();
         float yCurrent = navx.getDisplacementY();
+
         if (drivetrain.distance(xValues.get(i - 1), yValues.get(i - 1), xCurrent, yCurrent) > .025) {
             xValues.add(navx.getDisplacementX());
             yValues.add(navx.getDisplacementY());
         }
-        if(xbox.getButton(xbox.ABUTTON)) {
+
+        if (xbox.getButton(OI.ABUTTON)) {
             try{
                 PrintStream printstream = new PrintStream("AutonPath");
-                for(int j = 0; j<xValues.size(); ++j) {
+                for (int j = 0; j < xValues.size(); ++j) {
                     printstream.println(xValues.get(j) + " " + yValues.get(j));
                 }
             } catch (Exception e) {
@@ -75,23 +74,18 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {
-	    SmartDashboard.putNumber("Sonar distance", auton.sonar.getValue());
-	    SmartDashboard.putBoolean("Ir state", auton.ir.get());
-
-	    if (auton.sonar.getVoltage() > 0.1) {
-	        drivetrain.drive(1, 0);
-        }
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopPeriodic() {
-        climber.climb(xbox.getButtonDown(OI.LBUMPER));
+        drivetrain.drive(xbox.getAxis(1), xbox.getAxis(4));
+        climber.climb(xbox.getButton(OI.LBUMPER));
 
-        if (xbox.getButton(OI.XBUTTON))
+        if (xbox.getButton(OI.XBUTTON)) {
             drivetrain.shiftHigh();
-        else if (xbox.getButton(OI.YBUTTON))
+        } else if (xbox.getButton(OI.YBUTTON)) {
             drivetrain.shiftLow();
+        }
 
 	    if (xbox.getButton(OI.ABUTTON)) {
 	        gear.extendHolder();
