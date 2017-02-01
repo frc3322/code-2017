@@ -2,9 +2,7 @@ package org.usfirst.frc.team3322;
 
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
-
 
 public class Drivetrain {
 
@@ -16,7 +14,6 @@ public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
-    private Encoder enc_left, enc_right;
     private double lowGear, highGear;
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
@@ -40,9 +37,6 @@ public class Drivetrain {
         // Shifter for our gearboxes
         shifter = new DoubleSolenoid(RobotMap.shifter_1, RobotMap.shifter_2);
 
-        enc_left = new Encoder(RobotMap.encoderLeft_A, RobotMap.encoderLeft_B);
-        enc_right = new Encoder(RobotMap.encoderRight_A, RobotMap.encoderRight_B);
-
         lowGear = low;
         highGear = high;
         leftSamples = new double[NUM_SAMPLES]; rightSamples = new double[NUM_SAMPLES];
@@ -55,14 +49,12 @@ public class Drivetrain {
     }
 
     public void getSample() {
-        leftSamples[sampleIndex] = enc_left.getRate();
-        rightSamples[sampleIndex++] = enc_right.getRate();
         if (sampleIndex >= NUM_SAMPLES)
             sampleIndex = 0;
     }
 
     public void drive(double move, double rotate) {
-        drive.arcadeDrive(move * -1, rotate * -1);
+        drive.arcadeDrive(move, rotate);
     }
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }

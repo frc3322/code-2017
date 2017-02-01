@@ -16,7 +16,7 @@ public class Robot extends IterativeRobot {
     AHRS navx;
     Compressor compressor;
     Auton auton;
-    ArrayList<Point2D.Float> coords = new ArrayList<>(500);
+    //ArrayList<> coords = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        coords.add(new Point2D.Float(0.0f, 0.0f));
+        //coords.add(new Point2D.Float(0.0f, 0.0f));
     }
 
     @Override
@@ -50,24 +50,24 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        int i = coords.size();
+        //int i = coords.size();
         float x = navx.getDisplacementX();
         float y = navx.getDisplacementY();
 
-
+        /*
         // Record a new point for every inch moved
         if (Point2D.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
             coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
-        }
+        }*/
 
         // Start recording points to file
         if (xbox.getButtonDown(OI.ABUTTON)) {
             try {
                 PrintStream out = new PrintStream("AutonPath");
 
-                for (Point2D.Float coord : coords) {
+                /*for (Point2D.Float coord : coords) {
                     out.println(coord.x + " " + coord.y);
-                }
+                }*/
             } catch (Exception e) {
                 // TODO fix me - file is a directory
                 e.printStackTrace();
