@@ -43,7 +43,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        dashboard.Print();
 	    if (joystick.getRawButton(Xbox.LBUMPER)) {
             climber.climb(true);
         } else {
