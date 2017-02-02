@@ -12,23 +12,28 @@ public class Robot extends IterativeRobot {
     OI xbox;
     Drivetrain drivetrain;
     Climber climber;
+    Dashboard dashboard;
+    Joystick joystick;
     Gear gear;
-    AHRS navx;
+    static AHRS navx;
     Compressor compressor;
     Auton auton;
+    Gear gear;
     //ArrayList<> coords = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
-        // Object init
+	      // Initialize required object classes
         xbox = new OI();
         drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
-        gear = new Gear();
-        climber = new Climber();
-        auton = new Auton();
-
-        // Component init
+        // Init our compressor as PCM number 1
         compressor = new Compressor(0);
+        climber = new Climber();
+        dashboard = new Dashboard();
+        joystick = new Joystick(1);
+        auton = new Auton();
+        gear = new Gear();
+        // Init NavX gyroscope
         navx = new AHRS(SerialPort.Port.kUSB);
     }
 
