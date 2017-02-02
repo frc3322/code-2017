@@ -14,7 +14,6 @@ public class Robot extends IterativeRobot {
     Climber climber;
     Dashboard dashboard;
     Joystick joystick;
-    Gear gear;
     static AHRS navx;
     Compressor compressor;
     Auton auton;
