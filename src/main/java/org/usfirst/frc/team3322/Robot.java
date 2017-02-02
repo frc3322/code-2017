@@ -15,6 +15,7 @@ public class Robot extends IterativeRobot {
     Drivetrain drivetrain;
     Compressor compressor;
     Climber climber;
+    Dashboard dashboard;
     Joystick joystick;
     Gear gear;
     static AHRS navx;
@@ -26,6 +27,7 @@ public class Robot extends IterativeRobot {
         // Init our compressor as PCM number 1
         compressor = new Compressor(0);
         climber = new Climber();
+        dashboard = new Dashboard();
         joystick = new Joystick(1);
         gear = new Gear();
         // Init NavX gyroscope
@@ -41,6 +43,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        dashboard.Print();
 	    if (joystick.getRawButton(Xbox.LBUMPER)) {
             climber.climb(true);
         } else {

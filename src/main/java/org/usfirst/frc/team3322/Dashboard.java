@@ -10,4 +10,7 @@ public class Dashboard {
     public Dashboard() {
         dashboard = new SmartDashboard();
     }
+    void Print() {
+        SmartDashboard.putNumber("Altitude", Robot.navx.getAltitude());
+    }
 }
