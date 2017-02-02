@@ -3,9 +3,6 @@ package org.usfirst.frc.team3322;
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
 
-/**
- * Created by Shivam Patel on 1/19/2017.
- */
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
     Encoder climbEncoder;
@@ -22,10 +19,11 @@ public class Climber {
     int iterator = 0;
 
     public Climber() {
-        climb_talon_1 = new CANTalon(77);
-        climb_talon_2 = new CANTalon(78);
+        climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
+        climb_talon_2 = new CANTalon(RobotMap.climbTalon_2);
         climbEncoder = new Encoder(4,5,false);
         current = new double[]{0,0,0,0,0};
+
     }
 
     public void climb (boolean climbStatus) {
