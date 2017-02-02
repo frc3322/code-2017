@@ -15,7 +15,7 @@ public class Drivetrain {
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
-    private Talon drive_left_1, drive_left_2, drive_left_3, drive_right_1, drive_right_2, drive_right_3;
+    private Talon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
     private Encoder enc_left, enc_right;
 
     private double lowGear, highGear;
@@ -26,18 +26,14 @@ public class Drivetrain {
     Drivetrain(double low, double high, boolean left_inv, boolean right_inv){
         drive_left_1 = new Talon(RobotMap.driveLeft_1);
         drive_left_2 = new Talon(RobotMap.driveLeft_2);
-        //drive_left_3 = new Talon(RobotMap.driveLeft_3);
         drive_right_1 = new Talon(RobotMap.driveRight_1);
         drive_right_2 = new Talon(RobotMap.driveRight_2);
-        //drive_right_3 = new Talon(RobotMap.driveRight_3);
 
         // Invert our motors according to our inversion variables
         drive_left_1.setInverted(left_inv);
         drive_left_2.setInverted(left_inv);
-        //drive_left_3.setInverted(left_inv);
         drive_right_1.setInverted(right_inv);
         drive_right_2.setInverted(right_inv);
-        //drive_right_3.setInverted(right_inv);
 
         // Initialize our RobotDrive object - this could (should) be replaced with something like our 2016 gyro driving code
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
@@ -98,5 +94,9 @@ public class Drivetrain {
         }else {
             highCounter = lowCounter = 0;
         }
+    }
+
+    public double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
 }

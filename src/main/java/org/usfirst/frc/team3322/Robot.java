@@ -3,9 +3,8 @@ package org.usfirst.frc.team3322;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 
-import java.awt.geom.Point2D;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Robot extends IterativeRobot {
@@ -16,7 +15,7 @@ public class Robot extends IterativeRobot {
     AHRS navx;
     Compressor compressor;
     Auton auton;
-    ArrayList<Point2D.Float> coords = new ArrayList<>(500);
+    HashMap<Float, Float> coords = new HashMap<>(500);
 
     @Override
     public void robotInit() {
@@ -35,7 +34,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        coords.add(new Point2D.Float(0.0f, 0.0f));
+        coords.put(0.0f, 0.0f);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class Robot extends IterativeRobot {
 
 
         // Record a new point for every inch moved
-        if (Point2D.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
+        if (Drivetrain.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
             coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
         }
 
