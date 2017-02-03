@@ -7,11 +7,6 @@ public class Auton {
 
     public Auton() {
         // TODO Parse the coordinate stream for reassembly
-        /*try {
-            InputStream in = new FileInputStream("AutonPath");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static double distance(double x1, double y1, double x2, double y2) {
@@ -27,6 +22,6 @@ public class Auton {
     }
 
     public void parseCoordinates() {
-
+        // TODO make arrays for x values and y values from file string
     }
 }

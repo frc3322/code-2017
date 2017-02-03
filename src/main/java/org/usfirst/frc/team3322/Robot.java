@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
                 PrintStream out = new PrintStream("AutonPath");
 
                 for (int i = 0; i<xValues.size(); ++i) {
-                    out.println(xValues.get(i) + " " + yValues.get(i));
+                    out.print("x" + xValues.get(i) + "y" + yValues.get(i));
                 }
             } catch (Exception e) {
                 // TODO fix me - file is a directory
@@ -77,12 +77,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        // TODO Parse the coordinate stream for reassembly
-        try {
-            InputStream in = new FileInputStream("AutonPath");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
