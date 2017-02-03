@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.*;
 
 import java.awt.geom.Point2D;
 import java.io.*;
+import java.util.List;
 import java.util.ArrayList;
 
 
@@ -16,7 +17,8 @@ public class Robot extends IterativeRobot {
     AHRS navx;
     Compressor compressor;
     Auton auton;
-    ArrayList<Point2D.Float> coords = new ArrayList<>(500);
+    Point2D.Float point = new Point2D.Float(0f, 0f);
+    List<Point2D.Float> coords = new ArrayList<Point2D.Float>(500);
 
     @Override
     public void robotInit() {
@@ -35,7 +37,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        coords.add(new Point2D.Float(0.0f, 0.0f));
+        coords.add(point);
     }
 
     @Override
