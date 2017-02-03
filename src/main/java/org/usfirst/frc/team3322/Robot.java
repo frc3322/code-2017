@@ -4,8 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 
 import java.io.*;
-import java.util.HashMap;
-
+import java.util.ArrayList;
 
 public class Robot extends IterativeRobot {
     OI xbox;
@@ -15,7 +14,8 @@ public class Robot extends IterativeRobot {
     AHRS navx;
     Compressor compressor;
     Auton auton;
-    HashMap<Float, Float> coords = new HashMap<>(500);
+    ArrayList<Float> xValues = new ArrayList(500);
+    ArrayList<Float> yValues = new ArrayList(500);
 
     @Override
     public void robotInit() {
@@ -34,7 +34,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        coords.put(0.0f, 0.0f);
+        xValues.add(navx.getDisplacementX());
+        yValues.add(navx.getDisplacementY());
     }
 
     @Override
@@ -49,14 +50,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        int i = coords.size();
         float x = navx.getDisplacementX();
         float y = navx.getDisplacementY();
 
 
         // Record a new point for every inch moved
-        if (Drivetrain.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
-            coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
+        if (Auton.distance(xValues.get(xValues.size()), yValues.get(yValues.size()), x, y) > .025) {
+            xValues.add(x);
+            yValues.add(y);
         }
 
         // Start recording points to file
@@ -64,8 +65,8 @@ public class Robot extends IterativeRobot {
             try {
                 PrintStream out = new PrintStream("AutonPath");
 
-                for (Point2D.Float coord : coords) {
-                    out.println(coord.x + " " + coord.y);
+                for (int i = 0; i<xValues.size(); ++i) {
+                    out.println(xValues.get(i) + " " + yValues.get(i));
                 }
             } catch (Exception e) {
                 // TODO fix me - file is a directory
