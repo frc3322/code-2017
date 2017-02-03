@@ -3,17 +3,13 @@ package org.usfirst.frc.team3322;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 
-import java.awt.geom.Point2D;
 import java.io.*;
-import java.util.ArrayList;
 
 
 public class Robot extends IterativeRobot {
     OI xbox;
     Drivetrain drivetrain;
     Climber climber;
-    Dashboard dashboard;
-    Joystick joystick;
     static AHRS navx;
     Compressor compressor;
     Auton auton;
@@ -22,17 +18,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-	      // Initialize required object classes
+        // Object init
         xbox = new OI();
         drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
-        // Init our compressor as PCM number 1
-        compressor = new Compressor(0);
-        climber = new Climber();
-        dashboard = new Dashboard();
-        joystick = new Joystick(1);
-        auton = new Auton();
         gear = new Gear();
-        // Init NavX gyroscope
+        climber = new Climber();
+        auton = new Auton();
+
+        // Component init
+        compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
     }
 
