@@ -51,6 +51,9 @@ public class Robot extends IterativeRobot {
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
 
+        // Call autoshift periodically
+        drivetrain.autoShift();
+
         if (xbox.getButton(OI.XBUTTON)) {
             drivetrain.shiftHigh();
         } else if (xbox.getButton(OI.YBUTTON)) {

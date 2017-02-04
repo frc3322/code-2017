@@ -56,21 +56,6 @@ public class Drivetrain {
         }
     }
 
-    public double getRPM(Encoder e) {
-        return e.getRate() / 256.0 * 60.0 / (isHigh() ? 1.0588 : 0.4896);
-    }
-
-    public double getWheelRPM(Encoder e) {
-        return e.getRate() / 256.0 * 60.0 / 7.5;
-    }
-
-    public void getSample() {
-        leftSamples[sampleIndex] = getRPM(enc_left);
-        rightSamples[sampleIndex++] = getRPM(enc_right);
-        if (sampleIndex >= NUM_SAMPLES)
-            sampleIndex = 0;
-    }
-
     public void drive(double move, double rotate) {
         drive.arcadeDrive(move, rotate);
     }
@@ -89,12 +74,28 @@ public class Drivetrain {
         }
     }
 
+    public double getRPM(Encoder e) {
+        return e.getRate() / 256.0 * 60.0 / (isHigh() ? 1.0588 : 0.4896);
+    }
+    public double getWheelRPM(Encoder e) {
+        return e.getRate() / 256.0 * 60.0 / 7.5;
+    }
+
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
     public void toggleGear() { shifter.set(isHigh() ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse); }
     public void shiftHigh() { shifter.set(DoubleSolenoid.Value.kReverse); }
     public void shiftLow() { shifter.set(DoubleSolenoid.Value.kForward); }
 
+    void getSample() {
+        leftSamples[sampleIndex] = getRPM(enc_left);
+        rightSamples[sampleIndex++] = getRPM(enc_right);
+        if (sampleIndex >= NUM_SAMPLES)
+            sampleIndex = 0;
+    }
+
     public void autoShift() {
+        getSample();
+
         double leftAvg = 0.0, rightAvg = 0.0;
         for(double i : leftSamples)
             leftAvg += i;
@@ -114,7 +115,8 @@ public class Drivetrain {
             if(lowCounter > SHIFT_THRESHOLD)
                 shiftLow();
             highCounter = 0;
-        }else {
+        } else {
+            // Reset counters when not within thresholds
             highCounter = lowCounter = 0;
         }
     }
