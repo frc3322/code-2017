@@ -2,6 +2,7 @@ package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.io.*;
 
@@ -18,7 +19,12 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
+        drivetrain = new Drivetrain(
+                SmartDashboard.getNumber("Low gear",3000.0),
+                SmartDashboard.getNumber("High gear",4000.0),
+                false,
+                false
+        );
         gear = new Gear();
         climber = new Climber();
 
@@ -58,5 +64,8 @@ public class Robot extends IterativeRobot {
 	    } else {
 	        gear.retractHolder();
 	    }
+
+        SmartDashboard.putNumber("Left wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_left));
+        SmartDashboard.putNumber("Right wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_right));
     }
 }

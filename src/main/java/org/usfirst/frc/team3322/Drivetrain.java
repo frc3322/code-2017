@@ -17,7 +17,7 @@ public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
-    private Encoder enc_left, enc_right;
+    Encoder enc_left, enc_right;
 
     private double lowGear, highGear;
     private int sampleIndex;
