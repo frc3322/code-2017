@@ -3,19 +3,17 @@ package org.usfirst.frc.team3322;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 
-import java.io.*;
-import java.util.ArrayList;
-
 public class Robot extends IterativeRobot {
     OI xbox;
     Drivetrain drivetrain;
     Climber climber;
     Gear gear;
-    AHRS navx;
+    static AHRS navx;
     Compressor compressor;
     Auton auton;
-    ArrayList<Float> xValues = new ArrayList(500);
-    ArrayList<Float> yValues = new ArrayList(500);
+    public static float[] xValues;
+    public static float[] yValues;
+    int valueNum;
 
     @Override
     public void robotInit() {
@@ -25,6 +23,9 @@ public class Robot extends IterativeRobot {
         gear = new Gear();
         climber = new Climber();
         auton = new Auton();
+        xValues = new float[2];
+        yValues = new float[2];
+        valueNum = 0;
 
         // Component init
         compressor = new Compressor(0);
@@ -34,8 +35,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         navx.resetDisplacement();
-        xValues.add(navx.getDisplacementX());
-        yValues.add(navx.getDisplacementY());
     }
 
     @Override
@@ -50,17 +49,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        float x = navx.getDisplacementX();
-        float y = navx.getDisplacementY();
-
-
-        // Record a new point for every inch moved
-        if (Auton.distance(xValues.get(xValues.size()), yValues.get(yValues.size()), x, y) > .025) {
-            xValues.add(x);
-            yValues.add(y);
+        if(xbox.getButton(OI.ABUTTON)) {
+            xValues[valueNum] = navx.getDisplacementX();
+            xValues[valueNum] = navx.getDisplacementY();
+            valueNum++;
         }
+        if(valueNum == 2) {
 
-        // Start recording points to file
+        /*// Start recording points to file
         if (xbox.getButtonDown(OI.ABUTTON)) {
             try {
                 PrintStream out = new PrintStream("AutonPath");
@@ -71,13 +67,25 @@ public class Robot extends IterativeRobot {
             } catch (Exception e) {
                 // TODO fix me - file is a directory
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
     @Override
     public void autonomousPeriodic() {
-
+        int targetPoint = 0;
+        double targetAngle;
+        float x = navx.getDisplacementX();
+        float y = navx.getDisplacementY();
+        if(auton.distance(x, y, xValues[targetPoint], yValues[targetPoint]) < 2) {
+            targetPoint++;
+        }
+        if(targetPoint != 2) {
+            targetAngle = auton.getAngle(xValues[targetPoint], yValues[targetPoint]);
+            drivetrain.driveAngle(targetAngle, 1);
+        } else {
+            //Add vision move here
+        }
     }
 
     @Override
