@@ -7,13 +7,12 @@ public class Gear {
 	DoubleSolenoid gearSolenoidLeft;
 	//DoubleSolenoid gearSolenoidRight;
     AnalogInput gearReedSwitch;
-    SmartDashboard SmartDash;
+    SmartDashboard SmartDshbrd;
 	public Gear() {
         gearSolenoidLeft = new DoubleSolenoid(RobotMap.gearLeft_1, RobotMap.gearLeft_2);
         //gearSolenoidRight = new DoubleSolenoid(RobotMap.gearRight_1, RobotMap.gearRight_2);
         gearReedSwitch = new AnalogInput(3);
 	}
-
 	public void extendHolder() {
         gearSolenoidLeft.set(DoubleSolenoid.Value.kForward);
         gearReedSwitch.getValue();
