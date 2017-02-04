@@ -12,9 +12,7 @@ public class Robot extends IterativeRobot {
     Climber climber;
     static AHRS navx;
     Compressor compressor;
-    Auton auton;
     Gear gear;
-    //ArrayList<> coords = new ArrayList<>(500);
 
     @Override
     public void robotInit() {
@@ -23,7 +21,6 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
         gear = new Gear();
         climber = new Climber();
-        auton = new Auton();
 
         // Component init
         compressor = new Compressor(0);
@@ -31,57 +28,19 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledInit() {
-        navx.resetDisplacement();
-        //coords.add(new Point2D.Float(0.0f, 0.0f));
-    }
+    public void disabledInit() {}
 
     @Override
-    public void autonomousInit() {
-	    compressor.start();
-    }
+    public void autonomousInit() {}
 
     @Override
-    public void teleopInit() {
-        compressor.start();
-    }
+    public void teleopInit() {}
 
     @Override
-    public void disabledPeriodic() {
-        //int i = coords.size();
-        float x = navx.getDisplacementX();
-        float y = navx.getDisplacementY();
-
-        /*
-        // Record a new point for every inch moved
-        if (Point2D.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
-            coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
-        }*/
-
-        // Start recording points to file
-        if (xbox.getButtonDown(OI.ABUTTON)) {
-            try {
-                PrintStream out = new PrintStream("AutonPath");
-
-                /*for (Point2D.Float coord : coords) {
-                    out.println(coord.x + " " + coord.y);
-                }*/
-            } catch (Exception e) {
-                // TODO fix me - file is a directory
-                e.printStackTrace();
-            }
-        }
-    }
+    public void disabledPeriodic() {}
 
     @Override
-    public void autonomousPeriodic() {
-        // TODO Parse the coordinate stream for reassembly
-        try {
-            InputStream in = new FileInputStream("AutonPath");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopPeriodic() {
