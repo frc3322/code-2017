@@ -56,18 +56,16 @@ public class Robot extends IterativeRobot {
         }
         if(valueNum == 2) {
 
-        /*// Start recording points to file
-        if (xbox.getButtonDown(OI.ABUTTON)) {
-            try {
-                PrintStream out = new PrintStream("AutonPath");
+        // Start recording points to file
 
-                for (int i = 0; i<xValues.size(); ++i) {
-                    out.print("x" + xValues.get(i) + "y" + yValues.get(i));
-                }
-            } catch (Exception e) {
-                // TODO fix me - file is a directory
-                e.printStackTrace();
-            }*/
+            /*if (xbox.getButtonDown(OI.ABUTTON)) {
+                try {
+                    PrintStream out = new PrintStream("AutonPath");
+                    out.print();
+                } catch (Exception e) {
+                    // TODO fix me - file is a directory
+                    e.printStackTrace();
+               }*/
         }
     }
 

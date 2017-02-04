@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
@@ -64,6 +65,14 @@ public class Drivetrain {
 
     public void drive(double move, double rotate) {
         drive.arcadeDrive(move * -1, rotate * -1);
+    }
+
+    public void driveAngle(double targetAngle, double speed) { // in degrees
+        double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .2); // a constant that controls the sensitivity of the angle follower - has not been tuned
+        double angle = Robot.navx.getAngle() % 360;
+        double turn = (targetAngle - angle) * pTerm;
+        // if robot corrects in wrong direction, either switch targetAngle with angle or make k negative
+        drive.arcadeDrive(speed, turn);
     }
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
