@@ -18,11 +18,13 @@ public class Robot extends IterativeRobot {
         // Object init
         xbox = new OI();
         drivetrain = new Drivetrain(
-                SmartDashboard.getNumber("Low gear",3000.0),
-                SmartDashboard.getNumber("High gear",4000.0),
+                3000,
+                4000,
                 false,
                 false
         );
+        SmartDashboard.putNumber("Low gear", 3000);
+        SmartDashboard.putNumber("High gear", 4000);
         holder = new Holder();
         climber = new Climber();
 
@@ -41,7 +43,11 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {}
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        drivetrain.setShiftPoints(
+                SmartDashboard.getNumber("High gear", 0),
+                SmartDashboard.getNumber("Low gear", 0));
+    }
 
     @Override
     public void autonomousPeriodic() {}
@@ -50,9 +56,6 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
-
-        // Call autoshift periodically
-        drivetrain.autoShift();
 
         if (xbox.getButton(OI.XBUTTON)) {
             drivetrain.shiftHigh();
@@ -65,6 +68,8 @@ public class Robot extends IterativeRobot {
 	    } else {
 	        holder.retract();
 	    }
+
+        drivetrain.autoShift();
 
         SmartDashboard.putNumber("Left wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_left));
         SmartDashboard.putNumber("Right wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_right));

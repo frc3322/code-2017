@@ -4,20 +4,16 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Holder {
     // Main solenoids to control linear actuators
-	DoubleSolenoid gearSolenoidLeft;
-	DoubleSolenoid gearSolenoidRight;
+	DoubleSolenoid holder;
 
 	public Holder() {
-        gearSolenoidLeft = new DoubleSolenoid(RobotMap.gearLeft_1, RobotMap.gearLeft_2);
-        gearSolenoidRight = new DoubleSolenoid(RobotMap.gearRight_1, RobotMap.gearRight_2);
+        holder = new DoubleSolenoid(RobotMap.gearHolder_1, RobotMap.gearHolder_2);
 	}
 
 	public void extend() {
-        gearSolenoidLeft.set(DoubleSolenoid.Value.kForward);
-        gearSolenoidRight.set(DoubleSolenoid.Value.kForward);
+        holder.set(DoubleSolenoid.Value.kForward);
     }
     public void retract() {
-        gearSolenoidLeft.set(DoubleSolenoid.Value.kReverse);
-        gearSolenoidRight.set(DoubleSolenoid.Value.kReverse);
+        holder.set(DoubleSolenoid.Value.kReverse);
 	}
 }

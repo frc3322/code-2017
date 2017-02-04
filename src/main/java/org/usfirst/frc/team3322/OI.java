@@ -33,7 +33,6 @@ public class OI {
     public OI() {
         driver = new Joystick(RobotMap.driverPort);
         tech = new Joystick(RobotMap.techPort);
-
     }
 
     public boolean getButton(int button) {

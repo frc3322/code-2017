@@ -5,6 +5,7 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
@@ -19,7 +20,7 @@ public class Drivetrain {
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
     Encoder enc_left, enc_right;
 
-    private double lowGear, highGear;
+    private double lowRPM, highRPM;
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int highCounter = 0, lowCounter = 0;
@@ -45,8 +46,8 @@ public class Drivetrain {
         enc_left = new Encoder(RobotMap.encLeft_1, RobotMap.encLeft_2);
         enc_right = new Encoder(RobotMap.encRight_1, RobotMap.encRight_2);
 
-        lowGear = lowRPM;
-        highGear = highRPM;
+        this.lowRPM = lowRPM;
+        this.highRPM = highRPM;
         leftSamples = new double[NUM_SAMPLES]; rightSamples = new double[NUM_SAMPLES];
         sampleIndex = 0;
 
@@ -92,6 +93,10 @@ public class Drivetrain {
         if (sampleIndex >= NUM_SAMPLES)
             sampleIndex = 0;
     }
+    public void setShiftPoints(double highRPM, double lowRPM) {
+        this.highRPM = highRPM;
+        this.lowRPM = lowRPM;
+    }
 
     public void autoShift() {
         getSample();
@@ -105,12 +110,12 @@ public class Drivetrain {
         leftAvg /= ((double) NUM_SAMPLES);
         rightAvg /= ((double)NUM_SAMPLES);
 
-        if (Math.abs((leftAvg + rightAvg) / 2.0) > highGear) {
+        if (Math.abs((leftAvg + rightAvg) / 2.0) > highRPM) {
             highCounter++;
             if(highCounter > SHIFT_THRESHOLD)
                 shiftHigh();
            lowCounter = 0;
-        } else if (Math.abs((leftAvg + rightAvg)/2.0) < lowGear) {
+        } else if (Math.abs((leftAvg + rightAvg)/2.0) < lowRPM) {
             lowCounter++;
             if(lowCounter > SHIFT_THRESHOLD)
                 shiftLow();

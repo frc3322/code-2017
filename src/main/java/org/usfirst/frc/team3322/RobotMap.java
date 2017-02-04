@@ -25,13 +25,12 @@ public class RobotMap {
             shifter_1 = 0,
             shifter_2 = 1,
 
+            gearHolder_1 = 3,
+            gearHolder_2 = 4,
+
+            // Sensors
             encLeft_1 = 0,
             encLeft_2 = 1,
             encRight_1 = 2,
-            encRight_2 = 3,
-
-            gearLeft_1 = 3,
-            gearLeft_2 = 4,
-            gearRight_1 = 5,
-            gearRight_2 = 6;
+            encRight_2 = 3;
 }
