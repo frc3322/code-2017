@@ -2,20 +2,23 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Compressor;
 public class Gear {
     // Main solenoids to control linear actuators
 	DoubleSolenoid gearSolenoidLeft;
 	//DoubleSolenoid gearSolenoidRight;
     AnalogInput gearReedSwitch;
-    SmartDashboard SmartDshbrd;
+    SmartDashboard SmartDash;
+    Compressor compressor;
 	public Gear() {
         gearSolenoidLeft = new DoubleSolenoid(RobotMap.gearLeft_1, RobotMap.gearLeft_2);
         //gearSolenoidRight = new DoubleSolenoid(RobotMap.gearRight_1, RobotMap.gearRight_2);
         gearReedSwitch = new AnalogInput(3);
+        compressor = new Compressor(0);
+        compressor.start();
 	}
 	public void extendHolder() {
         gearSolenoidLeft.set(DoubleSolenoid.Value.kForward);
-        gearReedSwitch.getValue();
         SmartDashboard.putNumber("Reed Switch Num", gearReedSwitch.getValue());
         //gearSolenoidRight.set(yDoubleSolenoid.Value.kForward);
     }
