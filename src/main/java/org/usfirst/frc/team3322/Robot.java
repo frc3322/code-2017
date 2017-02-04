@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot {
     Climber climber;
     static AHRS navx;
     Compressor compressor;
-    Gear gear;
+    Holder holder;
 
     @Override
     public void robotInit() {
@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot {
                 false,
                 false
         );
-        gear = new Gear();
+        holder = new Holder();
         climber = new Climber();
 
         // Component init
@@ -58,9 +58,9 @@ public class Robot extends IterativeRobot {
         }
 
 	    if (xbox.getButton(OI.ABUTTON)) {
-	        gear.extendHolder();
+	        holder.extend();
 	    } else {
-	        gear.retractHolder();
+	        holder.retract();
 	    }
 
         SmartDashboard.putNumber("Left wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_left));
