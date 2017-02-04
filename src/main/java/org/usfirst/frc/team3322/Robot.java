@@ -13,7 +13,7 @@ public class Robot extends IterativeRobot {
     OI xbox;
     Drivetrain drivetrain;
     Climber climber;
-    Gear gear;
+    Gear gear, gear2;
     AHRS navx;
     Compressor compressor;
     Auton auton;
