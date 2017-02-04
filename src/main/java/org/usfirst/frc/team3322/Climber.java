@@ -90,6 +90,14 @@ public class Climber {
             climb_talon_2.set(0);
         }
 */
+    // Climb using joystick buttons
+        if (climbStatus) {
+            climb_talon_1.set(climbRate);
+            climb_talon_2.set(climbRate);
+        } else {
+            climb_talon_1.set(0);
+            climb_talon_2.set(0);
+        }
     }
 
     private void iterator() {
