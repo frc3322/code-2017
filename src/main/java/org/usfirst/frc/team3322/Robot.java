@@ -4,8 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.io.*;
-
 
 public class Robot extends IterativeRobot {
     OI xbox;
