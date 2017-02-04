@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class OI {
-    Joystick driver, tech;
-
-    boolean buttonDown = false;
+    static Joystick driver, tech;
 
     // Assign vague integers to variables
     public static final int
@@ -30,9 +28,12 @@ public class OI {
             R_YAXIS = 3,
             R_XAXIS = 4;
 
+    boolean buttonDown = false;
+
     public OI() {
         driver = new Joystick(RobotMap.driverPort);
         tech = new Joystick(RobotMap.techPort);
+
     }
 
     public boolean getButton(int button) {
