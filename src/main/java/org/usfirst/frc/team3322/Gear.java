@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 public class Gear {
-    // Main solenoids to control linear actuators
 	DoubleSolenoid gearSolenoidLeft;
 	//DoubleSolenoid gearSolenoidRight;
     AnalogInput gearReedSwitch;
