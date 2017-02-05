@@ -8,29 +8,29 @@ package org.usfirst.frc.team3322;
  */
 public class RobotMap {
     public static final int
-            // Controller
-            driverPort = 0,
-            techPort = 1,
+        // Controller
+        driverPort = 0,
+        techPort = 1,
 
-            // Talons
-            driveLeft_1 = 20,
-            driveLeft_2 = 21,
-            driveRight_1 = 23,
-            driveRight_2 = 22,
+        // Talons
+        driveLeft_1 = 20,
+        driveLeft_2 = 21,
+        driveRight_1 = 23,
+        driveRight_2 = 22,
 
-            climbTalon_1 = 5,
-            climbTalon_2 = 6,
+        climbTalon_1 = 40,
+        climbTalon_2 = 41,
 
-            // Solenoids
-            shifter_1 = 0,
-            shifter_2 = 1,
+        // Solenoids
+        shifter_1 = 0,
+        shifter_2 = 1,
 
-            gearHolder_1 = 3,
-            gearHolder_2 = 4,
+        gearHolder_1 = 3,
+        gearHolder_2 = 4,
 
-            // Sensors
-            encLeft_1 = 0,
-            encLeft_2 = 1,
-            encRight_1 = 2,
-            encRight_2 = 3;
+        // Sensors
+        encLeft_1 = 0,
+        encLeft_2 = 1,
+        encRight_1 = 2,
+        encRight_2 = 3;
 }

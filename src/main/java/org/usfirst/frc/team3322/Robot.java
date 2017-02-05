@@ -18,13 +18,13 @@ public class Robot extends IterativeRobot {
         // Object init
         xbox = new OI();
         drivetrain = new Drivetrain(
-                3000,
-                4000,
-                false,
-                false
+            1300,
+            1600,
+            false,
+            false
         );
-        SmartDashboard.putNumber("Low gear", 3000);
-        SmartDashboard.putNumber("High gear", 4000);
+        SmartDashboard.putNumber("Low gear", 1300);
+        SmartDashboard.putNumber("High gear", 1600);
         holder = new Holder();
         climber = new Climber();
 
@@ -45,8 +45,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         drivetrain.setShiftPoints(
-                SmartDashboard.getNumber("High gear", 0),
-                SmartDashboard.getNumber("Low gear", 0));
+            SmartDashboard.getNumber("High gear", 0),
+            SmartDashboard.getNumber("Low gear", 0));
     }
 
     @Override
@@ -57,21 +57,20 @@ public class Robot extends IterativeRobot {
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
 
-        if (xbox.getButton(OI.XBUTTON)) {
-            drivetrain.shiftHigh();
-        } else if (xbox.getButton(OI.YBUTTON)) {
-            drivetrain.shiftLow();
-        }
-
-	    if (xbox.getButton(OI.ABUTTON)) {
-	        holder.extend();
-	    } else {
-	        holder.retract();
+	    if (xbox.getButtonDown(OI.RBUMPER)) {
+	        holder.toggle();
 	    }
+
+	    if(xbox.getButton(OI.ABUTTON)){
+	        climber.climbManual();
+        }
+        else{
+	        climber.stop();
+        }
 
         drivetrain.autoShift();
 
-        SmartDashboard.putNumber("Left wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_left));
-        SmartDashboard.putNumber("Right wheel (RPM)", drivetrain.getWheelRPM(drivetrain.enc_right));
+        SmartDashboard.putNumber("Left motor (RPM)", Math.abs(drivetrain.getRPM(drivetrain.enc_left)));
+        SmartDashboard.putNumber("Right motor (RPM)", Math.abs(drivetrain.getRPM(drivetrain.enc_right)));
     }
 }

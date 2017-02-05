@@ -16,4 +16,11 @@ public class Holder {
     public void retract() {
         holder.set(DoubleSolenoid.Value.kReverse);
 	}
+	public void toggle() {
+	    if (holder.get() == DoubleSolenoid.Value.kReverse) {
+	        extend();
+        } else {
+	        retract();
+        }
+    }
 }
