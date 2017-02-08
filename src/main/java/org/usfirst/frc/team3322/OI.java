@@ -29,6 +29,7 @@ public class OI {
             R_XAXIS = 4;
 
     boolean buttonDown = false;
+    public boolean invertInput = false;
 
     public OI() {
         driver = new Joystick(RobotMap.driverPort);
@@ -55,6 +56,6 @@ public class OI {
     }
 
 	public double getAxis(int axis) {
-        return driver.getRawAxis(axis);
+            return driver.getRawAxis(axis);
     }
 }

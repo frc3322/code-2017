@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
-    OI xbox;
+    public static OI xbox;
     Drivetrain drivetrain;
     Climber climber;
     static AHRS navx;
@@ -54,6 +54,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        xbox.invertInput = xbox.getButtonDown(OI.BACK);
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
 

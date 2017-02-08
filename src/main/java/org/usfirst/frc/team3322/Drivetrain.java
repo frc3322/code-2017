@@ -62,7 +62,7 @@ public class Drivetrain {
         if(Robot.xbox.invertInput) {
             invert = -1;
         }
-        drive.arcadeDrive(invert*move, invert*rotate);
+        drive.arcadeDrive(invert * move, invert * rotate);
     }
     void driveAngle(double targetAngle, double speed) { // in degrees
         double pTerm = .2; // a constant that controls the sensitivity of the angle follower - has not been tuned
