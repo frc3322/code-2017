@@ -71,14 +71,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        int targetPoint = 0;
+        int targetPoint = 1;
         double targetAngle;
         float x = navx.getDisplacementX();
         float y = navx.getDisplacementY();
         if(auton.distance(x, y, xValues[targetPoint], yValues[targetPoint]) < 2) {
-            targetPoint++;
+            targetPoint--;
         }
-        if(targetPoint != 2) {
+        if(targetPoint != -1) {
             targetAngle = auton.getAngle(xValues[targetPoint], yValues[targetPoint]);
             drivetrain.driveAngle(targetAngle, 1);
         } else {
