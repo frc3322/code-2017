@@ -107,9 +107,9 @@ public class Drivetrain {
 
         double leftAvg = 0.0, rightAvg = 0.0;
         for(double i : leftSamples)
-            leftAvg += i;
+            leftAvg += Math.abs(i);
         for (double i : rightSamples)
-            rightAvg += i;
+            rightAvg += Math.abs(i);
 
         leftAvg /= ((double) NUM_SAMPLES);
         rightAvg /= ((double)NUM_SAMPLES);
