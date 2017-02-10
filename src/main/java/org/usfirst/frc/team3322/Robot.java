@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
-    public static OI xbox;
+    static OI xbox;
     Drivetrain drivetrain;
     Climber climber;
     static AHRS navx;
@@ -19,9 +19,7 @@ public class Robot extends IterativeRobot {
         xbox = new OI();
         drivetrain = new Drivetrain(
             1300,
-            1600,
-            false,
-            false
+            1600
         );
         SmartDashboard.putNumber("Low gear", 1300);
         SmartDashboard.putNumber("High gear", 1600);
@@ -54,7 +52,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        xbox.invertInput = xbox.getButtonDown(OI.BACK);
+        // getButtonDown cannot be called twice :(
+        //xbox.invertInput = xbox.getButtonDown(OI.BACK);
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.getButton(OI.LBUMPER));
 
@@ -64,8 +63,7 @@ public class Robot extends IterativeRobot {
 
 	    if(xbox.getButton(OI.ABUTTON)){
 	        climber.climbManual();
-        }
-        else{
+        } else {
 	        climber.stop();
         }
 

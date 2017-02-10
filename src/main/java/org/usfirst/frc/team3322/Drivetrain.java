@@ -5,7 +5,6 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
@@ -25,22 +24,24 @@ public class Drivetrain {
     private double leftSamples[], rightSamples[];
     int highCounter = 0, lowCounter = 0;
 
+    Drivetrain(double lowRPM, double highRPM) {
+        this(lowRPM, highRPM, false, false);
+    }
+
     Drivetrain(double lowRPM, double highRPM, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);
         drive_right_2 = new CANTalon(RobotMap.driveRight_2);
 
-        // Invert our motors according to our inversion variables
         drive_left_1.setInverted(left_inv);
         drive_left_2.setInverted(left_inv);
         drive_right_1.setInverted(right_inv);
         drive_right_2.setInverted(right_inv);
 
-        // Initialize our RobotDrive object - this could (should) be replaced with something like our 2016 gyro driving code
+        // This could (should) be replaced with something like our 2016 gyro driving code
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
 
-        // Shifter for our gearboxes
         shifter = new DoubleSolenoid(RobotMap.shifter_1, RobotMap.shifter_2);
 
         enc_left = new Encoder(RobotMap.encLeft_1, RobotMap.encLeft_2);
@@ -74,7 +75,7 @@ public class Drivetrain {
     void driveAngleDistance(double targetAngle, double speed, double distance) { //distance in meters, angle in degrees
         double distToEncoder = 7.5 * .3 * Math.PI; //7.5 for encoder gearing, .3 needs to be adjusted - should equal diameter of wheel in meters, pi to compute circumference
         double initEncoderValue = enc_left.getDistance();
-        while(distance*distToEncoder + initEncoderValue >= drive_left_1.getEncPosition()) {
+        while(distance * distToEncoder + initEncoderValue >= drive_left_1.getEncPosition()) {
             driveAngle(targetAngle, speed);
         }
     }
