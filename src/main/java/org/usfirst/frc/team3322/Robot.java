@@ -75,16 +75,17 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        // getButtonDown cannot be called twice :(
-        //xbox.invertInput = xbox.getButtonDown(OI.BACK);
+        drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
-        climber.climb(xbox.getButton(OI.LBUMPER));
+        climber.climb(xbox.heldDown(OI.LBUMPER));
 
-	    if (xbox.getButtonDown(OI.RBUMPER)) {
-	        holder.toggle();
-	    }
+        if (xbox.isToggled(OI.RBUMPER)) {
+	        holder.extend();
+	    } else {
+	        holder.retract();
+        }
 
-	    if(xbox.getButton(OI.ABUTTON)){
+	    if(xbox.heldDown(OI.ABUTTON)){
 	        climber.climbManual();
         } else {
 	        climber.stop();

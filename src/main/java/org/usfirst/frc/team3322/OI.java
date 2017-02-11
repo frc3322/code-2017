@@ -28,33 +28,52 @@ public class OI {
             R_YAXIS = 3,
             R_XAXIS = 4;
 
-    boolean buttonDown = false;
-    public boolean invertInput = false;
+    int buttonState, toggleState;
 
     public OI() {
         joystick = new Joystick(0);
     }
 
-    public boolean getButton(int button) {
-        return joystick.getRawButton(button);
-	}
+	// Track button states for pressedOnce
+    private void setButtonDown(int button) {
+        buttonState |= (1 << button);
+    }
+    private void setButtonUp(int button) {
+        buttonState &= ~(1 << button);
+    }
+    private boolean isDown(int button) {
+        return 0 != (buttonState & (1 << button));
+    }
 
-	// Returns true only once, and will not return true again until the button is released and pressed again.
-	public boolean getButtonDown(int button) {
-        if (getButton(button)) {
-            if (!buttonDown) {
-                buttonDown = true;
+    public boolean heldDown(int button) {
+        return joystick.getRawButton(button);
+    }
+    // Returns true only once, and will not return true again until the button is released and pressed again.
+	public boolean pressedOnce(int button) {
+        if (heldDown(button)) {
+            if (!isDown(button)) {
+                setButtonDown(button);
                 return true;
             } else {
                 return false;
             }
         } else {
-            buttonDown = false;
+            setButtonUp(button);
             return false;
         }
     }
-
 	public double getAxis(int axis) {
             return joystick.getRawAxis(axis);
+    }
+
+    void toggleButtonState(int button) {
+        toggleState ^= (1 << button);
+    }
+
+    public boolean isToggled(int button) {
+        if (pressedOnce(button)) {
+            toggleButtonState(button);
+        }
+        return 0 != (toggleState & (1 << button));
     }
 }

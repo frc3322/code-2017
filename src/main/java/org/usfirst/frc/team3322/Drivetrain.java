@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-
     public static final boolean SHIFT_HIGH = true;
     public static final boolean SHIFT_LOW  = false;
     private static final int NUM_SAMPLES = 20;
@@ -24,11 +23,11 @@ public class Drivetrain {
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int highCounter = 0, lowCounter = 0;
+    public double invert;
 
     Drivetrain(double lowRPM, double highRPM) {
         this(lowRPM, highRPM, false, false);
     }
-
     Drivetrain(double lowRPM, double highRPM, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
@@ -72,12 +71,14 @@ public class Drivetrain {
         return enc_right.getDistance() / 714;
     }
 
+    public void direction(boolean inverted) {
+        invert = inverted ? -1 : 1;
+    }
+
     public void drive(double move, double rotate) {
-        int invert = 1;
-        if(Robot.xbox.invertInput) {
-            invert = -1;
-        }
-        drive.arcadeDrive(invert * move, invert * rotate);
+        move *= invert;
+        rotate *= invert;
+        drive.arcadeDrive(move, rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
         double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .05);
@@ -98,15 +99,16 @@ public class Drivetrain {
     public void shiftHigh() { shifter.set(DoubleSolenoid.Value.kReverse); }
     public void shiftLow() { shifter.set(DoubleSolenoid.Value.kForward); }
 
+    public void setShiftPoints(double highRPM, double lowRPM) {
+        this.highRPM = highRPM;
+        this.lowRPM = lowRPM;
+    }
+
     void getSample() {
         leftSamples[sampleIndex] = getRPM(enc_left);
         rightSamples[sampleIndex++] = getRPM(enc_right);
         if (sampleIndex >= NUM_SAMPLES)
             sampleIndex = 0;
-    }
-    public void setShiftPoints(double highRPM, double lowRPM) {
-        this.highRPM = highRPM;
-        this.lowRPM = lowRPM;
     }
 
     public void autoShift() {
