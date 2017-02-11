@@ -79,7 +79,6 @@ public class Drivetrain {
 
     public void drive(double move, double rotate) {
         move *= invert;
-        rotate *= invert;
         drive.arcadeDrive(move, rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
