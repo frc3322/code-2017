@@ -24,6 +24,7 @@ public class Drivetrain {
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int highCounter = 0, lowCounter = 0;
+    public boolean invertInput = false;
 
     Drivetrain(double lowRPM, double highRPM) {
         this(lowRPM, highRPM, false, false);
@@ -61,7 +62,7 @@ public class Drivetrain {
 
     public void drive(double move, double rotate) {
         int invert = 1;
-        if(Robot.xbox.invertInput) {
+        if(invertInput) {
             invert = -1;
         }
         drive.arcadeDrive(invert * move, invert * rotate);
