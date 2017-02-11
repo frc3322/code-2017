@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drivetrain {
     public static final boolean SHIFT_HIGH = true;
     public static final boolean SHIFT_LOW  = false;
-    private static final int NUM_SAMPLES = 20;
-    private static final int SHIFT_THRESHOLD = 3;
+    private static final int NUM_SAMPLES = 3;
+    private static final int SHIFT_THRESHOLD = 25;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
@@ -22,7 +22,7 @@ public class Drivetrain {
     private double lowRPM, highRPM;
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
-    int highCounter = 0, lowCounter = 0;
+    int shiftCounter = 0;
     public double invert;
 
     Drivetrain(double lowRPM, double highRPM) {
@@ -49,7 +49,9 @@ public class Drivetrain {
 
         this.lowRPM = lowRPM;
         this.highRPM = highRPM;
-        leftSamples = new double[NUM_SAMPLES]; rightSamples = new double[NUM_SAMPLES];
+
+        leftSamples = new double[NUM_SAMPLES];
+        rightSamples = new double[NUM_SAMPLES];
         sampleIndex = 0;
 
         for (int i = 0; i < NUM_SAMPLES; i++) {
@@ -104,38 +106,39 @@ public class Drivetrain {
         this.lowRPM = lowRPM;
     }
 
-    void getSample() {
+    public void autoShift() {
+        shiftCounter++;
+
         leftSamples[sampleIndex] = getRPM(enc_left);
         rightSamples[sampleIndex++] = getRPM(enc_right);
         if (sampleIndex >= NUM_SAMPLES)
             sampleIndex = 0;
-    }
-
-    public void autoShift() {
-        getSample();
 
         double leftAvg = 0.0, rightAvg = 0.0;
-        for(double i : leftSamples)
-            leftAvg += Math.abs(i);
-        for (double i : rightSamples)
-            rightAvg += Math.abs(i);
+        for(double sample : leftSamples) {
+            leftAvg += Math.abs(sample);
+        }
+        for (double sample : rightSamples) {
+            rightAvg += Math.abs(sample);
+        }
 
-        leftAvg /= ((double) NUM_SAMPLES);
-        rightAvg /= ((double)NUM_SAMPLES);
+        leftAvg /= (double)NUM_SAMPLES;
+        rightAvg /= (double)NUM_SAMPLES;
 
-        if (Math.abs((leftAvg + rightAvg) / 2.0) > highRPM) {
-            highCounter++;
-            if(highCounter > SHIFT_THRESHOLD)
+        // TODO Test which method is best
+        //double currentSpeed = (leftAvg + rightAvg) / 2.0;
+        //double currentSpeed = Math.max(leftAvg, rightAvg);
+        double currentSpeed = Math.min(leftAvg, rightAvg);
+        if (currentSpeed > highRPM) {
+            if (shiftCounter > SHIFT_THRESHOLD) {
                 shiftHigh();
-           lowCounter = 0;
-        } else if (Math.abs((leftAvg + rightAvg)/2.0) < lowRPM) {
-            lowCounter++;
-            if(lowCounter > SHIFT_THRESHOLD)
+                shiftCounter = 0;
+            }
+        } else if (currentSpeed < lowRPM) {
+            if (shiftCounter > SHIFT_THRESHOLD) {
                 shiftLow();
-            highCounter = 0;
-        } else {
-            // Reset counters when not within thresholds
-            highCounter = lowCounter = 0;
+                shiftCounter = 0;
+            }
         }
     }
 

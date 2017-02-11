@@ -43,7 +43,8 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {
         drivetrain.setShiftPoints(
             SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0));
+            SmartDashboard.getNumber("Low gear", 0)
+        );
     }
     @Override
     public void autonomousInit() {
