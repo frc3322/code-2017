@@ -59,6 +59,19 @@ public class Drivetrain {
         }
     }
 
+    public void resetEncs() {
+        enc_left.reset();
+        enc_right.reset();
+    }
+
+    public double getLeftEncValue() { //returns in feet
+        return enc_left.getDistance() / 714;
+    }
+
+    public double getRightEncValue() { //returns in feet
+        return enc_right.getDistance() / 714;
+    }
+
     public void drive(double move, double rotate) {
         int invert = 1;
         if(Robot.xbox.invertInput) {
@@ -67,18 +80,10 @@ public class Drivetrain {
         drive.arcadeDrive(invert * move, invert * rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .2); // a constant that controls the sensitivity of the angle follower - has not been tuned
-        double angle = Robot.navx.getAngle() % 360;
+        double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .05);
+        double angle = Robot.navx.getYaw();
         double turn = (targetAngle - angle) * pTerm;
-        // if robot corrects in wrong direction, either switch targetAngle with angle or make k negative
         drive.arcadeDrive(speed, turn);
-    }
-    void driveAngleDistance(double targetAngle, double speed, double distance) { //distance in meters, angle in degrees
-        double distToEncoder = 7.5 * .3 * Math.PI; //7.5 for encoder gearing, .3 needs to be adjusted - should equal diameter of wheel in meters, pi to compute circumference
-        double initEncoderValue = enc_left.getDistance();
-        while(distance * distToEncoder + initEncoderValue >= drive_left_1.getEncPosition()) {
-            driveAngle(targetAngle, speed);
-        }
     }
 
     public double getRPM(Encoder e) {

@@ -12,6 +12,7 @@ public class Robot extends IterativeRobot {
     static AHRS navx;
     Compressor compressor;
     Holder holder;
+    int autonState;
 
     @Override
     public void robotInit() {
@@ -25,17 +26,15 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("High gear", 1600);
         holder = new Holder();
         climber = new Climber();
+        autonState = 0;
 
         // Component init
         compressor = new Compressor(0);
-        navx = new AHRS(SerialPort.Port.kUSB);
+        navx = new AHRS(SerialPort.Port.kMXP);
     }
 
     @Override
     public void disabledInit() {}
-
-    @Override
-    public void autonomousInit() {}
 
     @Override
     public void teleopInit() {}
@@ -46,9 +45,33 @@ public class Robot extends IterativeRobot {
             SmartDashboard.getNumber("High gear", 0),
             SmartDashboard.getNumber("Low gear", 0));
     }
+    @Override
+    public void autonomousInit() {
+        navx.reset();
+        drivetrain.resetEncs();
+        compressor.start();
+    }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() { //starts 5.5 feet from left side, goes to left lift
+        SmartDashboard.putNumber("LeftEncValue", drivetrain.getLeftEncValue());
+        holder.extend();
+        if(autonState == 0) {
+            if(drivetrain.getLeftEncValue() < 5) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            if(drivetrain.getLeftEncValue() < 15) {
+                drivetrain.driveAngle(56, -.8);
+            } else {
+                autonState++;
+            }
+        } else if(autonState == 2) {
+            //wait until end of auton
+        }
+    }
 
     @Override
     public void teleopPeriodic() {
