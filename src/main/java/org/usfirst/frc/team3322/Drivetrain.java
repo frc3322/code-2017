@@ -23,7 +23,7 @@ public class Drivetrain {
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int highCounter = 0, lowCounter = 0;
-    public boolean invert = false;
+    public double invert;
 
     Drivetrain(double lowRPM, double highRPM) {
         this(lowRPM, highRPM, false, false);
@@ -58,9 +58,13 @@ public class Drivetrain {
         }
     }
 
+    public void direction(boolean inverted) {
+        invert = inverted ? -1 : 1;
+    }
+
     public void drive(double move, double rotate) {
-        move *= invert ? -1 : 1;
-        rotate *= invert ? -1 : 1;
+        move *= invert;
+        rotate *= invert;
         drive.arcadeDrive(move, rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
