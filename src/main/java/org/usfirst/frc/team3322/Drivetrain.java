@@ -5,6 +5,7 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
@@ -65,8 +66,8 @@ public class Drivetrain {
         }
         drive.arcadeDrive(invert * move, invert * rotate);
     }
-    void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = .2; // a constant that controls the sensitivity of the angle follower - has not been tuned
+    public void driveAngle(double targetAngle, double speed) { // in degrees
+        double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .2); // a constant that controls the sensitivity of the angle follower - has not been tuned
         double angle = Robot.navx.getAngle() % 360;
         double turn = (targetAngle - angle) * pTerm;
         // if robot corrects in wrong direction, either switch targetAngle with angle or make k negative
