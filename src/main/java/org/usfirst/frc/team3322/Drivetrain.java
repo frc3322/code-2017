@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-    public static final boolean SHIFT_HIGH = true;
-    public static final boolean SHIFT_LOW  = false;
-    private static final int NUM_SAMPLES = 3;
-    private static final int SHIFT_THRESHOLD = 25;
+    private int numSamples = 3;
+    private int shiftThreshold = 50;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
@@ -50,14 +48,17 @@ public class Drivetrain {
         this.lowRPM = lowRPM;
         this.highRPM = highRPM;
 
-        leftSamples = new double[NUM_SAMPLES];
-        rightSamples = new double[NUM_SAMPLES];
+        leftSamples = new double[numSamples];
+        rightSamples = new double[numSamples];
         sampleIndex = 0;
 
-        for (int i = 0; i < NUM_SAMPLES; i++) {
+        for (int i = 0; i < numSamples; i++) {
             leftSamples[i] = 0;
             rightSamples[i] = 0;
         }
+
+        SmartDashboard.putNumber("Num samples", numSamples);
+        SmartDashboard.putNumber("Shift threshold", numSamples);
     }
 
     public void resetEncs() {
@@ -97,12 +98,20 @@ public class Drivetrain {
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
     public void toggleGear() { shifter.set(isHigh() ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse); }
-    public void shiftHigh() { shifter.set(DoubleSolenoid.Value.kReverse); }
-    public void shiftLow() { shifter.set(DoubleSolenoid.Value.kForward); }
+    public void shiftHigh() {
+        shifter.set(DoubleSolenoid.Value.kReverse);
+        SmartDashboard.putString("Shift state", "High");
+    }
+    public void shiftLow() {
+        shifter.set(DoubleSolenoid.Value.kForward);
+        SmartDashboard.putString("Shift state", "Low");
+    }
 
-    public void setShiftPoints(double highRPM, double lowRPM) {
+    public void config(double highRPM, double lowRPM, int numSamples, int shiftThreshold) {
         this.highRPM = highRPM;
         this.lowRPM = lowRPM;
+        this.numSamples = numSamples;
+        this.shiftThreshold = shiftThreshold;
     }
 
     public void autoShift() {
@@ -110,33 +119,39 @@ public class Drivetrain {
 
         leftSamples[sampleIndex] = getRPM(enc_left);
         rightSamples[sampleIndex++] = getRPM(enc_right);
-        if (sampleIndex >= NUM_SAMPLES)
+        if (sampleIndex >= numSamples)
             sampleIndex = 0;
 
         double leftAvg = 0.0, rightAvg = 0.0;
-        for(double sample : leftSamples) {
-            leftAvg += Math.abs(sample);
+        for (int i = 0; i < leftSamples.length; ++i) {
+            leftAvg += Math.abs(leftSamples[i]);
         }
-        for (double sample : rightSamples) {
-            rightAvg += Math.abs(sample);
+        for (int i = 0; i < rightSamples.length; ++i) {
+            rightAvg += Math.abs(rightSamples[i]);
         }
 
-        leftAvg /= (double)NUM_SAMPLES;
-        rightAvg /= (double)NUM_SAMPLES;
+        leftAvg /= (double) numSamples;
+        rightAvg /= (double) numSamples;
 
         // TODO Test which method is best
         //double currentSpeed = (leftAvg + rightAvg) / 2.0;
-        //double currentSpeed = Math.max(leftAvg, rightAvg);
-        double currentSpeed = Math.min(leftAvg, rightAvg);
+        double currentSpeed = Math.max(leftAvg, rightAvg);
+        //double currentSpeed = Math.min(leftAvg, rightAvg);
+        SmartDashboard.putNumber("Current speed", currentSpeed);
+        SmartDashboard.putNumber("Shift counter", shiftCounter);
         if (currentSpeed > highRPM) {
-            if (shiftCounter > SHIFT_THRESHOLD) {
-                shiftHigh();
-                shiftCounter = 0;
+            if (shiftCounter > shiftThreshold) {
+                if (!isHigh()) {
+                    shiftHigh();
+                    shiftCounter = 0;
+                }
             }
         } else if (currentSpeed < lowRPM) {
-            if (shiftCounter > SHIFT_THRESHOLD) {
-                shiftLow();
-                shiftCounter = 0;
+            if (shiftCounter > shiftThreshold) {
+                if (isHigh()) {
+                    shiftLow();
+                    shiftCounter = 0;
+                }
             }
         }
     }

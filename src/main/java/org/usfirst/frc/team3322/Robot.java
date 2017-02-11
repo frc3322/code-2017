@@ -34,16 +34,20 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        drivetrain.shiftLow();
+    }
 
     @Override
     public void teleopInit() {}
 
     @Override
     public void disabledPeriodic() {
-        drivetrain.setShiftPoints(
+        drivetrain.config(
             SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0)
+            SmartDashboard.getNumber("Low gear", 0),
+            (int)SmartDashboard.getNumber("Num samples", 0),
+            (int)SmartDashboard.getNumber("Shift threshold", 0)
         );
     }
     @Override
@@ -121,5 +125,4 @@ public class Robot extends IterativeRobot {
         drivetrain.autoShift();
         drivetrain.showRPM();
     }
-
 }
