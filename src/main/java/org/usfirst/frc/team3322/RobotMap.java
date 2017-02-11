@@ -8,10 +8,6 @@ package org.usfirst.frc.team3322;
  */
 public class RobotMap {
     public static final int
-        // Controller
-        driverPort = 0,
-        techPort = 1,
-
         // Talons
         driveLeft_1 = 20,
         driveLeft_2 = 21,

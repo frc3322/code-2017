@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class OI {
-    static Joystick driver, tech;
+    static Joystick joystick;
 
     // Assign vague integers to variables
     public static final int
@@ -32,12 +32,11 @@ public class OI {
     public boolean invertInput = false;
 
     public OI() {
-        driver = new Joystick(RobotMap.driverPort);
-        tech = new Joystick(RobotMap.techPort);
+        joystick = new Joystick(0);
     }
 
     public boolean getButton(int button) {
-        return driver.getRawButton(button);
+        return joystick.getRawButton(button);
 	}
 
 	// Returns true only once, and will not return true again until the button is released and pressed again.
@@ -56,6 +55,6 @@ public class OI {
     }
 
 	public double getAxis(int axis) {
-            return driver.getRawAxis(axis);
+            return joystick.getRawAxis(axis);
     }
 }
