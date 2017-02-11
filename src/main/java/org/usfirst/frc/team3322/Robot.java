@@ -52,16 +52,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        drivetrain.invert = xbox.isToggled(OI.LBUMPER);
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.heldDown(OI.LBUMPER));
 
-	    if (xbox.isToggled(OI.RBUMPER)) {
+        if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
 	        holder.retract();
         }
-
-        drivetrain.invertInput = xbox.isToggled(OI.LBUMPER);
 
 	    if(xbox.heldDown(OI.ABUTTON)){
 	        climber.climbManual();
