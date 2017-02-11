@@ -18,7 +18,7 @@ public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
-    Encoder enc_left, enc_right;
+    private Encoder enc_left, enc_right;
 
     private double lowRPM, highRPM;
     private int sampleIndex;
@@ -130,5 +130,10 @@ public class Drivetrain {
             // Reset counters when not within thresholds
             highCounter = lowCounter = 0;
         }
+    }
+
+    public void showRPM() {
+        SmartDashboard.putNumber("Left motor (RPM)", Math.abs(getRPM(enc_left)));
+        SmartDashboard.putNumber("Right motor (RPM)", Math.abs(getRPM(enc_right)));
     }
 }

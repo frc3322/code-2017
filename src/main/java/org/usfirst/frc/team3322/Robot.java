@@ -68,8 +68,7 @@ public class Robot extends IterativeRobot {
         }
 
         drivetrain.autoShift();
-
-        SmartDashboard.putNumber("Left motor (RPM)", Math.abs(drivetrain.getRPM(drivetrain.enc_left)));
-        SmartDashboard.putNumber("Right motor (RPM)", Math.abs(drivetrain.getRPM(drivetrain.enc_right)));
+        drivetrain.showRPM();
     }
+
 }
