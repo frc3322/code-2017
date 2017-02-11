@@ -50,12 +50,12 @@ public class Robot extends IterativeRobot {
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
+        autonState = 0;
     }
 
     @Override
-    public void autonomousPeriodic() { //starts 5.5 feet from left side, goes to left lift
-        SmartDashboard.putNumber("LeftEncValue", drivetrain.getLeftEncValue());
-        holder.extend();
+    public void autonomousPeriodic() {
+        holder.extend(); //starts 5.5 feet from left side, goes to left lift
         if(autonState == 0) {
             if(drivetrain.getLeftEncValue() < 5) {
                 drivetrain.driveAngle(0, -.8);
@@ -64,13 +64,39 @@ public class Robot extends IterativeRobot {
             }
         } else if (autonState == 1) {
             if(drivetrain.getLeftEncValue() < 15) {
-                drivetrain.driveAngle(56, -.8);
+                drivetrain.driveAngle(59, -.8);
             } else {
                 autonState++;
             }
         } else if(autonState == 2) {
             //wait until end of auton
         }
+        /*holder.extend(); //starts 5.5 feet from right side, goes to right lift
+        if(autonState == 0) {
+            if(drivetrain.getRightEncValue() < 5) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            if(drivetrain.getRightEncValue() < 15) {
+                drivetrain.driveAngle(-59, -.8);
+            } else {
+                autonState++;
+            }
+        } else if(autonState == 2) {
+            //wait until end of auton
+        }*/
+        /*holder.extend(); //starts directly in front of center lift, goes to center lift
+        if(autonState == 0) {
+            if(drivetrain.getRightEncValue() < 10) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            //wait until end of auton
+        }*/
     }
 
     @Override
