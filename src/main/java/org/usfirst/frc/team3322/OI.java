@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3322;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 
@@ -75,5 +76,9 @@ public class OI {
             toggleButtonState(button);
         }
         return 0 != (toggleState & (1 << button));
+    }
+    public void vibrate(double leftVibrate , double rightVibrate){
+        joystick.setRumble(GenericHID.RumbleType.kLeftRumble, leftVibrate);
+        joystick.setRumble(GenericHID.RumbleType.kRightRumble, rightVibrate);
     }
 }
