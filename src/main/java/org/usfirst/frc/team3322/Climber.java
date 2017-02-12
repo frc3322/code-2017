@@ -26,16 +26,7 @@ public class Climber {
         climbEncoder = new Encoder(4,5);
         current = new double[]{0,0,0,0,0};
     }
-/*
-    public void climbManual(){
-        climb_talon_1.set(1);
-        climb_talon_2.set(1);
-    }
-    public void stop(){
-        climb_talon_1.set(0);
-        climb_talon_2.set(0);
-    }
-*/
+
     public void climb (boolean climbStatus) {
     // Climb using current spike and encoder
 /*
