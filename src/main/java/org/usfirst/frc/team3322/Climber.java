@@ -14,9 +14,11 @@ public class Climber {
     double climbDistance =0;
     double totalCurrent = 0;
     double avgCurrent = 0;
+    double vibration = 0;
 //  double altitude = 0;
     double[] current;
     int iterator = 0;
+    int timer = 0;
 
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
@@ -60,6 +62,7 @@ public class Climber {
 */
     // Climb using only current
         iterator();
+        climbVibrate();
         SmartDashboard.putNumber("average current", avgCurrent);
         SmartDashboard.putNumber("climb 1 output current", climb_talon_1.getOutputCurrent());
         SmartDashboard.putNumber("climb 2 output current", climb_talon_2.getOutputCurrent());
@@ -71,7 +74,7 @@ public class Climber {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
-        if(avgCurrent > 50){
+        if (avgCurrent > 50){
             currentSpike = true;
         }
 
@@ -118,5 +121,19 @@ public class Climber {
             totalCurrent += amps;
         }
         avgCurrent = totalCurrent / 5.0;
+    }
+
+    private void climbVibrate() {
+        if (avgCurrent > 1) {
+            timer ++;
+            Robot.xbox.setVibrate(0 + vibration,0 + vibration);
+        } else {
+            vibration = 0;
+            Robot.xbox.setVibrate(0 , 0);
+        }
+        if (timer == 5) {
+            vibration = vibration + 0.01;
+            timer = 0;
+        }
     }
 }
