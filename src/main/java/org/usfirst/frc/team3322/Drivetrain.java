@@ -89,11 +89,23 @@ public class Drivetrain {
         drive.arcadeDrive(speed, turn);
     }
 
-    public double getRPM(Encoder e) {
-        return e.getRate() / 256.0 * 60.0 / (isHigh() ? 1.0588 : 0.4896);
+    public double encoderRPS(Encoder e) {
+        return e.getRate() / 256.0;
     }
-    public double getWheelRPM(Encoder e) {
-        return e.getRate() / 256.0 * 60.0 / 7.5;
+    public double motorRPS(Encoder e) {
+        return encoderRPS(e) / (isHigh() ? 1.0588 : 0.4896);
+    }
+    public double motorRPM(Encoder e) {
+        return motorRPS(e) * 60.0;
+    }
+    public double wheelRPS(Encoder e) {
+        return encoderRPS(e) / 7.5;
+    }
+    public double wheelRPM(Encoder e) {
+        return wheelRPS(e) * 60.0;
+    }
+    public double wheelFloorSpeed(Encoder e) {
+        return wheelRPS(e) * 0.5 * 3.14;
     }
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
@@ -107,7 +119,7 @@ public class Drivetrain {
         SmartDashboard.putString("Shift state", "Low");
     }
 
-    public void config(double highRPM, double lowRPM, int numSamples, int shiftThreshold) {
+    public void configFromDashboard(double highRPM, double lowRPM, int numSamples, int shiftThreshold) {
         this.highRPM = highRPM;
         this.lowRPM = lowRPM;
         this.numSamples = numSamples;
@@ -117,8 +129,8 @@ public class Drivetrain {
     public void autoShift() {
         shiftCounter++;
 
-        leftSamples[sampleIndex] = getRPM(enc_left);
-        rightSamples[sampleIndex++] = getRPM(enc_right);
+        leftSamples[sampleIndex] = wheelFloorSpeed(enc_left);
+        rightSamples[sampleIndex++] = wheelFloorSpeed(enc_right);
         if (sampleIndex >= numSamples)
             sampleIndex = 0;
 
@@ -137,8 +149,7 @@ public class Drivetrain {
         //double currentSpeed = (leftAvg + rightAvg) / 2.0;
         double currentSpeed = Math.max(leftAvg, rightAvg);
         //double currentSpeed = Math.min(leftAvg, rightAvg);
-        SmartDashboard.putNumber("Current speed", currentSpeed);
-        SmartDashboard.putNumber("Shift counter", shiftCounter);
+
         if (currentSpeed > highRPM) {
             if (shiftCounter > shiftThreshold) {
                 if (!isHigh()) {
@@ -155,7 +166,16 @@ public class Drivetrain {
             }
         }
 
-        SmartDashboard.putNumber("Left motor (RPM)", Math.abs(getRPM(enc_left)));
-        SmartDashboard.putNumber("Right motor (RPM)", Math.abs(getRPM(enc_right)));
+        SmartDashboard.putNumber("Left motor (RPM)", motorRPM(enc_left));
+        SmartDashboard.putNumber("Right motor (RPM)", motorRPM(enc_right));
+        SmartDashboard.putNumber("Current speed (FPS)", currentSpeed);
+        SmartDashboard.putNumber("Shift counter", shiftCounter);
+    }
+
+    public void configFromDashboard() {
+        highRPM = SmartDashboard.getNumber("High gear", 0);
+        lowRPM = SmartDashboard.getNumber("Low gear", 0);
+        numSamples = (int)SmartDashboard.getNumber("Num samples", 0);
+        shiftThreshold = (int)SmartDashboard.getNumber("Shift threshold", 0);
     }
 }

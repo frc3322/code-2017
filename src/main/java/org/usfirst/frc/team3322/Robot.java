@@ -47,12 +47,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         Robot.xbox.setVibrate(0 , 0);
-        drivetrain.config(
-            SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0),
-            (int)SmartDashboard.getNumber("Num samples", 0),
-            (int)SmartDashboard.getNumber("Shift threshold", 0)
-        );
+        drivetrain.configFromDashboard();
     }
     @Override
     public void autonomousInit() {
