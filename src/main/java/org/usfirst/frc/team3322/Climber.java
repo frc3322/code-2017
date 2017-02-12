@@ -10,13 +10,13 @@ public class Climber {
     boolean climbStatus = false;
     boolean climbStartStatus = true;
     boolean currentSpike = false;
-    double climbRate = 1.0; //value from 0.00 to 1.00
+    double climbRate = 1.0;
     double climbDistance =0;
     double totalCurrent = 0;
     double avgCurrent = 0;
     double ticksPerSecond = 44.0;
     double vibration = 0;
-//  double altitude = 0;
+    double altitude = 0;
     double[] current;
     int iterator = 0;
     int timer = 0;
@@ -120,7 +120,7 @@ public class Climber {
     private void climbVibrate() {
         if (avgCurrent > 50) {
             timer ++;
-            xbox.vibrate(0 + vibration,0 + vibration);
+            xbox.setLeftRightControllerVibrate(0 + vibration,0 + vibration);
         }
         if (timer == 5) {
             vibration = vibration + 0.01;

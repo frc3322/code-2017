@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class OI {
     static Joystick joystick;
+    int timer = 0;
+    double ticksPerSecond = 44.0;
 
     // Assign vague integers to variables
     public static final int
@@ -64,7 +66,7 @@ public class OI {
         }
     }
 	public double getAxis(int axis) {
-            return joystick.getRawAxis(axis);
+        return joystick.getRawAxis(axis);
     }
 
     void toggleButtonState(int button) {
@@ -77,8 +79,13 @@ public class OI {
         }
         return 0 != (toggleState & (1 << button));
     }
-    public void vibrate(double leftVibrate , double rightVibrate){
+    public void setLeftRightControllerVibrate(double leftVibrate , double rightVibrate){
         joystick.setRumble(GenericHID.RumbleType.kLeftRumble, leftVibrate);
         joystick.setRumble(GenericHID.RumbleType.kRightRumble, rightVibrate);
+    }
+    public void gameTimerRumble() {
+        timer++;
+        if (timer*ticksPerSecond ==  75)
+            setLeftRightControllerVibrate(1,1);
     }
 }
