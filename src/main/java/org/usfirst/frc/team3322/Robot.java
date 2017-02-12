@@ -42,6 +42,9 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {}
 
     @Override
+    public void robotPeriodic() {}
+
+    @Override
     public void disabledPeriodic() {
         drivetrain.config(
             SmartDashboard.getNumber("High gear", 0),

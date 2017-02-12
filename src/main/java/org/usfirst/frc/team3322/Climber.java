@@ -10,9 +10,9 @@ public class Climber {
     boolean climbStartStatus = true;
     boolean currentSpike = false;
     double climbRate = 1.0; //value from 0.00 to 1.00
-    double climbDistance =0;
-    double totalCurrent = 0;
-    double avgCurrent = 0;
+    double climbDistance;
+    double totalCurrent;
+    double avgCurrent;
 //  double altitude = 0;
     double[] current;
     int iterator = 0;
@@ -20,8 +20,8 @@ public class Climber {
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
         climb_talon_2 = new CANTalon(RobotMap.climbTalon_2);
-        climbEncoder = new Encoder(4,5);
-        current = new double[]{0,0,0,0,0};
+        climbEncoder = new Encoder(RobotMap.encClimb_1, RobotMap.encClimb_2);
+        current = new double[] {0,0,0,0,0};
     }
     public void climbManual(){
         climb_talon_1.set(1);
@@ -31,7 +31,7 @@ public class Climber {
         climb_talon_1.set(0);
         climb_talon_2.set(0);
     }
-    public void climb (boolean climbStatus) {
+    public void climb(boolean climbStatus) {
     // Climb using current spike and encoder
 /*
         climber.iterator();
@@ -99,12 +99,11 @@ public class Climber {
 
     private void iterator() {
         current[iterator] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent())/2;
-        if (iterator < 5){
+        if (iterator < 4){
             iterator++;
         } else {
             iterator = 0;
         }
-        totalCurrent = 0;
         for (double amps : current) {
             totalCurrent += amps;
         }
