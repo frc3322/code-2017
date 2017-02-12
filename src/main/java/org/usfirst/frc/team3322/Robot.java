@@ -69,32 +69,6 @@ public class Robot extends IterativeRobot {
         } else if(autonState == 2) {
             //wait until end of auton
         }
-        /*holder.extend(); //starts 5.5 feet from right side, goes to right lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 5) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            if(drivetrain.getRightEncValue() < 15) {
-                drivetrain.driveAngle(-59, -.8);
-            } else {
-                autonState++;
-            }
-        } else if(autonState == 2) {
-            //wait until end of auton
-        }*/
-        /*holder.extend(); //starts directly in front of center lift, goes to center lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 10) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            //wait until end of auton
-        }*/
     }
 
     @Override
