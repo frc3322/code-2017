@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SerialPort;
 
 /**
- * Created by snekiam on 1/10/2017.
+ * Created by sneki on 1/10/2017.
  * Main Robot class for 3322's 2017 SteamWorks robot
  */
 public class Robot extends IterativeRobot {
