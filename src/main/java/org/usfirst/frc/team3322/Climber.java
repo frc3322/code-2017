@@ -6,10 +6,8 @@ import edu.wpi.first.wpilibj.Encoder;
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
     Encoder climbEncoder;
-    Climber climber;
-    static OI xbox;
     boolean climbStatus = false;
-    boolean climbStartStatus = true; //set current as false (not a power surge)
+    boolean climbStartStatus = true;
     boolean currentSpike = false;
     double climbRate = 1.0; //value from 0.00 to 1.00
     double climbDistance =0;
@@ -23,19 +21,15 @@ public class Climber {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
         climb_talon_2 = new CANTalon(RobotMap.climbTalon_2);
         climbEncoder = new Encoder(4,5);
-        xbox = new OI();
         current = new double[]{0,0,0,0,0};
-
     }
     public void climbManual(){
         climb_talon_1.set(1);
         climb_talon_2.set(1);
-        xbox.vibrate(climb_talon_1.getOutputCurrent(), climb_talon_2.getOutputCurrent());
     }
     public void stop(){
         climb_talon_1.set(0);
         climb_talon_2.set(0);
-        xbox.vibrate(0 , 0);
     }
     public void climb (boolean climbStatus) {
     // Climb using current spike and encoder
