@@ -2,6 +2,7 @@ package org.usfirst.frc.team3322;
 
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
@@ -23,6 +24,7 @@ public class Climber {
         climbEncoder = new Encoder(RobotMap.encClimb_1, RobotMap.encClimb_2);
         current = new double[] {0,0,0,0,0};
     }
+/*
     public void climbManual(){
         climb_talon_1.set(1);
         climb_talon_2.set(1);
@@ -31,6 +33,7 @@ public class Climber {
         climb_talon_1.set(0);
         climb_talon_2.set(0);
     }
+*/
     public void climb(boolean climbStatus) {
     // Climb using current spike and encoder
 /*
@@ -56,16 +59,22 @@ public class Climber {
         }
 */
     // Climb using only current
-/*
-        climber.iterator();
-        if (climbStatus && avgCurrent > 50 && avgCurrent < 100) {
+        iterator();
+        SmartDashboard.putNumber("average current", avgCurrent);
+        SmartDashboard.putNumber("climb 1 output current", climb_talon_1.getOutputCurrent());
+        SmartDashboard.putNumber("climb 2 output current", climb_talon_2.getOutputCurrent());
+        if (climbStatus & avgCurrent < 50 && !currentSpike) {
             climb_talon_1.set(climbRate);
             climb_talon_2.set(climbRate);
-        } else {
+        }
+        else {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
-*/
+        if(avgCurrent > 50){
+            currentSpike = true;
+        }
+
     // Climb using altitude and encoder
 /*
         altitude = Robot.navx.getAltitude();
