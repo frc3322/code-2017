@@ -46,12 +46,10 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        drivetrain.config(
-            SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0),
-            (int)SmartDashboard.getNumber("Num samples", 0),
-            (int)SmartDashboard.getNumber("Shift threshold", 0)
-        );
+        drivetrain.lowRPM = SmartDashboard.getNumber("Low gear", 0);
+        drivetrain.highRPM = SmartDashboard.getNumber("High gear", 0);
+        drivetrain.numSamples = (int)SmartDashboard.getNumber("Num samples", 0);
+        drivetrain.shiftThreshold = (int)SmartDashboard.getNumber("Shift threshold", 0);
     }
     @Override
     public void autonomousInit() {
@@ -126,6 +124,5 @@ public class Robot extends IterativeRobot {
         }
 
         drivetrain.autoShift();
-        drivetrain.showRPM();
     }
 }

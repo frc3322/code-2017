@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-    private int numSamples = 3;
-    private int shiftThreshold = 50;
+    double lowRPM, highRPM;
+    int numSamples = 3;
+    int shiftThreshold = 50;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
     private Encoder enc_left, enc_right;
 
-    private double lowRPM, highRPM;
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int shiftCounter = 0;
@@ -154,9 +154,7 @@ public class Drivetrain {
                 }
             }
         }
-    }
 
-    public void showRPM() {
         SmartDashboard.putNumber("Left motor (RPM)", Math.abs(getRPM(enc_left)));
         SmartDashboard.putNumber("Right motor (RPM)", Math.abs(getRPM(enc_right)));
     }
