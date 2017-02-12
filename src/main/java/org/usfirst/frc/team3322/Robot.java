@@ -46,10 +46,13 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        drivetrain.lowRPM = SmartDashboard.getNumber("Low gear", 0);
-        drivetrain.highRPM = SmartDashboard.getNumber("High gear", 0);
-        drivetrain.numSamples = (int)SmartDashboard.getNumber("Num samples", 0);
-        drivetrain.shiftThreshold = (int)SmartDashboard.getNumber("Shift threshold", 0);
+        Robot.xbox.setVibrate(0 , 0);
+        drivetrain.config(
+            SmartDashboard.getNumber("High gear", 0),
+            SmartDashboard.getNumber("Low gear", 0),
+            (int)SmartDashboard.getNumber("Num samples", 0),
+            (int)SmartDashboard.getNumber("Shift threshold", 0)
+        );
     }
     @Override
     public void autonomousInit() {
@@ -111,27 +114,12 @@ public class Robot extends IterativeRobot {
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.heldDown(OI.ABUTTON));
 
-        if(xbox.heldDown(OI.XBUTTON)){
-            climber.climb_talon_1.set(-1);
-            climber.climb_talon_2.set(-1);
-        }
-        else if (xbox.heldDown(OI.YBUTTON)){
-            climber.climb_talon_1.set(0);
-            climber.climb_talon_2.set(0);
-        }
-
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
 	        holder.retract();
         }
-/*
-	    if(xbox.heldDown(OI.ABUTTON)){
-	        climber.climbManual();
-        } else {
-	        climber.stop();
-        }
-*/
+
         drivetrain.autoShift();
     }
 }

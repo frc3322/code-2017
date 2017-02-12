@@ -11,12 +11,14 @@ public class Climber {
     boolean climbStartStatus = true;
     boolean currentSpike = false;
     double climbRate = 1.0; //value from 0.00 to 1.00
-    double climbDistance;
-    double totalCurrent;
-    double avgCurrent;
+    double climbDistance =0;
+    double totalCurrent = 0;
+    double avgCurrent = 0;
+    double vibration = 0;
 //  double altitude = 0;
     double[] current;
     int iterator = 0;
+    int timer = 0;
 
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
@@ -24,17 +26,8 @@ public class Climber {
         climbEncoder = new Encoder(RobotMap.encClimb_1, RobotMap.encClimb_2);
         current = new double[] {0,0,0,0,0};
     }
-/*
-    public void climbManual(){
-        climb_talon_1.set(1);
-        climb_talon_2.set(1);
-    }
-    public void stop(){
-        climb_talon_1.set(0);
-        climb_talon_2.set(0);
-    }
-*/
-    public void climb(boolean climbStatus) {
+
+    public void climb (boolean climbStatus) {
     // Climb using current spike and encoder
 /*
         climber.iterator();
@@ -60,6 +53,7 @@ public class Climber {
 */
     // Climb using only current
         iterator();
+        climbVibrate();
         SmartDashboard.putNumber("average current", avgCurrent);
         SmartDashboard.putNumber("climb 1 output current", climb_talon_1.getOutputCurrent());
         SmartDashboard.putNumber("climb 2 output current", climb_talon_2.getOutputCurrent());
@@ -71,7 +65,7 @@ public class Climber {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
-        if(avgCurrent > 50){
+        if (avgCurrent > 50){
             currentSpike = true;
         }
 
@@ -113,9 +107,24 @@ public class Climber {
         } else {
             iterator = 0;
         }
+        totalCurrent = 0;
         for (double amps : current) {
             totalCurrent += amps;
         }
         avgCurrent = totalCurrent / 5.0;
+    }
+
+    private void climbVibrate() {
+        if (avgCurrent > 1) {
+            timer ++;
+            Robot.xbox.setVibrate(0 + vibration,0 + vibration);
+        } else {
+            vibration = 0;
+            Robot.xbox.setVibrate(0 , 0);
+        }
+        if (timer == 5) {
+            vibration = vibration + 0.01;
+            timer = 0;
+        }
     }
 }
