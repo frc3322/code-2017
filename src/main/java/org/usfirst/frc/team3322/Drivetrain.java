@@ -10,8 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain {
     double lowRPM, highRPM;
-    int numSamples = 3;
-    int shiftThreshold = 50;
+    int numSamples, shiftThreshold;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
@@ -23,10 +22,10 @@ public class Drivetrain {
     int shiftCounter = 0;
     public double invert;
 
-    Drivetrain(double lowRPM, double highRPM) {
-        this(lowRPM, highRPM, false, false);
+    Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold) {
+        this(lowRPM, highRPM, numSamples, shiftThreshold, false, false);
     }
-    Drivetrain(double lowRPM, double highRPM, boolean left_inv, boolean right_inv) {
+    Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);
@@ -47,6 +46,8 @@ public class Drivetrain {
 
         this.lowRPM = lowRPM;
         this.highRPM = highRPM;
+        this.numSamples = numSamples;
+        this.shiftThreshold = shiftThreshold;
 
         leftSamples = new double[numSamples];
         rightSamples = new double[numSamples];
@@ -57,6 +58,8 @@ public class Drivetrain {
             rightSamples[i] = 0;
         }
 
+        SmartDashboard.putNumber("Low gear", lowRPM);
+        SmartDashboard.putNumber("High gear", highRPM);
         SmartDashboard.putNumber("Num samples", numSamples);
         SmartDashboard.putNumber("Shift threshold", shiftThreshold);
     }
@@ -69,7 +72,6 @@ public class Drivetrain {
     public double getLeftEncValue() { //returns in feet
         return enc_left.getDistance() / 714;
     }
-
     public double getRightEncValue() { //returns in feet
         return enc_right.getDistance() / 714;
     }

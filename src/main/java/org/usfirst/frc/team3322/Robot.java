@@ -2,7 +2,6 @@ package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
@@ -18,12 +17,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(
-            1300,
-            1600
-        );
-        SmartDashboard.putNumber("Low gear", 1300);
-        SmartDashboard.putNumber("High gear", 1600);
+        drivetrain = new Drivetrain(5, 3.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
         autonState = 0;
@@ -46,7 +40,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.xbox.setVibrate(0 , 0);
+        Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
     }
     @Override
