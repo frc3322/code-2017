@@ -105,16 +105,19 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
+        drivetrain.autoShift();
+
+        // Above chassis
         climber.climb(xbox.heldDown(OI.ABUTTON));
 
+        // Controls
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
 	        holder.retract();
         }
-
-        drivetrain.autoShift();
     }
 }
