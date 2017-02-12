@@ -58,7 +58,7 @@ public class Drivetrain {
         }
 
         SmartDashboard.putNumber("Num samples", numSamples);
-        SmartDashboard.putNumber("Shift threshold", numSamples);
+        SmartDashboard.putNumber("Shift threshold", shiftThreshold);
     }
 
     public void resetEncs() {
