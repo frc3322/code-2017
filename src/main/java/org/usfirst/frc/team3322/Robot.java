@@ -4,65 +4,125 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * Main Robot class for team 3322's 2017 SteamWorks robot
- */
+
 public class Robot extends IterativeRobot {
-    // Define our global variables
-    OI xbox;
+    static OI xbox;
     Drivetrain drivetrain;
-    Compressor compressor;
     Climber climber;
-    Gear gear;
-    AHRS navx;
-    Auton auton;
+    static AHRS navx;
+    Compressor compressor;
+    Holder holder;
+    int autonState;
 
     @Override
     public void robotInit() {
-        // Initialize required object classes
-        drivetrain = new Drivetrain(3000.0, 4000.0,true, false); // TODO what RPM should these be?
+        // Object init
+        xbox = new OI();
+        drivetrain = new Drivetrain(
+            1300,
+            1600
+        );
+        SmartDashboard.putNumber("Low gear", 1300);
+        SmartDashboard.putNumber("High gear", 1600);
+        holder = new Holder();
         climber = new Climber();
+        autonState = 0;
+
+        // Component init
         compressor = new Compressor(0);
-        navx = new AHRS(SerialPort.Port.kUSB);
-        xbox = new OI(1);
-        gear = new Gear();
-        auton = new Auton();
+        navx = new AHRS(SerialPort.Port.kMXP);
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        drivetrain.shiftLow();
+    }
 
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disabledPeriodic() {
+        drivetrain.config(
+            SmartDashboard.getNumber("High gear", 0),
+            SmartDashboard.getNumber("Low gear", 0),
+            (int)SmartDashboard.getNumber("Num samples", 0),
+            (int)SmartDashboard.getNumber("Shift threshold", 0)
+        );
+    }
     @Override
     public void autonomousInit() {
-	    compressor.start();
-    }
-
-    @Override
-    public void teleopInit() {
+        navx.reset();
+        drivetrain.resetEncs();
         compressor.start();
+        autonState = 0;
     }
-
-    @Override
-    public void disabledPeriodic() {}
 
     @Override
     public void autonomousPeriodic() {
-	    SmartDashboard.putNumber("Sonar distance", auton.sonar.getValue());
-	    SmartDashboard.putBoolean("Ir state", auton.ir.get());
-
-	    if (auton.sonar.getVoltage() > 0.1) {
-	        drivetrain.drive(1, 0);
+        holder.extend(); //starts 5.5 feet from left side, goes to left lift
+        if(autonState == 0) {
+            if(drivetrain.getLeftEncValue() < 5) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            if(drivetrain.getLeftEncValue() < 15) {
+                drivetrain.driveAngle(59, -.8);
+            } else {
+                autonState++;
+            }
+        } else if(autonState == 2) {
+            //wait until end of auton
         }
+        /*holder.extend(); //starts 5.5 feet from right side, goes to right lift
+        if(autonState == 0) {
+            if(drivetrain.getRightEncValue() < 5) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            if(drivetrain.getRightEncValue() < 15) {
+                drivetrain.driveAngle(-59, -.8);
+            } else {
+                autonState++;
+            }
+        } else if(autonState == 2) {
+            //wait until end of auton
+        }*/
+        /*holder.extend(); //starts directly in front of center lift, goes to center lift
+        if(autonState == 0) {
+            if(drivetrain.getRightEncValue() < 10) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            //wait until end of auton
+        }*/
     }
 
     @Override
     public void teleopPeriodic() {
-        climber.climb(xbox.getButtonDown(OI.LBUMPER));
+        drivetrain.direction(xbox.isToggled(OI.LBUMPER));
+        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
+        climber.climb(xbox.heldDown(OI.LBUMPER));
 
-	    if (xbox.getButton(OI.ABUTTON)) {
-	        gear.extendHolder();
+        if (xbox.isToggled(OI.RBUMPER)) {
+	        holder.extend();
 	    } else {
-	        gear.retractHolder();
-	    }
+	        holder.retract();
+        }
+
+	    if(xbox.heldDown(OI.ABUTTON)){
+	        climber.climbManual();
+        } else {
+	        climber.stop();
+        }
+
+        drivetrain.autoShift();
+        drivetrain.showRPM();
     }
 }

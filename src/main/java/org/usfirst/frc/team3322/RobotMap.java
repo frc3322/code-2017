@@ -1,38 +1,32 @@
 package org.usfirst.frc.team3322;
 
-
+/**
+ * The RobotMap is a mapping from the ports sensors and actuators are wired into
+ * to a variable name. This provides flexibility changing wiring, makes checking
+ * the wiring easier and significantly reduces the number of magic numbers
+ * floating around.
+ */
 public class RobotMap {
-    // Assign IDs to integers for easier electrical rewiring
     public static final int
-            // Talons
-            driveLeft_1 = 20,
-            driveLeft_2 = 21,
-            driveLeft_3 = 3,
+        // Talons
+        driveLeft_1 = 20,
+        driveLeft_2 = 21,
+        driveRight_1 = 23,
+        driveRight_2 = 22,
 
-            driveRight_1 = 22,
-            driveRight_2 = 23,
-            driveRight_3 = 6,
+        climbTalon_1 = 40,
+        climbTalon_2 = 41,
 
-            climbTalon_1 = 77,
-            climbTalon_2 = 78,
+        // Solenoids
+        shifter_1 = 0,
+        shifter_2 = 1,
 
-            // Solenoids
-            shifter_1 = 1,
-            shifter_2 = 3,
+        gearHolder_1 = 3,
+        gearHolder_2 = 4,
 
-            // Digital
-            encoderLeft_A = 0,
-            encoderLeft_B = 1,
-            encoderRight_A = 2,
-            encoderRight_B = 3,
-
-            // Analog
-            sonarFrontLeft = 0,
-            sonarFrontRight = 1,
-
-            irTest = 0; // not sure if analog or digital
-    /*
-        leftEnc = new Encoder(0, 1);
-        rightEnc = new Encoder(2, 3);
-     */
+        // Sensors
+        encLeft_1 = 0,
+        encLeft_2 = 1,
+        encRight_1 = 2,
+        encRight_2 = 3;
 }
