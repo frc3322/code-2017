@@ -2,7 +2,6 @@ package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
@@ -18,12 +17,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(
-            1300,
-            1600
-        );
-        SmartDashboard.putNumber("Low gear", 1300);
-        SmartDashboard.putNumber("High gear", 1600);
+        drivetrain = new Drivetrain(5, 3.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
         autonState = 0;
@@ -42,14 +36,12 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {}
 
     @Override
+    public void robotPeriodic() {}
+
+    @Override
     public void disabledPeriodic() {
-        Robot.xbox.setVibrate(0 , 0);
-        drivetrain.config(
-            SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0),
-            (int)SmartDashboard.getNumber("Num samples", 0),
-            (int)SmartDashboard.getNumber("Shift threshold", 0)
-        );
+        Robot.xbox.setVibrate(0, 0);
+        drivetrain.configFromDashboard();
     }
     @Override
     public void autonomousInit() {
@@ -77,47 +69,22 @@ public class Robot extends IterativeRobot {
         } else if(autonState == 2) {
             //wait until end of auton
         }
-        /*holder.extend(); //starts 5.5 feet from right side, goes to right lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 5) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            if(drivetrain.getRightEncValue() < 15) {
-                drivetrain.driveAngle(-59, -.8);
-            } else {
-                autonState++;
-            }
-        } else if(autonState == 2) {
-            //wait until end of auton
-        }*/
-        /*holder.extend(); //starts directly in front of center lift, goes to center lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 10) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            //wait until end of auton
-        }*/
     }
 
     @Override
     public void teleopPeriodic() {
+        // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
         climber.climb(xbox.isToggled(OI.ABUTTON));
 
+        drivetrain.autoShift();
+
+        // Controls
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
 	        holder.retract();
         }
-
-        drivetrain.autoShift();
-        drivetrain.showRPM();
     }
 }
