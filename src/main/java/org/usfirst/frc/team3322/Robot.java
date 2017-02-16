@@ -64,7 +64,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         holder.extend();
-
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
