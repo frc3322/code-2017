@@ -7,17 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
     static OI xbox;
-    Drivetrain drivetrain;
+    static Drivetrain drivetrain;
     Climber climber;
     static AHRS navx;
     Compressor compressor;
     Holder holder;
-    int autonState;
-    double autonD1;
-    double autonD2;
-    int stringLength;
+    Auton auton;
+    int startPos;
     double angleStart;
-    double angleLift;
 
     @Override
     public void robotInit() {
@@ -26,9 +23,8 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain(5, 3.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
-        autonState = 0;
-        stringLength = 132; //inches
-        angleLift = 30; //degrees
+        auton = new Auton();
+        startPos = 0;
 
         // Component init
         compressor = new Compressor(0);
@@ -39,6 +35,8 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
         drivetrain.shiftLow();
         SmartDashboard.putNumber("String Angle", 60);
+        SmartDashboard.putNumber("StartPos", 0);
+        SmartDashboard.putString("PositionKey", "L to R, B in 1-3, R in 4-6");
     }
 
     @Override
@@ -52,39 +50,28 @@ public class Robot extends IterativeRobot {
         Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
         angleStart = SmartDashboard.getNumber("String Angle", 60);
-
+        startPos = (int) SmartDashboard.getNumber("StartPos", 0);
+        SmartDashboard.putBoolean("AutonReady", startPos != 0);
     }
     @Override
     public void autonomousInit() {
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
-        autonState = 0;
-        double ly = Math.sin(Math.toDegrees(angleStart));
-        double lx = Math.cos(Math.toDegrees(angleStart));
-        autonD1 = ly - lx * Math.tan(angleLift);
-        autonD2 = lx/Math.cos(angleLift);
+        auton.initVars(angleStart);
     }
 
     @Override
     public void autonomousPeriodic() {
         holder.extend();
 
-        /*if(autonState == 0) { //starts 5.5 feet from left side, goes to left lift
-            if(drivetrain.getLeftEncValue() < 5) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            if(drivetrain.getLeftEncValue() < 15) {
-                drivetrain.driveAngle(59, -.8);
-            } else {
-                autonState++;
-            }
-        } else if(autonState == 2) {
-            //wait until end of auton
-        }*/
+        if(startPos == 1 || startPos == 4) {
+            auton.leftPos();
+        } else if (startPos == 2 || startPos == 5) {
+            auton.middlePos();
+        } else if (startPos == 3 || startPos == 6) {
+            auton.rightPos();
+        }
     }
 
     @Override
