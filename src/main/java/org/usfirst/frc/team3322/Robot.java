@@ -2,106 +2,105 @@ package org.usfirst.frc.team3322;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
-
-import java.awt.geom.Point2D;
-import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
-    OI xbox;
+    static OI xbox;
     Drivetrain drivetrain;
     Climber climber;
-    Gear gear, gear2;
-    AHRS navx;
+    static AHRS navx;
     Compressor compressor;
-    Auton auton;
-    Point2D.Float point = new Point2D.Float(0f, 0f);
-    List<Point2D.Float> coords = new ArrayList<Point2D.Float>(500);
+    Holder holder;
+    int autonState;
+    double autonD1;
+    double autonD2;
+    int stringLength;
+    double angleStart;
+    double angleLift;
 
     @Override
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(3000.0, 4000.0,false, false); // TODO what RPM should these be?
-        gear = new Gear();
+        drivetrain = new Drivetrain(5, 3.5, 3, 50);
+        holder = new Holder();
         climber = new Climber();
-        auton = new Auton();
+        autonState = 0;
+        stringLength = 132; //inches
+        angleLift = 30; //degrees
 
         // Component init
         compressor = new Compressor(0);
-        navx = new AHRS(SerialPort.Port.kUSB);
+        navx = new AHRS(SerialPort.Port.kMXP);
     }
 
     @Override
     public void disabledInit() {
-        navx.resetDisplacement();
-        coords.add(point);
+        drivetrain.shiftLow();
+        SmartDashboard.putNumber("String Angle", 60);
     }
 
     @Override
-    public void autonomousInit() {
-	    compressor.start();
-    }
+    public void teleopInit() {}
 
     @Override
-    public void teleopInit() {
-        compressor.start();
-    }
+    public void robotPeriodic() {}
 
     @Override
     public void disabledPeriodic() {
-        int i = coords.size();
-        float x = navx.getDisplacementX();
-        float y = navx.getDisplacementY();
+        Robot.xbox.setVibrate(0, 0);
+        drivetrain.configFromDashboard();
+        angleStart = SmartDashboard.getNumber("String Angle", 60);
 
-
-        // Record a new point for every inch moved
-        if (Point2D.distance(coords.get(i - 1).x, coords.get(i - 1).y, x, y) > .025) {
-            coords.add(new Point2D.Float(navx.getDisplacementX(), navx.getDisplacementY()));
-        }
-
-        // Start recording points to file
-        if (xbox.getButtonDown(OI.ABUTTON)) {
-            try {
-                PrintStream out = new PrintStream("AutonPath");
-
-                for (Point2D.Float coord : coords) {
-                    out.println(coord.x + " " + coord.y);
-                }
-            } catch (Exception e) {
-                // TODO fix me - file is a directory
-                e.printStackTrace();
-            }
-        }
+    }
+    @Override
+    public void autonomousInit() {
+        navx.reset();
+        drivetrain.resetEncs();
+        compressor.start();
+        autonState = 0;
+        double ly = Math.sin(Math.toDegrees(angleStart));
+        double lx = Math.cos(Math.toDegrees(angleStart));
+        autonD1 = ly - lx * Math.tan(angleLift);
+        autonD2 = lx/Math.cos(angleLift);
     }
 
     @Override
     public void autonomousPeriodic() {
-        // TODO Parse the coordinate stream for reassembly
-        try {
-            InputStream in = new FileInputStream("AutonPath");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        holder.extend();
+
+        /*if(autonState == 0) { //starts 5.5 feet from left side, goes to left lift
+            if(drivetrain.getLeftEncValue() < 5) {
+                drivetrain.driveAngle(0, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 1) {
+            if(drivetrain.getLeftEncValue() < 15) {
+                drivetrain.driveAngle(59, -.8);
+            } else {
+                autonState++;
+            }
+        } else if(autonState == 2) {
+            //wait until end of auton
+        }*/
     }
 
     @Override
     public void teleopPeriodic() {
+        // Drivetrain
+        drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
-        climber.climb(xbox.getButton(OI.LBUMPER));
+        climber.climb(xbox.isToggled(OI.ABUTTON));
 
-        if (xbox.getButton(OI.XBUTTON)) {
-            drivetrain.shiftHigh();
-        } else if (xbox.getButton(OI.YBUTTON)) {
-            drivetrain.shiftLow();
-        }
+        drivetrain.autoShift();
 
-	    if (xbox.getButton(OI.ABUTTON)) {
-	        gear.extendHolder();
+        // Controls
+        if (xbox.isToggled(OI.RBUMPER)) {
+	        holder.extend();
 	    } else {
-	        gear.retractHolder();
-	    }
+	        holder.retract();
+        }
     }
 }

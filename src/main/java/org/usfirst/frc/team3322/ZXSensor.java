@@ -1,8 +1,7 @@
 package org.usfirst.frc.team3322;
 
-/**
- * Created by sneki on 1/19/2017.
- */
+// Created by snekiam on 1/19/2017.
+ 
 public class ZXSensor {
     //register addresses
     public static final int ZX_MODEL_VER = 0x00;
@@ -17,7 +16,7 @@ public class ZXSensor {
     public static final int ZX_RRNG = 0x0E;
     public static final int ZX_REGVER = 0xFE;
     public static final int ZX_MODEL = 0xFF;
-    //sensor bit names
+    //names of sensors
     public static final int DRE_RNG = 0;
     public static final int DRE_CRD = 1;
     public static final int DRE_SWP = 2;
