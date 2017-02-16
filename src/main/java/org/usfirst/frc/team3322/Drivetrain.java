@@ -69,11 +69,11 @@ public class Drivetrain {
         enc_right.reset();
     }
 
-    public double getLeftEncValue() { //returns in feet
-        return enc_left.getDistance() / 714;
+    public double getLeftEncValue() { //returns in inches
+        return enc_left.getDistance() / 67;
     }
-    public double getRightEncValue() { //returns in feet
-        return enc_right.getDistance() / 714;
+    public double getRightEncValue() { //returns in inches
+        return enc_right.getDistance() / 67;
     }
 
     public void direction(boolean inverted) {
