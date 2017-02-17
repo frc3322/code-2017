@@ -21,6 +21,7 @@ public class Drivetrain {
     private double leftSamples[], rightSamples[];
     int shiftCounter = 0;
     public double invert;
+    public static final double DIAMETER_WHEEL = 0.5;
 
     Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold) {
         this(lowRPM, highRPM, numSamples, shiftThreshold, false, false);
@@ -101,13 +102,13 @@ public class Drivetrain {
         return motorRPS(e) * 60.0;
     }
     public double wheelRPS(Encoder e) {
-        return encoderRPS(e) / 7.5;
+        return encoderRPS(e) / 3;
     }
     public double wheelRPM(Encoder e) {
         return wheelRPS(e) * 60.0;
     }
     public double wheelFloorSpeed(Encoder e) {
-        return wheelRPS(e) * 0.5 * 3.14;
+        return wheelRPS(e) * Math.PI * DIAMETER_WHEEL;
     }
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
