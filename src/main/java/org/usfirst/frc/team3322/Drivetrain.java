@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-    double lowRPM, highRPM;
-    int numSamples, shiftThreshold;
+    double lowThreshold, highThreshold;
+    int numSamples, cooldown;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
@@ -23,10 +23,10 @@ public class Drivetrain {
     public double invert;
     public static final double DIAMETER_WHEEL = 0.5;
 
-    Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold) {
-        this(lowRPM, highRPM, numSamples, shiftThreshold, false, false);
+    Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
+        this(lowThreshold, highThreshold, numSamples, cooldown, false, false);
     }
-    Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold, boolean left_inv, boolean right_inv) {
+    Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);
@@ -45,10 +45,10 @@ public class Drivetrain {
         enc_left = new Encoder(RobotMap.encLeft_1, RobotMap.encLeft_2);
         enc_right = new Encoder(RobotMap.encRight_1, RobotMap.encRight_2);
 
-        this.lowRPM = lowRPM;
-        this.highRPM = highRPM;
+        this.lowThreshold = lowThreshold;
+        this.highThreshold = highThreshold;
         this.numSamples = numSamples;
-        this.shiftThreshold = shiftThreshold;
+        this.cooldown = cooldown;
 
         leftSamples = new double[numSamples];
         rightSamples = new double[numSamples];
@@ -59,10 +59,14 @@ public class Drivetrain {
             rightSamples[i] = 0;
         }
 
-        SmartDashboard.putNumber("Low gear", lowRPM);
-        SmartDashboard.putNumber("High gear", highRPM);
+        // Set the encode scaling value to reflect rotations per second
+        enc_left.setDistancePerPulse(1/256.0);
+        enc_right.setDistancePerPulse(1/256.0);
+
+        SmartDashboard.putNumber("Low gear", lowThreshold);
+        SmartDashboard.putNumber("High gear", highThreshold);
         SmartDashboard.putNumber("Num samples", numSamples);
-        SmartDashboard.putNumber("Shift threshold", shiftThreshold);
+        SmartDashboard.putNumber("Cooldown", cooldown);
     }
 
     public void resetEncs() {
@@ -71,7 +75,7 @@ public class Drivetrain {
     }
 
     public double getLeftEncValue() { //returns in inches
-        return enc_left.getDistance() / 67;
+        return enc_left.getDistance(); //divide by 67 to go to inches
     }
     public double getRightEncValue() { //returns in inches
         return enc_right.getDistance() / 67;
@@ -80,10 +84,11 @@ public class Drivetrain {
     public void direction(boolean inverted) {
         invert = inverted ? -1 : 1;
     }
-
     public void drive(double move, double rotate) {
         move *= invert;
         drive.arcadeDrive(move, rotate);
+
+        autoShift();
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
         double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .05);
@@ -98,21 +103,14 @@ public class Drivetrain {
     public double motorRPS(Encoder e) {
         return encoderRPS(e) / (isHigh() ? 1.0588 : 0.4896);
     }
-    public double motorRPM(Encoder e) {
-        return motorRPS(e) * 60.0;
-    }
     public double wheelRPS(Encoder e) {
-        return encoderRPS(e) / 3;
-    }
-    public double wheelRPM(Encoder e) {
-        return wheelRPS(e) * 60.0;
+        return encoderRPS(e) / 3.0;
     }
     public double wheelFloorSpeed(Encoder e) {
         return wheelRPS(e) * Math.PI * DIAMETER_WHEEL;
     }
 
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
-    public void toggleGear() { shifter.set(isHigh() ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse); }
     public void shiftHigh() {
         shifter.set(DoubleSolenoid.Value.kReverse);
         SmartDashboard.putString("Shift state", "High");
@@ -122,11 +120,11 @@ public class Drivetrain {
         SmartDashboard.putString("Shift state", "Low");
     }
 
-    public void configFromDashboard(double highRPM, double lowRPM, int numSamples, int shiftThreshold) {
-        this.highRPM = highRPM;
-        this.lowRPM = lowRPM;
+    public void configFromDashboard(double highThreshold, double lowThreshold, int numSamples, int cooldown) {
+        this.highThreshold = highThreshold;
+        this.lowThreshold = lowThreshold;
         this.numSamples = numSamples;
-        this.shiftThreshold = shiftThreshold;
+        this.cooldown = cooldown;
     }
 
     public void autoShift() {
@@ -145,23 +143,18 @@ public class Drivetrain {
             rightAvg += Math.abs(rightSamples[i]);
         }
 
-        leftAvg /= (double) numSamples;
-        rightAvg /= (double) numSamples;
+        leftAvg /= (double)numSamples;
+        rightAvg /= (double)numSamples;
 
-        // TODO Test which method is best
-        //double currentSpeed = (leftAvg + rightAvg) / 2.0;
-        double currentSpeed = Math.max(leftAvg, rightAvg);
-        //double currentSpeed = Math.min(leftAvg, rightAvg);
+        double robotSpeed = Math.max(leftAvg, rightAvg);
 
-        if (currentSpeed > highRPM) {
-            if (shiftCounter > shiftThreshold) {
+        if (shiftCounter > cooldown) {
+            if (robotSpeed > highThreshold) {
                 if (!isHigh()) {
                     shiftHigh();
                     shiftCounter = 0;
                 }
-            }
-        } else if (currentSpeed < lowRPM) {
-            if (shiftCounter > shiftThreshold) {
+            } else if (robotSpeed < lowThreshold) {
                 if (isHigh()) {
                     shiftLow();
                     shiftCounter = 0;
@@ -169,16 +162,13 @@ public class Drivetrain {
             }
         }
 
-        SmartDashboard.putNumber("Left motor (RPM)", motorRPM(enc_left));
-        SmartDashboard.putNumber("Right motor (RPM)", motorRPM(enc_right));
-        SmartDashboard.putNumber("Current speed (FPS)", currentSpeed);
-        SmartDashboard.putNumber("Shift counter", shiftCounter);
+        SmartDashboard.putNumber("Robot speed", robotSpeed);
     }
 
     public void configFromDashboard() {
-        highRPM = SmartDashboard.getNumber("High gear", 0);
-        lowRPM = SmartDashboard.getNumber("Low gear", 0);
+        highThreshold = SmartDashboard.getNumber("High gear", 0);
+        lowThreshold = SmartDashboard.getNumber("Low gear", 0);
         numSamples = (int)SmartDashboard.getNumber("Num samples", 0);
-        shiftThreshold = (int)SmartDashboard.getNumber("Shift threshold", 0);
+        cooldown = (int)SmartDashboard.getNumber("Shift threshold", 0);
     }
 }

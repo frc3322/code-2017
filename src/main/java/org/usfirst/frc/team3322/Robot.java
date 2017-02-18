@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
         angleStart = SmartDashboard.getNumber("String Angle", 60);
         startPos = (int) SmartDashboard.getNumber("StartPos", 0);
         SmartDashboard.putBoolean("AutonReady", startPos != 0);
+        SmartDashboard.putNumber("LeftEnc", drivetrain.getLeftEncValue());
     }
     @Override
     public void autonomousInit() {
@@ -63,13 +64,18 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        holder.extend();
+        /*holder.extend();
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
             auton.middlePos();
         } else if (startPos == 3 || startPos == 6) {
             auton.rightPos();
+        }*/
+        if(drivetrain.getLeftEncValue() < 144) {
+            drivetrain.drive(-.2, 0);
+        } else {
+            drivetrain.drive(0, 0);
         }
     }
 
@@ -77,12 +83,11 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getFineAxis(OI.R_XAXIS, 2));
-        drivetrain.autoShift();
-
-        climber.climb(xbox.isToggled(OI.ABUTTON));
+        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
 
         // Controls
+        climber.climb(xbox.isToggled(OI.ABUTTON));
+
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
