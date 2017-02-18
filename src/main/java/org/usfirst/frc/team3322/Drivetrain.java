@@ -60,8 +60,8 @@ public class Drivetrain {
         }
 
         // Set the encode scaling value to reflect rotations per second
-        enc_left.setDistancePerPulse(1/256.0);
-        enc_right.setDistancePerPulse(1/256.0);
+        //enc_left.setDistancePerPulse(1/256.0);
+        //enc_right.setDistancePerPulse(1/256.0);
 
         SmartDashboard.putNumber("Low gear", lowThreshold);
         SmartDashboard.putNumber("High gear", highThreshold);
@@ -75,7 +75,7 @@ public class Drivetrain {
     }
 
     public double getLeftEncValue() { //returns in inches
-        return enc_left.getDistance(); //divide by 67 to go to inches
+        return enc_left.getDistance() / 67;
     }
     public double getRightEncValue() { //returns in inches
         return enc_right.getDistance() / 67;
