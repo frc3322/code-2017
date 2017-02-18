@@ -59,10 +59,6 @@ public class Drivetrain {
             rightSamples[i] = 0;
         }
 
-        // Set the encode scaling value to reflect rotations per second
-        enc_left.setDistancePerPulse(1/256.0);
-        enc_right.setDistancePerPulse(1/256.0);
-
         SmartDashboard.putNumber("Low gear", lowThreshold);
         SmartDashboard.putNumber("High gear", highThreshold);
         SmartDashboard.putNumber("Num samples", numSamples);
@@ -87,8 +83,6 @@ public class Drivetrain {
     public void drive(double move, double rotate) {
         move *= invert;
         drive.arcadeDrive(move, rotate);
-
-        autoShift();
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
         double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .05);
