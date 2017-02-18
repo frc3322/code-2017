@@ -79,6 +79,7 @@ public class Robot extends IterativeRobot {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
+        drivetrain.autoShift();
 
         // Controls
         climber.climb(xbox.isToggled(OI.ABUTTON));
