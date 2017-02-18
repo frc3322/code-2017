@@ -21,7 +21,7 @@ public class Auton {
     public void initVars(double smallX) {
         startDistance = 0;
         double hypSmall = Math.sqrt(Math.pow(smallX, 2) + 144);
-        double ly = (stringLength * smallY / hypSmall) - 28; //string measured behind front
+        double ly = (stringLength * smallY / hypSmall) - 8; //string measured behind front
         double lx = (stringLength * smallX / hypSmall) + 12; //string measured off center
         autonD1 = ly - lx * Math.tan(Math.toRadians(angleLift));
         autonD2 = lx/Math.cos(Math.toRadians(angleLift));
@@ -38,7 +38,7 @@ public class Auton {
             }
         } else if (autonState == 1) {
             if (Robot.drivetrain.getLeftEncValue() < (startDistance + autonD2)) {
-                Robot.drivetrain.driveAngle(60, -.8);
+                Robot.drivetrain.driveAngle(58, -.8);
             } else {
                 autonState++;
             }
@@ -57,7 +57,7 @@ public class Auton {
             }
         } else if (autonState == 1) {
             if (Robot.drivetrain.getRightEncValue() < (startDistance + autonD2)) {
-                Robot.drivetrain.driveAngle(60, -.8);
+                Robot.drivetrain.driveAngle(-58, -.8);
             } else {
                 autonState++;
             }
