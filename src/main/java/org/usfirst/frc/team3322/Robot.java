@@ -77,7 +77,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getFineAxis(OI.R_XAXIS, 4));
+        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getFineAxis(OI.R_XAXIS, 2));
         drivetrain.autoShift();
 
         climber.climb(xbox.isToggled(OI.ABUTTON));

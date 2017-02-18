@@ -71,7 +71,7 @@ public class OI {
 	public double getAxis(int axis) {
             return joystick.getRawAxis(axis);
     }
-    public double getFineAxis(int axis, int pow) {
+    public double getFineAxis(int axis, double pow) {
         // Use quadratic function for turning
         double sign = joystick.getRawAxis(axis)/Math.abs(joystick.getRawAxis(axis));
         return sign * Math.pow(joystick.getRawAxis(axis), pow);
