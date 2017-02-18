@@ -14,7 +14,7 @@ public class Robot extends IterativeRobot {
     Holder holder;
     Auton auton;
     int startPos;
-    double angleStart;
+    double smallX;
 
     @Override
     public void robotInit() {
@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         drivetrain.shiftLow();
-        SmartDashboard.putNumber("String Angle", 60);
+        SmartDashboard.putNumber("smallX", 5.875);
         SmartDashboard.putNumber("StartPos", 0);
         SmartDashboard.putString("PositionKey", "L to R, B in 1-3, R in 4-6");
     }
@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {
         Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
-        angleStart = SmartDashboard.getNumber("String Angle", 60);
+        smallX = SmartDashboard.getNumber("smallX", 5.875);
         startPos = (int) SmartDashboard.getNumber("StartPos", 0);
         SmartDashboard.putBoolean("AutonReady", startPos != 0);
     }
@@ -58,19 +58,20 @@ public class Robot extends IterativeRobot {
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
-        auton.initVars(angleStart);
+        auton.initVars(smallX);
     }
 
     @Override
     public void autonomousPeriodic() {
         holder.extend();
-        if(startPos == 1 || startPos == 4) {
+        auton.leftPos();
+        /*if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
             auton.middlePos();
         } else if (startPos == 3 || startPos == 6) {
             auton.rightPos();
-        }
+        }*/
     }
 
     @Override
