@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(5, 3.5, 3, 50);
+        drivetrain = new Drivetrain(8.75, 12.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
         auton = new Auton();
