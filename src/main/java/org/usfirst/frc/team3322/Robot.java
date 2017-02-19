@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {  compressor.start(); }
 
     @Override
     public void robotPeriodic() {}
