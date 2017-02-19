@@ -2,11 +2,11 @@ package org.usfirst.frc.team3322;
 
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
     Encoder climbEncoder;
+    static OI xbox;
     boolean climbStatus = false;
     boolean climbStartStatus = true;
     boolean currentSpike = false;
@@ -14,6 +14,7 @@ public class Climber {
     double climbDistance =0;
     double totalCurrent = 0;
     double avgCurrent = 0;
+    double ticksPerSecond = 44.0;
     double vibration = 0;
 //  double altitude = 0;
     double[] current;
@@ -23,10 +24,19 @@ public class Climber {
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
         climb_talon_2 = new CANTalon(RobotMap.climbTalon_2);
-        climbEncoder = new Encoder(RobotMap.encClimb_1, RobotMap.encClimb_2);
-        current = new double[] {0,0,0,0,0};
+        climbEncoder = new Encoder(4,5);
+        xbox = new OI();
+        current = new double[]{0,0,0,0,0};
     }
-
+    public void climbManual(){
+        climb_talon_1.set(1);
+        climb_talon_2.set(1);
+        climbVibrate();
+    }
+    public void stop(){
+        climb_talon_1.set(0);
+        climb_talon_2.set(0);
+    }
     public void climb (boolean climbStatus) {
     // Climb using current spike and encoder
 /*
@@ -52,23 +62,16 @@ public class Climber {
         }
 */
     // Climb using only current
-        iterator();
-        climbVibrate();
-        SmartDashboard.putNumber("average current", avgCurrent);
-        SmartDashboard.putNumber("climb 1 output current", climb_talon_1.getOutputCurrent());
-        SmartDashboard.putNumber("climb 2 output current", climb_talon_2.getOutputCurrent());
-        if (climbStatus & avgCurrent < 50 && !currentSpike) {
+/*
+        climber.iterator();
+        if (climbStatus && avgCurrent > 50 && avgCurrent < 100) {
             climb_talon_1.set(climbRate);
             climb_talon_2.set(climbRate);
-        }
-        else {
+        } else {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
-        if (avgCurrent > 50){
-            currentSpike = true;
-        }
-
+*/
     // Climb using altitude and encoder
 /*
         altitude = Robot.navx.getAltitude();
@@ -102,7 +105,7 @@ public class Climber {
 
     private void iterator() {
         current[iterator] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent())/2;
-        if (iterator < 4){
+        if (iterator < 5){
             iterator++;
         } else {
             iterator = 0;
@@ -115,12 +118,9 @@ public class Climber {
     }
 
     private void climbVibrate() {
-        if (avgCurrent > 1) {
+        if (avgCurrent > 50) {
             timer ++;
-            Robot.xbox.setVibrate(0 + vibration,0 + vibration);
-        } else {
-            vibration = 0;
-            Robot.xbox.setVibrate(0 , 0);
+            xbox.vibrate(0 + vibration,0 + vibration);
         }
         if (timer == 5) {
             vibration = vibration + 0.01;
