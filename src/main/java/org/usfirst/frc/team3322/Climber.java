@@ -54,9 +54,6 @@ public class Climber {
     // Climb using only current
         iterator();
         climbVibrate();
-        SmartDashboard.putNumber("average current", avgCurrent);
-        SmartDashboard.putNumber("climb 1 output current", climb_talon_1.getOutputCurrent());
-        SmartDashboard.putNumber("climb 2 output current", climb_talon_2.getOutputCurrent());
         if (climbStatus & avgCurrent < 50 && !currentSpike) {
             climb_talon_1.set(climbRate);
             climb_talon_2.set(climbRate);
