@@ -120,7 +120,7 @@ public class Climber {
     private void climbVibrate() {
         if (avgCurrent > 50) {
             timer ++;
-            xbox.vibrate(0 + vibration,0 + vibration);
+            xbox.setLeftRightControllerVibrate(0 + vibration,0 + vibration);
         }
         if (timer == 5) {
             vibration = vibration + 0.01;

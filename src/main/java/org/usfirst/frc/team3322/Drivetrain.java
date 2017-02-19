@@ -14,9 +14,8 @@ public class Drivetrain {
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
-    private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
+    private CANTalon drive_left_1, drive_left_2, indenturedServantL, drive_right_1, drive_right_2, indenturedServantR;
     private Encoder enc_left, enc_right;
-
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
     int shiftCounter = 0;
@@ -28,9 +27,10 @@ public class Drivetrain {
     Drivetrain(double lowRPM, double highRPM, int numSamples, int shiftThreshold, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
+        indenturedServantL = new CANTalon(RobotMap.driveLeft_3);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);
         drive_right_2 = new CANTalon(RobotMap.driveRight_2);
-
+        indenturedServantR = new CANTalon(RobotMap.driveRight_3);
         drive_left_1.setInverted(left_inv);
         drive_left_2.setInverted(left_inv);
         drive_right_1.setInverted(right_inv);
@@ -38,7 +38,10 @@ public class Drivetrain {
 
         // This could (should) be replaced with something like our 2016 gyro driving code
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
-
+        indenturedServantL.changeControlMode(CANTalon.TalonControlMode.Follower);//setting indentured servants to follow the master talon drive_right || left_1
+        indenturedServantR.changeControlMode(CANTalon.TalonControlMode.Follower);
+        indenturedServantL.set(drive_left_1.getDeviceID());//getting the device ID for the thingies
+        indenturedServantR.set(drive_left_1.getDeviceID());
         shifter = new DoubleSolenoid(RobotMap.shifter_1, RobotMap.shifter_2);
 
         enc_left = new Encoder(RobotMap.encLeft_1, RobotMap.encLeft_2);
