@@ -14,7 +14,8 @@ public class Robot extends IterativeRobot {
     Holder holder;
     Auton auton;
     int startPos;
-    double smallX;
+    double xLength;
+    double yLength;
 
     @Override
     public void robotInit() {
@@ -34,7 +35,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         drivetrain.shiftLow();
-        SmartDashboard.putNumber("smallX", 5.875);
+        SmartDashboard.putNumber("X Length", 100);
+        SmartDashboard.putNumber("Y Length", 132);
         SmartDashboard.putNumber("StartPos", 0);
         SmartDashboard.putString("PositionKey", "L to R, B in 1-3, R in 4-6");
     }
@@ -49,17 +51,18 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {
         Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
-        smallX = SmartDashboard.getNumber("smallX", 5.875);
         startPos = (int) SmartDashboard.getNumber("StartPos", 0);
         SmartDashboard.putBoolean("AutonReady", startPos != 0);
         SmartDashboard.putNumber("LeftEnc", drivetrain.getLeftEncValue());
+        xLength = SmartDashboard.getNumber("X Length", 100); //100x, 100y if starting on boiler
+        yLength = SmartDashboard.getNumber("Y Length", 132); //84x, 100y if starting next to return loading station
     }
     @Override
     public void autonomousInit() {
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
-        auton.initVars(smallX);
+        auton.initVars(xLength, yLength);
     }
 
     @Override
