@@ -13,10 +13,10 @@ public class Holder {
 
 	public void extend() {
         holder.set(DoubleSolenoid.Value.kForward);
-        SmartDashboard.putBoolean("Holder", true);
+        SmartDashboard.putBoolean("holder", true);
     }
     public void retract() {
         holder.set(DoubleSolenoid.Value.kReverse);
-        SmartDashboard.putBoolean("Holder", false);
+        SmartDashboard.putBoolean("holder", false);
 	}
 }
