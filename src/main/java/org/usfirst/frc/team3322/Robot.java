@@ -42,7 +42,9 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        compressor.start();
+    }
 
     @Override
     public void robotPeriodic() {}
@@ -54,8 +56,8 @@ public class Robot extends IterativeRobot {
         startPos = (int) SmartDashboard.getNumber("StartPos", 0);
         SmartDashboard.putBoolean("AutonReady", startPos != 0);
         SmartDashboard.putNumber("LeftEnc", drivetrain.getLeftEncValue());
-        xLength = SmartDashboard.getNumber("X Length", 100); //100x, 100y if starting on boiler
-        yLength = SmartDashboard.getNumber("Y Length", 132); //84x, 100y if starting next to return loading station
+        xLength = SmartDashboard.getNumber("X Length", 100); //132x, 100y if starting on boiler
+        yLength = SmartDashboard.getNumber("Y Length", 132); //80x, 100y if starting next to return loading station
     }
     @Override
     public void autonomousInit() {

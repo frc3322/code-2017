@@ -65,14 +65,14 @@ public class Auton {
 
     public void rightPos() {
         if (autonState == 0) {
-            if (Robot.drivetrain.getRightEncValue() < startDorT + autonD1) {
+            if (Robot.drivetrain.getRightEncValue() < startDorT + autonD1 - 2) {
                 Robot.drivetrain.driveAngle(0, -.8);
             } else {
                 autonState++;
                 startDorT = Robot.drivetrain.getRightEncValue();
             }
         } else if (autonState == 1) {
-            if(Robot.navx.getYaw() > -50) {
+            if(Robot.navx.getYaw() > -20) {
                 Robot.drivetrain.drive(.4, -1);
             } else {
                 autonState++;
@@ -80,13 +80,13 @@ public class Auton {
             }
         } else if (autonState == 2) {
             if (System.currentTimeMillis() < startDorT + 5000) {
-                Robot.drivetrain.driveAngle(-58, -.8);
+                Robot.drivetrain.driveAngle(-56, -.8);
             } else {
                 autonState++;
                 startDorT = Robot.drivetrain.getRightEncValue();
             }
         } else if (autonState == 3) {
-            if (Robot.drivetrain.getRightEncValue() > startDorT - 20) {
+            if (Robot.drivetrain.getRightEncValue() > startDorT - 50) {
                 Robot.drivetrain.driveAngle(-45, .5);
             } else {
                 autonState++;
@@ -94,7 +94,7 @@ public class Auton {
             }
         } else if (autonState == 4) {
             if (System.currentTimeMillis() < startDorT + 1500) {
-                Robot.drivetrain.driveAngle(-58, -.8);
+                Robot.drivetrain.driveAngle(-56, -.8);
             } else {
                 autonState++;
             }
