@@ -11,10 +11,10 @@ public class RobotMap {
         // Talons
         driveLeft_1 = 6,
         driveLeft_2 = 7,
-        driveLeft_3 = 8,
+        indenturedServantL = 8,
         driveRight_1 = 3,
         driveRight_2 = 4,
-        driveRight_3 = 5,
+        indenturedServantR = 5,
 
         climbTalon_1 = 1,
         climbTalon_2 = 2,

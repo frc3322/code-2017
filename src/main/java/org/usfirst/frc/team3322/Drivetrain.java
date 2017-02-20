@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3321;
+package org.usfirst.frc.team3322;
 
 import java.lang.Math;
 import com.ctre.CANTalon;
@@ -12,7 +12,7 @@ public class Drivetrain {
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
-    private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
+    private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2,indenturedServantL,indenturedServantR;
     private Encoder enc_left, enc_right;
 
     double robotSpeed, lowThreshold, highThreshold;
@@ -31,6 +31,8 @@ public class Drivetrain {
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);
         drive_right_2 = new CANTalon(RobotMap.driveRight_2);
+        indenturedServantL = new CANTalon(RobotMap.indenturedServantL);
+        indenturedServantR = new CANTalon(RobotMap.indenturedServantR);
 
         drive_left_1.setInverted(left_inv);
         drive_left_2.setInverted(left_inv);

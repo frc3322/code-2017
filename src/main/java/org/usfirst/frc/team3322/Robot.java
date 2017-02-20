@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.xbox.setLeftRightControllerVibrate(0,0);
+        Robot.xbox.setVibrate(0,0);
         drivetrain.configFromDashboard();
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
@@ -83,6 +83,7 @@ public class Robot extends IterativeRobot {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
+        //TODO Quadratic rotating
         drivetrain.autoShift();
 
         // Controls
