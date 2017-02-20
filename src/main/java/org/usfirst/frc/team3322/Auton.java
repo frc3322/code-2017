@@ -47,7 +47,7 @@ public class Auton {
             }
         } else if (autonState == 3) {
             if (Robot.drivetrain.getLeftEncValue() > startDorT - 50) {
-                Robot.drivetrain.driveAngle(45, .5);
+                Robot.drivetrain.driveAngle(50, .5);
             } else {
                 autonState++;
                 startDorT = System.currentTimeMillis();
@@ -57,9 +57,23 @@ public class Auton {
                 Robot.drivetrain.driveAngle(55, -.8);
             } else {
                 autonState++;
+                startDorT = Robot.drivetrain.getLeftEncValue();
             }
         } else if (autonState == 5) {
-            //wait until end of auton
+            if (Robot.drivetrain.getLeftEncValue() > startDorT - 50) {
+                Robot.drivetrain.driveAngle(65, .5);
+            } else {
+                autonState++;
+                startDorT = System.currentTimeMillis();
+            }
+        } else if (autonState == 6) {
+            if (System.currentTimeMillis() < startDorT + 2000) {
+                Robot.drivetrain.driveAngle(55, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 7) {
+            //wait until end of auton;
         }
     }
 
@@ -97,9 +111,23 @@ public class Auton {
                 Robot.drivetrain.driveAngle(-56, -.8);
             } else {
                 autonState++;
+                startDorT = Robot.drivetrain.getRightEncValue();
             }
         } else if (autonState == 5) {
-            //wait until end of auton
+            if (Robot.drivetrain.getRightEncValue() > startDorT - 50) {
+                Robot.drivetrain.driveAngle(-65, .5);
+            } else {
+                autonState++;
+                startDorT = System.currentTimeMillis();
+            }
+        } else if (autonState == 6) {
+            if (System.currentTimeMillis() < startDorT + 2000) {
+                Robot.drivetrain.driveAngle(-56, -.8);
+            } else {
+                autonState++;
+            }
+        } else if (autonState == 7) {
+            //wait until end of auton;
         }
     }
 
