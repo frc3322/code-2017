@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.xbox.setVibrate(0, 0);
+        Robot.xbox.setLeftRightControllerVibrate(0,0);
         drivetrain.configFromDashboard();
         angleStart = SmartDashboard.getNumber("String Angle", 60);
 
@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
-	        holder.retract();
+            holder.retract();
         }
     }
 }
