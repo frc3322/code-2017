@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3322;
+package org.usfirst.frc.team3321;
 
 import java.lang.Math;
 import com.ctre.CANTalon;
@@ -34,12 +34,17 @@ public class Drivetrain {
 
         drive_left_1.setInverted(left_inv);
         drive_left_2.setInverted(left_inv);
+        indenturedServantL.setInverted(left_inv);
         drive_right_1.setInverted(right_inv);
         drive_right_2.setInverted(right_inv);
+        indenturedServantR.setInverted(right_inv);
 
         // This could (should) be replaced with something like our 2016 gyro driving code
         drive = new RobotDrive(drive_left_1, drive_left_2, drive_right_1, drive_right_2);
-
+        indenturedServantL.changeControlMode(CANTalon.TalonControlMode.Follower);//setting indentured servants to follow the master talon drive_right || left_1
+        indenturedServantR.changeControlMode(CANTalon.TalonControlMode.Follower);
+        indenturedServantL.set(drive_left_1.getDeviceID());//getting the device ID for the thingies
+        indenturedServantR.set(drive_right_1.getDeviceID());
         shifter = new DoubleSolenoid(RobotMap.shifter_1, RobotMap.shifter_2);
 
         enc_left = new Encoder(RobotMap.encLeft_1, RobotMap.encLeft_2);

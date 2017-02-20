@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.xbox.setVibrate(0, 0);
+        Robot.xbox.setLeftRightControllerVibrate(0,0);
         drivetrain.configFromDashboard();
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
@@ -91,7 +91,7 @@ public class Robot extends IterativeRobot {
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
-	        holder.retract();
+            holder.retract();
         }
     }
 }
