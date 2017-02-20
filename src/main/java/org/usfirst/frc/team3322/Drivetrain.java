@@ -9,18 +9,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-    double lowThreshold, highThreshold;
-    int numSamples, cooldown;
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2;
     private Encoder enc_left, enc_right;
 
+    double robotSpeed, lowThreshold, highThreshold;
+    int numSamples, cooldown, invert;
+    int shiftCounter = 0;
+
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
-    int shiftCounter = 0;
-    public double invert;
     public static final double DIAMETER_WHEEL = 0.5;
 
     Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
@@ -59,10 +59,10 @@ public class Drivetrain {
             rightSamples[i] = 0;
         }
 
-        SmartDashboard.putNumber("Low gear", lowThreshold);
-        SmartDashboard.putNumber("High gear", highThreshold);
-        SmartDashboard.putNumber("Num samples", numSamples);
-        SmartDashboard.putNumber("Cooldown", cooldown);
+        SmartDashboard.putNumber("low_gear", lowThreshold);
+        SmartDashboard.putNumber("high_gear", highThreshold);
+        SmartDashboard.putNumber("num_samples", numSamples);
+        SmartDashboard.putNumber("cooldown", cooldown);
     }
 
     public void resetEncs() {
@@ -107,11 +107,11 @@ public class Drivetrain {
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
     public void shiftHigh() {
         shifter.set(DoubleSolenoid.Value.kReverse);
-        SmartDashboard.putString("Shift state", "High");
+        SmartDashboard.putString("shift_state", "high");
     }
     public void shiftLow() {
         shifter.set(DoubleSolenoid.Value.kForward);
-        SmartDashboard.putString("Shift state", "Low");
+        SmartDashboard.putString("shift_state", "low");
     }
 
     public void configFromDashboard(double highThreshold, double lowThreshold, int numSamples, int cooldown) {
@@ -140,7 +140,7 @@ public class Drivetrain {
         leftAvg /= (double)numSamples;
         rightAvg /= (double)numSamples;
 
-        double robotSpeed = Math.max(leftAvg, rightAvg);
+        robotSpeed = Math.max(leftAvg, rightAvg);
 
         if (shiftCounter > cooldown) {
             if (robotSpeed > highThreshold) {
@@ -156,13 +156,13 @@ public class Drivetrain {
             }
         }
 
-        SmartDashboard.putNumber("Robot speed", robotSpeed);
+        SmartDashboard.putNumber("robot_speed", robotSpeed);
     }
 
     public void configFromDashboard() {
-        highThreshold = SmartDashboard.getNumber("High gear", 0);
-        lowThreshold = SmartDashboard.getNumber("Low gear", 0);
-        numSamples = (int)SmartDashboard.getNumber("Num samples", 0);
-        cooldown = (int)SmartDashboard.getNumber("Shift threshold", 0);
+        highThreshold = SmartDashboard.getNumber("high_gear", 0);
+        lowThreshold = SmartDashboard.getNumber("low_gear", 0);
+        numSamples = (int)SmartDashboard.getNumber("num_samples", 0);
+        cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
     }
 }

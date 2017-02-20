@@ -37,25 +37,26 @@ public class Robot extends IterativeRobot {
         drivetrain.shiftLow();
         SmartDashboard.putNumber("x_length", 100);
         SmartDashboard.putNumber("y_length", 132);
-        SmartDashboard.putNumber("StartPos", 0);
-        SmartDashboard.putString("PositionKey", "L to R, B in 1-3, R in 4-6");
+        SmartDashboard.putNumber("start_pos", 0);
+        SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
     }
 
     @Override
-    public void teleopInit() {  compressor.start(); }
+    public void teleopInit() {}
 
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        SmartDashboard.putNumber("robot_speed", drivetrain.robotSpeed);
+    }
 
     @Override
     public void disabledPeriodic() {
         Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
-        startPos = (int) SmartDashboard.getNumber("StartPos", 0);
-        SmartDashboard.putBoolean("AutonReady", startPos != 0);
-        SmartDashboard.putNumber("LeftEnc", drivetrain.getLeftEncValue());
-        xLength = SmartDashboard.getNumber("x_length", 100); //100x, 132y if starting on boiler
-        yLength = SmartDashboard.getNumber("y_length", 132); //80x, 132y if starting next to return loading station
+        startPos = (int) SmartDashboard.getNumber("start_pos", 0);
+        SmartDashboard.putBoolean("auton_ready", startPos != 0);
+        xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
+        yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
     }
     @Override
     public void autonomousInit() {
