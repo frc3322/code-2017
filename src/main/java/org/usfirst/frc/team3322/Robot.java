@@ -7,26 +7,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
     static OI xbox;
-    Drivetrain drivetrain;
+    static Drivetrain drivetrain;
     Climber climber;
     static AHRS navx;
     Compressor compressor;
     Holder holder;
-    int autonState;
+    Auton auton;
+    int startPos;
+    double xLength;
+    double yLength;
 
     @Override
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(
-            1300,
-            1600
-        );
-        SmartDashboard.putNumber("Low gear", 1300);
-        SmartDashboard.putNumber("High gear", 1600);
+        drivetrain = new Drivetrain(8.75, 12.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
-        autonState = 0;
+        auton = new Auton();
+        startPos = 0;
 
         // Component init
         compressor = new Compressor(0);
@@ -36,93 +35,63 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         drivetrain.shiftLow();
+        SmartDashboard.putNumber("x_length", 100);
+        SmartDashboard.putNumber("y_length", 132);
+        SmartDashboard.putNumber("start_pos", 0);
+        SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
     }
 
     @Override
     public void teleopInit() {}
 
     @Override
+    public void robotPeriodic() {
+        SmartDashboard.putNumber("robot_speed", drivetrain.robotSpeed);
+    }
+
+    @Override
     public void disabledPeriodic() {
-        drivetrain.config(
-            SmartDashboard.getNumber("High gear", 0),
-            SmartDashboard.getNumber("Low gear", 0),
-            (int)SmartDashboard.getNumber("Num samples", 0),
-            (int)SmartDashboard.getNumber("Shift threshold", 0)
-        );
+        Robot.xbox.setVibrate(0, 0);
+        drivetrain.configFromDashboard();
+        startPos = (int) SmartDashboard.getNumber("start_pos", 0);
+        SmartDashboard.putBoolean("auton_ready", startPos != 0);
+        xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
+        yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
     }
     @Override
     public void autonomousInit() {
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
-        autonState = 0;
+        auton.initVars(xLength, yLength);
     }
 
     @Override
     public void autonomousPeriodic() {
-        holder.extend(); //starts 5.5 feet from left side, goes to left lift
-        if(autonState == 0) {
-            if(drivetrain.getLeftEncValue() < 5) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            if(drivetrain.getLeftEncValue() < 15) {
-                drivetrain.driveAngle(59, -.8);
-            } else {
-                autonState++;
-            }
-        } else if(autonState == 2) {
-            //wait until end of auton
+        holder.extend();
+        if(startPos == 1 || startPos == 4) {
+            auton.leftPos();
+        } else if (startPos == 2 || startPos == 5) {
+            auton.middlePos();
+        } else if (startPos == 3 || startPos == 6) {
+            auton.rightPos();
         }
-        /*holder.extend(); //starts 5.5 feet from right side, goes to right lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 5) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            if(drivetrain.getRightEncValue() < 15) {
-                drivetrain.driveAngle(-59, -.8);
-            } else {
-                autonState++;
-            }
-        } else if(autonState == 2) {
-            //wait until end of auton
-        }*/
-        /*holder.extend(); //starts directly in front of center lift, goes to center lift
-        if(autonState == 0) {
-            if(drivetrain.getRightEncValue() < 10) {
-                drivetrain.driveAngle(0, -.8);
-            } else {
-                autonState++;
-            }
-        } else if (autonState == 1) {
-            //wait until end of auton
-        }*/
     }
 
     @Override
     public void teleopPeriodic() {
+        // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
-        climber.climb(xbox.heldDown(OI.LBUMPER));
+        drivetrain.autoShift();
+
+        // Controls
+        climber.climb(xbox.isToggled(OI.ABUTTON));
 
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
 	    } else {
 	        holder.retract();
         }
-
-	    if(xbox.heldDown(OI.ABUTTON)){
-	        climber.climbManual();
-        } else {
-	        climber.stop();
-        }
-
-        drivetrain.autoShift();
-        drivetrain.showRPM();
     }
 }

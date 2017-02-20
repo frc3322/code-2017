@@ -46,11 +46,15 @@ public class OI {
         return 0 != (buttonState & (1 << button));
     }
 
+    void toggleButtonState(int button) {
+        toggleState ^= (1 << button);
+    }
+
     public boolean heldDown(int button) {
         return joystick.getRawButton(button);
     }
-    // Returns true only once, and will not return true again until the button is released and pressed again.
-	public boolean pressedOnce(int button) {
+    public boolean pressedOnce(int button) {
+        // Returns true only once, and will not return true again until the button is released and pressed again.
         if (heldDown(button)) {
             if (!isDown(button)) {
                 setButtonDown(button);
@@ -63,12 +67,14 @@ public class OI {
             return false;
         }
     }
+
 	public double getAxis(int axis) {
             return joystick.getRawAxis(axis);
     }
-
-    void toggleButtonState(int button) {
-        toggleState ^= (1 << button);
+    public double getFineAxis(int axis, double pow) {
+        // Use quadratic function for turning
+        double sign = joystick.getRawAxis(axis)/Math.abs(joystick.getRawAxis(axis));
+        return sign * Math.pow(joystick.getRawAxis(axis), pow);
     }
 
     public boolean isToggled(int button) {
@@ -77,8 +83,8 @@ public class OI {
         }
         return 0 != (toggleState & (1 << button));
     }
-    public void vibrate(double leftVibrate , double rightVibrate){
-        joystick.setRumble(GenericHID.RumbleType.kLeftRumble, leftVibrate);
-        joystick.setRumble(GenericHID.RumbleType.kRightRumble, rightVibrate);
+    public void setVibrate(double leftVibrate, double rightVibrate) {
+        joystick.setRumble(GenericHID.RumbleType.kLeftRumble , leftVibrate);
+        joystick.setRumble(GenericHID.RumbleType.kRightRumble , rightVibrate);
     }
 }

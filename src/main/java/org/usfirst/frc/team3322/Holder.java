@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3322;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Holder {
     // Main solenoids to control linear actuators
@@ -12,8 +13,10 @@ public class Holder {
 
 	public void extend() {
         holder.set(DoubleSolenoid.Value.kForward);
+        SmartDashboard.putBoolean("holder", true);
     }
     public void retract() {
         holder.set(DoubleSolenoid.Value.kReverse);
+        SmartDashboard.putBoolean("holder", false);
 	}
 }
