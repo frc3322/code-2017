@@ -16,7 +16,7 @@ public class Auton {
 
     public void initVars(double xIn, double yIn) { //default
         startDorT = 0;
-        double ly = yIn - 12;
+        double ly = yIn - 32;
         double lx = xIn - 15;
         autonD1 = ly - lx * Math.tan(Math.toRadians(angleLift));
         autonD2 = lx/Math.cos(Math.toRadians(angleLift));
@@ -46,15 +46,15 @@ public class Auton {
                 startDorT = Robot.drivetrain.getLeftEncValue();
             }
         } else if (autonState == 3) {
-            if (Robot.drivetrain.getLeftEncValue() > startDorT - 50) {
-                Robot.drivetrain.driveAngle(50, .5);
+            if (Robot.drivetrain.getLeftEncValue() > startDorT - 40) {
+                Robot.drivetrain.driveAngle(45, .5);
             } else {
                 autonState++;
                 startDorT = System.currentTimeMillis();
             }
         } else if (autonState == 4) {
             if (System.currentTimeMillis() < startDorT + 2000) {
-                Robot.drivetrain.driveAngle(55, -.8);
+                Robot.drivetrain.driveAngle(60, -.8);
             } else {
                 autonState++;
                 startDorT = Robot.drivetrain.getLeftEncValue();
