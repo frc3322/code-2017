@@ -107,11 +107,11 @@ public class Drivetrain {
     public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
     public void shiftHigh() {
         shifter.set(DoubleSolenoid.Value.kReverse);
-        SmartDashboard.putString("shift_state", "High");
+        SmartDashboard.putString("shift_state", "high");
     }
     public void shiftLow() {
         shifter.set(DoubleSolenoid.Value.kForward);
-        SmartDashboard.putString("shift_state", "Low");
+        SmartDashboard.putString("shift_state", "low");
     }
 
     public void configFromDashboard(double highThreshold, double lowThreshold, int numSamples, int cooldown) {
