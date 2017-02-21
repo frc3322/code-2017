@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
         drivetrain.autoShift();
 
         // Controls
-        climber.climb(xbox.isToggled(OI.ABUTTON));
+        climber.climb(xbox.isToggled(OI.LBUMPER));
 
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
