@@ -15,10 +15,10 @@ public class Robot extends IterativeRobot {
     static Compressor compressor;
 
     int startPos;
+    boolean drivingStraight;
     double xLength,
         yLength,
         driveStraightAngle,
-        drivingStraight,
         previousThrottle = 0,
         previousTurn = 0,
         maxTurnDelta = .05,
@@ -67,7 +67,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         Robot.xbox.setVibrate(0, 0);
-        drivetrain.configFromDashboard();
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
