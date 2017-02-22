@@ -16,6 +16,8 @@ public class Robot extends IterativeRobot {
     int startPos;
     double xLength;
     double yLength;
+    double driveStraightAngle;
+    boolean drivingStraight;
     double previousThrottle = 0;
     double previousTurn = 0;
     double maxTurnDelta = .05;
@@ -98,7 +100,15 @@ public class Robot extends IterativeRobot {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         clamp();
-        drivetrain.drive(throttleValue, turnValue);
+        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
+            if(!drivingStraight) {
+                drivingStraight = true;
+                driveStraightAngle = navx.getYaw();
+            }
+            drivetrain.driveAngle(driveStraightAngle, throttleValue);
+        } else {
+            drivetrain.drive(throttleValue, turnValue);
+        }
         //TODO Quadratic rotating
         drivetrain.autoShift();
 
