@@ -16,6 +16,14 @@ public class Robot extends IterativeRobot {
     int startPos;
     double xLength;
     double yLength;
+    double previousThrottle = 0;
+    double previousTurn = 0;
+    double maxTurnDelta = .05;
+    double maxThrottleDelta = .05;
+    double turnValue;
+    double throttleValue;
+    double currentTurn;
+    double currentThrottle;
 
     @Override
     public void robotInit() {
@@ -82,7 +90,8 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getAxis(OI.R_XAXIS));
+        clamp();
+        drivetrain.drive(throttleValue, turnValue);
         //TODO Quadratic rotating
         drivetrain.autoShift();
 
@@ -90,9 +99,33 @@ public class Robot extends IterativeRobot {
         climber.climb(xbox.isToggled(OI.LBUMPER));
 
         if (xbox.isToggled(OI.RBUMPER)) {
-	        holder.extend();
-	    } else {
+            holder.extend();
+        } else {
             holder.retract();
         }
+    }
+    private void clamp(){
+        currentThrottle = xbox.getAxis(OI.L_YAXIS);
+        currentTurn = xbox.getAxis(OI.R_XAXIS);
+
+        double deltaTurn = currentTurn - previousTurn;
+        double deltaThrottle = currentThrottle - previousThrottle;
+        //TODO put Andriy's function here
+        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
+            turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
+        }
+        else{
+            turnValue = currentTurn;
+        }
+        if(Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0){
+            throttleValue = previousThrottle + ((deltaThrottle < 0)? -maxThrottleDelta : maxThrottleDelta);
+        }
+        else{
+            throttleValue = currentThrottle;
+        }
+        previousThrottle = throttleValue;
+        previousTurn = turnValue;
+        SmartDashboard.putNumber("Turn Value",turnValue);
+        SmartDashboard.putNumber("Joystick", currentTurn);
     }
 }
