@@ -87,6 +87,7 @@ public class Robot extends IterativeRobot {
 
         // Controls
         climber.climb(xbox.isToggled(OI.LBUMPER));
+        climber.climbManually(xbox.heldDown(OI.ABUTTON));
 
         if (xbox.isToggled(OI.RBUMPER)) {
 	        holder.extend();
