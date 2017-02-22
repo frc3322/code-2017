@@ -8,22 +8,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
     static OI xbox;
     static Drivetrain drivetrain;
-    Climber climber;
+    static Climber climber;
     static AHRS navx;
-    Compressor compressor;
     static Holder holder;
-    Auton auton;
+    static Auton auton;
+    static Compressor compressor;
+
     int startPos;
-    double xLength;
-    double yLength;
-    double previousThrottle = 0;
-    double previousTurn = 0;
-    double maxTurnDelta = .05;
-    double maxThrottleDelta = .05;
-    double turnValue;
-    double throttleValue;
-    double currentTurn;
-    double currentThrottle;
+    double xLength,
+        yLength,
+        previousThrottle = 0,
+        previousTurn = 0,
+        maxTurnDelta = .05,
+        maxThrottleDelta = .05,
+        turnValue,
+        throttleValue,
+        currentTurn,
+        currentThrottle;
 
     @Override
     public void robotInit() {
@@ -63,7 +64,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.xbox.setVibrate(0,0);
+        Robot.xbox.setVibrate(0, 0);
         drivetrain.configFromDashboard();
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
@@ -76,7 +77,7 @@ public class Robot extends IterativeRobot {
         drivetrain.resetEncs();
         compressor.start();
         auton.initVars(xLength, yLength);
-        SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("auton", 1);
     }
 
     @Override
@@ -94,13 +95,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("auton",0);
+        SmartDashboard.putNumber("auton", 0);
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        clamp();
         drivetrain.drive(throttleValue, turnValue);
-        //TODO Quadratic rotating
         drivetrain.autoShift();
+        clamp();
 
         // Controls
         climber.climb(xbox.isToggled(OI.LBUMPER));
@@ -118,22 +118,20 @@ public class Robot extends IterativeRobot {
 
         double deltaTurn = currentTurn - previousTurn;
         double deltaThrottle = currentThrottle - previousThrottle;
-        //TODO put Andriy's function here
-        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
+
+        if (Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0) {
             turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
-        }
-        else{
+        } else {
             turnValue = currentTurn;
         }
-        if(Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0){
+        if (Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0) {
             throttleValue = previousThrottle + ((deltaThrottle < 0)? -maxThrottleDelta : maxThrottleDelta);
-        }
-        else{
+        } else {
             throttleValue = currentThrottle;
         }
         previousThrottle = throttleValue;
         previousTurn = turnValue;
-        SmartDashboard.putNumber("Turn Value",turnValue);
-        SmartDashboard.putNumber("Joystick", currentTurn);
+        SmartDashboard.putNumber("turn_value",turnValue);
+        SmartDashboard.putNumber("joystick", currentTurn);
     }
 }
