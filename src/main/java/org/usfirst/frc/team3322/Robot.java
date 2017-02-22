@@ -17,8 +17,8 @@ public class Robot extends IterativeRobot {
     int startPos;
     double xLength,
         yLength,
-        driveStraightAngle;
-        drivingStraight;
+        driveStraightAngle,
+        drivingStraight,
         previousThrottle = 0,
         previousTurn = 0,
         maxTurnDelta = .05,
