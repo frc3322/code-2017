@@ -2,7 +2,6 @@ package org.usfirst.frc.team3322;
 
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
@@ -10,6 +9,7 @@ public class Climber {
     boolean climbStatus = false;
     boolean climbStartStatus = true;
     boolean currentSpike = false;
+    boolean override = false;
     double climbRate = 1.0; //value from 0.00 to 1.00
     double climbDistance =0;
     double totalCurrent = 0;
@@ -59,18 +59,14 @@ public class Climber {
     // Climb using only current
         iterator();
         climbVibrate();
-        if (climbStatus & avgCurrent < 50 && !currentSpike) {
+        if (climbStatus && avgCurrent < 50) {
             climb_talon_1.set(climbRate);
             climb_talon_2.set(climbRate);
         }
-        else {
+        else if(!override) {
             climb_talon_1.set(0);
             climb_talon_2.set(0);
         }
-        if (avgCurrent > 50){
-            currentSpike = true;
-        }
-
     // Climb using altitude and encoder
 /*
         altitude = Robot.navx.getAltitude();
@@ -101,7 +97,17 @@ public class Climber {
         }
 */
     }
-
+    public void climbManually(boolean buttonPressed) {
+        if (buttonPressed) {
+            climb_talon_1.set(climbRate);
+            climb_talon_2.set(climbRate);
+            override = true;
+        } else {
+            climb_talon_1.set(0);
+            climb_talon_2.set(0);
+            override = false;
+        }
+    }
     private void iterator() {
         current[iterator] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent())/2;
         if (iterator < 4){
