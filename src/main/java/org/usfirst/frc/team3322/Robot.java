@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot {
     Climber climber;
     static AHRS navx;
     Compressor compressor;
-    Holder holder;
+    static Holder holder;
     Auton auton;
     int startPos;
     double xLength;

@@ -27,9 +27,14 @@ public class Climber {
         current = new double[] {0,0,0,0,0};
     }
 
-    public void climb (boolean climbStatus) {
-    // Climb using current spike and encoder
-/*
+    public void climb(boolean climbStatus) {
+        // Pull holder back to prevent interference with ground
+        if (climbStatus) {
+            Robot.holder.retract();
+        }
+
+        // Climb using current spike and encoder
+        /*
         climber.iterator();
         if (avgCurrent > 50) {
             currentSpike = true;
