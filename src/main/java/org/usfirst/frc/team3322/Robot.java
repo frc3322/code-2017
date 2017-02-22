@@ -16,6 +16,14 @@ public class Robot extends IterativeRobot {
     int startPos;
     double xLength;
     double yLength;
+    double previousThrottle = 0;
+    double previousTurn = 0;
+    double maxTurnDelta = .05;
+    double maxThrottleDelta = .05;
+    double turnValue;
+    double throttleValue;
+    double currentTurn;
+    double currentThrottle;
 
     @Override
     public void robotInit() {
@@ -30,6 +38,7 @@ public class Robot extends IterativeRobot {
         // Component init
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kMXP);
+        SmartDashboard.putNumber("auton",0);
     }
 
     @Override
@@ -39,10 +48,13 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("y_length", 132);
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
+        SmartDashboard.putNumber("auton",0);
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        SmartDashboard.putNumber("auton",0);
+    }
 
     @Override
     public void robotPeriodic() {
@@ -64,10 +76,12 @@ public class Robot extends IterativeRobot {
         drivetrain.resetEncs();
         compressor.start();
         auton.initVars(xLength, yLength);
+        SmartDashboard.putNumber("auton",1);
     }
 
     @Override
     public void autonomousPeriodic() {
+        SmartDashboard.putNumber("auton",1);
         holder.extend();
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
@@ -80,9 +94,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("auton",0);
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        drivetrain.drive(xbox.getAxis(OI.L_YAXIS), xbox.getFineAxis(OI.R_XAXIS, 2));
+        clamp();
+        drivetrain.drive(throttleValue, turnValue);
+        //TODO Quadratic rotating
         drivetrain.autoShift();
 
         // Controls
@@ -90,9 +107,33 @@ public class Robot extends IterativeRobot {
         climber.climbManually(xbox.heldDown(OI.ABUTTON));
 
         if (xbox.isToggled(OI.RBUMPER)) {
-	        holder.extend();
-	    } else {
+            holder.extend();
+        } else {
             holder.retract();
         }
+    }
+    private void clamp(){
+        currentThrottle = xbox.getAxis(OI.L_YAXIS);
+        currentTurn = xbox.getAxis(OI.R_XAXIS);
+
+        double deltaTurn = currentTurn - previousTurn;
+        double deltaThrottle = currentThrottle - previousThrottle;
+        //TODO put Andriy's function here
+        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
+            turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
+        }
+        else{
+            turnValue = currentTurn;
+        }
+        if(Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0){
+            throttleValue = previousThrottle + ((deltaThrottle < 0)? -maxThrottleDelta : maxThrottleDelta);
+        }
+        else{
+            throttleValue = currentThrottle;
+        }
+        previousThrottle = throttleValue;
+        previousTurn = turnValue;
+        SmartDashboard.putNumber("Turn Value",turnValue);
+        SmartDashboard.putNumber("Joystick", currentTurn);
     }
 }
