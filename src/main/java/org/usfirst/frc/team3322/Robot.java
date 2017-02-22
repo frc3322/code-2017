@@ -109,7 +109,6 @@ public class Robot extends IterativeRobot {
         } else {
             drivetrain.drive(throttleValue, turnValue);
         }
-        //TODO Quadratic rotating
         drivetrain.autoShift();
 
         // Controls
@@ -123,12 +122,11 @@ public class Robot extends IterativeRobot {
         }
     }
     private void clamp(){
-        currentThrottle = xbox.getAxis(OI.L_YAXIS);
-        currentTurn = xbox.getAxis(OI.R_XAXIS);
+        currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 2);
+        currentTurn = xbox.getFineAxis(OI.R_XAXIS, 2);
 
         double deltaTurn = currentTurn - previousTurn;
         double deltaThrottle = currentThrottle - previousThrottle;
-        //TODO put Andriy's function here
         if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
             turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
         }
