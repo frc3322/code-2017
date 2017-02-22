@@ -17,6 +17,8 @@ public class Robot extends IterativeRobot {
     int startPos;
     double xLength,
         yLength,
+        driveStraightAngle;
+        drivingStraight;
         previousThrottle = 0,
         previousTurn = 0,
         maxTurnDelta = .05,
@@ -101,6 +103,15 @@ public class Robot extends IterativeRobot {
         drivetrain.drive(throttleValue, turnValue);
         drivetrain.autoShift();
         clamp();
+        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
+            if(!drivingStraight) {
+                drivingStraight = true;
+                driveStraightAngle = navx.getYaw();
+            }
+            drivetrain.driveAngle(driveStraightAngle, throttleValue);
+        } else {
+            drivetrain.drive(throttleValue, turnValue);
+        }
 
         // Controls
         climber.climb(xbox.isToggled(OI.LBUMPER));
@@ -113,13 +124,12 @@ public class Robot extends IterativeRobot {
         }
     }
     private void clamp(){
-        currentThrottle = xbox.getAxis(OI.L_YAXIS);
-        currentTurn = xbox.getAxis(OI.R_XAXIS);
+        currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 2);
+        currentTurn = xbox.getFineAxis(OI.R_XAXIS, 2);
 
         double deltaTurn = currentTurn - previousTurn;
         double deltaThrottle = currentThrottle - previousThrottle;
-
-        if (Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0) {
+        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
             turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
         } else {
             turnValue = currentTurn;

@@ -72,7 +72,7 @@ public class OI {
             return joystick.getRawAxis(axis);
     }
     public double getFineAxis(int axis, double pow) {
-        return Math.pow(joystick.getRawAxis(axis), pow - 1) * Math.abs(joystick.getRawAxis(axis));
+        return Math.abs(Math.pow(joystick.getRawAxis(axis), pow - 1)) * joystick.getRawAxis(axis);
     }
 
     public boolean isToggled(int button) {

@@ -29,7 +29,6 @@ public class Auton {
                 Robot.drivetrain.driveAngle(0, -.8);
             } else {
                 autonState++;
-                startDorT = Robot.drivetrain.getLeftEncValue();
             }
         } else if (autonState == 1) {
             if(Robot.navx.getYaw() < 20) {
@@ -39,7 +38,7 @@ public class Auton {
                 startDorT = System.currentTimeMillis();
             }
         } else if (autonState == 2) {
-            if (System.currentTimeMillis() < startDorT + 5000) {
+            if (System.currentTimeMillis() < startDorT + 3000) {
                 Robot.drivetrain.driveAngle(55, -.8);
             } else {
                 autonState++;
@@ -73,7 +72,7 @@ public class Auton {
                 autonState++;
             }
         } else if (autonState == 7) {
-            //wait until end of auton;
+            Robot.drivetrain.drive(0, 0);
         }
     }
 
@@ -83,7 +82,6 @@ public class Auton {
                 Robot.drivetrain.driveAngle(0, -.8);
             } else {
                 autonState++;
-                startDorT = Robot.drivetrain.getRightEncValue();
             }
         } else if (autonState == 1) {
             if(Robot.navx.getYaw() > -20) {
@@ -93,7 +91,7 @@ public class Auton {
                 startDorT = System.currentTimeMillis();
             }
         } else if (autonState == 2) {
-            if (System.currentTimeMillis() < startDorT + 5000) {
+            if (System.currentTimeMillis() < startDorT + 3000) {
                 Robot.drivetrain.driveAngle(-56, -.8);
             } else {
                 autonState++;
@@ -107,7 +105,7 @@ public class Auton {
                 startDorT = System.currentTimeMillis();
             }
         } else if (autonState == 4) {
-            if (System.currentTimeMillis() < startDorT + 1500) {
+            if (System.currentTimeMillis() < startDorT + 2000) {
                 Robot.drivetrain.driveAngle(-56, -.8);
             } else {
                 autonState++;
@@ -127,7 +125,7 @@ public class Auton {
                 autonState++;
             }
         } else if (autonState == 7) {
-            //wait until end of auton;
+            Robot.drivetrain.drive(0, 0);
         }
     }
 
@@ -138,6 +136,8 @@ public class Auton {
             } else {
                 autonState++;
             }
+        } else if (autonState == 1) {
+            Robot.drivetrain.drive(0, 0);
         }
     }
 }
