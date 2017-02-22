@@ -62,9 +62,9 @@ public class Robot extends IterativeRobot {
         Robot.xbox.setVibrate(0,0);
         drivetrain.configFromDashboard();
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
-        SmartDashboard.putBoolean("auton_ready", startPos != 0);
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
+        SmartDashboard.putBoolean("auton_ready", startPos != 0);
     }
     @Override
     public void autonomousInit() {

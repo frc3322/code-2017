@@ -92,7 +92,7 @@ public class Drivetrain {
         drive.arcadeDrive(move, rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("driveAnglePTerm", .05);
+        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .05);
         double angle = Robot.navx.getYaw();
         double turn = (targetAngle - angle) * pTerm;
         drive.arcadeDrive(speed, turn);
