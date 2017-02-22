@@ -38,6 +38,7 @@ public class Robot extends IterativeRobot {
         // Component init
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kMXP);
+        SmartDashboard.putNumber("auton",0);
     }
 
     @Override
@@ -47,10 +48,13 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("y_length", 132);
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
+        SmartDashboard.putNumber("auton",0);
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        SmartDashboard.putNumber("auton",0);
+    }
 
     @Override
     public void robotPeriodic() {
@@ -72,10 +76,12 @@ public class Robot extends IterativeRobot {
         drivetrain.resetEncs();
         compressor.start();
         auton.initVars(xLength, yLength);
+        SmartDashboard.putNumber("auton",1);
     }
 
     @Override
     public void autonomousPeriodic() {
+        SmartDashboard.putNumber("auton",1);
         holder.extend();
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
@@ -88,6 +94,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("auton",0);
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
         clamp();
