@@ -72,9 +72,7 @@ public class OI {
             return joystick.getRawAxis(axis);
     }
     public double getFineAxis(int axis, double pow) {
-        // Use quadratic function for turning
-        double sign = joystick.getRawAxis(axis)/Math.abs(joystick.getRawAxis(axis));
-        return sign * Math.pow(joystick.getRawAxis(axis), pow);
+        return Math.abs(Math.pow(joystick.getRawAxis(axis), pow - 1)) * joystick.getRawAxis(axis);
     }
 
     public boolean isToggled(int button) {
