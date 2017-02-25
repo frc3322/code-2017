@@ -15,7 +15,7 @@ public class Drivetrain {
 
     private RobotDrive drive;
     private DoubleSolenoid shifter;
-    private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2,indenturedServantL,indenturedServantR;
+    private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
     private Encoder enc_left, enc_right;
     private double previous = 0;
     private int iterator = 0;
@@ -127,7 +127,7 @@ public class Drivetrain {
         return encoderRPS(e) / (isHigh() ? 1.0588 : 0.4896);
     }
     public double wheelRPS(Encoder e) {
-        return encoderRPS(e) / 3.0;
+        return encoderRPS(e) / 3.0 * .55;
     }
     public double wheelFloorSpeed(Encoder e) {
         return wheelRPS(e) * Math.PI * DIAMETER_WHEEL;
