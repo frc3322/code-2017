@@ -14,6 +14,7 @@ public class Drivetrain {
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2,indenturedServantL,indenturedServantR;
     private Encoder enc_left, enc_right;
+    double previousError = 0;
 
     double robotSpeed, lowThreshold, highThreshold;
     int numSamples, cooldown, invert;
@@ -171,5 +172,25 @@ public class Drivetrain {
         lowThreshold = SmartDashboard.getNumber("low_gear", 0);
         numSamples = (int)SmartDashboard.getNumber("num_samples", 0);
         cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
+    }
+    public void closedLoopDrive(double throttle, double turn){
+        double kp = .7;
+        double kd = .04;
+        turn = turn * Math.abs(turn) * Math.abs(turn) * Math.abs(turn);
+//        if(Math.abs(turn) < .005){
+//            turn = 0;
+//        }
+        double yawRate = Robot.navx.getRate();
+        double error = (yawRate - (turn * 360));
+        double RM = 0;
+        double LM = 0;
+        turn = -turn;
+        RM = (throttle + turn) - ((error * kp) - kd * (error + previousError) / 2);
+        LM = (throttle - turn) + ((error * kp) + kd * (error + previousError) / 2);
+        drive_left_1.set(LM);
+        drive_left_2.set(LM);
+        drive_right_1.set(-RM);
+        drive_right_2.set(-RM);
+        previousError = error;
     }
 }

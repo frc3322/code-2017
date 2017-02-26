@@ -15,7 +15,7 @@ public class Robot extends IterativeRobot {
     static Compressor compressor;
 
     int startPos;
-    boolean drivingStraight;
+    boolean drivingStraight = false;
     double xLength,
         yLength,
         driveStraightAngle,
@@ -108,9 +108,13 @@ public class Robot extends IterativeRobot {
                 driveStraightAngle = navx.getYaw();
             }
             drivetrain.driveAngle(driveStraightAngle, throttleValue);
-        } else {
-            drivetrain.drive(throttleValue, turnValue);
         }
+        else {
+            drivetrain.drive(throttleValue,turnValue);
+            drivingStraight = false;
+        }
+        //drivetrain.closedLoopDrive(throttleValue,turnValue);
+//        }
 
         // Controls
         climber.climb(xbox.isToggled(OI.LBUMPER));
