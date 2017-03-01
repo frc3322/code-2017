@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
 
         // Component init
         compressor = new Compressor(0);
-        navx = new AHRS(SerialPort.Port.kMXP);
+        navx = new AHRS(SerialPort.Port.kUSB);
         SmartDashboard.putNumber("auton",0);
     }
 
@@ -97,23 +97,30 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         SmartDashboard.putNumber("auton", 0);
+        SmartDashboard.putNumber("yaw",navx.getYaw());
+        System.out.println(navx.getYaw());
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
-        drivetrain.drive(throttleValue, turnValue);
+//        drivetrain.drive(throttleValue, turnValue);
         drivetrain.autoShift();
         clamp();
-        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
-            if(!drivingStraight) {
-                drivingStraight = true;
-                driveStraightAngle = navx.getYaw();
-            }
-            drivetrain.driveAngle(driveStraightAngle, throttleValue);
-        }
-        else {
-            drivetrain.drive(throttleValue,turnValue);
+//        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
+//            if(!drivingStraight) {
+//                drivingStraight = true;
+//                driveStraightAngle = navx.getYaw();
+//            }
+//            SmartDashboard.putNumber("Turn Angle",driveStraightAngle);
+////            drivetrain.driveAngle(driveStraightAngle, throttleValue);
+//             drivetrain.closedLoopDrive(throttleValue,turnValue);
+//        }
+//        else {
+//            drivetrain.drive(throttleValue,turnValue);
+
+            drivetrain.closedLoopDrive(throttleValue,turnValue);
             drivingStraight = false;
-        }
-        //drivetrain.closedLoopDrive(throttleValue,turnValue);
+//        }
+       // drivetrain.closedLoopDrive(throttleValue,turnValue);
+        SmartDashboard.putNumber("Yaw Rate",navx.getRate());
 //        }
 
         // Controls
