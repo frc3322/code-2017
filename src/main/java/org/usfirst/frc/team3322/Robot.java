@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.nio.charset.StandardCharsets;
+
 
 public class Robot extends IterativeRobot {
     static OI xbox;
@@ -13,8 +15,11 @@ public class Robot extends IterativeRobot {
     static Holder holder;
     static Auton auton;
     static Compressor compressor;
-
+    static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
+    byte[] WriteData;
     int startPos;
+    boolean holderForward;
+    boolean climbing;
     boolean drivingStraight = false;
     double xLength,
         yLength,
@@ -42,6 +47,7 @@ public class Robot extends IterativeRobot {
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kUSB);
         SmartDashboard.putNumber("auton",0);
+        LEDWrite("RobotInit");
     }
 
     @Override
@@ -52,11 +58,13 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
         SmartDashboard.putNumber("auton",0);
+        LEDWrite("DisabledInit");
     }
 
     @Override
     public void teleopInit() {
         SmartDashboard.putNumber("auton",0);
+        LEDWrite("TeleopInit");
     }
 
     @Override
@@ -71,6 +79,7 @@ public class Robot extends IterativeRobot {
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
+        LEDWrite("DisabledPeriodic");
     }
     @Override
     public void autonomousInit() {
@@ -79,6 +88,7 @@ public class Robot extends IterativeRobot {
         compressor.start();
         auton.initVars(xLength, yLength);
         SmartDashboard.putNumber("auton", 1);
+        LEDWrite("AutonInit");
     }
 
     @Override
@@ -92,6 +102,7 @@ public class Robot extends IterativeRobot {
         } else if (startPos == 3 || startPos == 6) {
             auton.rightPos();
         }
+        LEDWrite("AutonPeriodic");
     }
 
     @Override
@@ -129,9 +140,21 @@ public class Robot extends IterativeRobot {
 
         if (xbox.isToggled(OI.RBUMPER)) {
             holder.extend();
+            holderForward = true;
         } else {
             holder.retract();
+            holderForward = false;
         }
+        if(xbox.isToggled(OI.LBUMPER) || xbox.heldDown(OI.ABUTTON)){
+            LEDWrite("Climbing");
+        }
+        else if(holderForward) {
+            LEDWrite("HolderForward");
+        }
+        else{
+            LEDWrite("HolderBack");
+        }
+
     }
     private void clamp(){
         currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 2);
@@ -153,5 +176,9 @@ public class Robot extends IterativeRobot {
         previousTurn = turnValue;
         SmartDashboard.putNumber("turn_value",turnValue);
         SmartDashboard.putNumber("joystick", currentTurn);
+    }
+    private void LEDWrite(String data){
+        WriteData = data.getBytes(StandardCharsets.UTF_8);
+        LEDs.transaction(WriteData, WriteData.length, null, 0);
     }
 }
