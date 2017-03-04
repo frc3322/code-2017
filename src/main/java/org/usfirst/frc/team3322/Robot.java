@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 
         // Component init
         compressor = new Compressor(0);
-        navx = new AHRS(SerialPort.Port.kUSB);
+        navx = new AHRS(SerialPort.Port.kMXP);
         SmartDashboard.putNumber("auton",0);
         LEDWrite("RobotInit");
     }
@@ -59,12 +59,14 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
         SmartDashboard.putNumber("auton",0);
         LEDWrite("DisabledInit");
+        SmartDashboard.putBoolean("enabled",false);
     }
 
     @Override
     public void teleopInit() {
         SmartDashboard.putNumber("auton",0);
         LEDWrite("TeleopInit");
+        SmartDashboard.putBoolean("enabled",true);
     }
 
     @Override
@@ -80,6 +82,7 @@ public class Robot extends IterativeRobot {
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
         LEDWrite("DisabledPeriodic");
+        SmartDashboard.putBoolean("enabled",false);
     }
     @Override
     public void autonomousInit() {
@@ -89,12 +92,12 @@ public class Robot extends IterativeRobot {
         auton.initVars(xLength, yLength);
         SmartDashboard.putNumber("auton", 1);
         LEDWrite("AutonInit");
+        SmartDashboard.putBoolean("enabled",true);
     }
 
     @Override
     public void autonomousPeriodic() {
         SmartDashboard.putNumber("auton",1);
-        holder.extend();
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
@@ -103,6 +106,7 @@ public class Robot extends IterativeRobot {
             auton.rightPos();
         }
         LEDWrite("AutonPeriodic");
+        SmartDashboard.putBoolean("enabled",true);
     }
 
     @Override
@@ -110,6 +114,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("auton", 0);
         SmartDashboard.putNumber("yaw",navx.getYaw());
         System.out.println(navx.getYaw());
+        SmartDashboard.putBoolean("enabled",true);
         // Drivetrain
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
 //        drivetrain.drive(throttleValue, turnValue);
