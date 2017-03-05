@@ -141,7 +141,7 @@ public class Auton {
                 }
                 break;
             case 2:
-                if (System.currentTimeMillis() < startDorT + 4000) {
+                if (System.currentTimeMillis() < startDorT + 6000) {
                     if (SmartDashboard.getBoolean("detected_target", false)) {
                         correctionAngle = SmartDashboard.getNumber("angle_to_target", 0);
                         Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.5);

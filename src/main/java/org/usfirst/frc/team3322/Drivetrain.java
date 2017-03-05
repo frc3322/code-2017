@@ -174,23 +174,20 @@ public class Drivetrain {
         cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
     }
     public void closedLoopDrive(double throttle, double turn){
-        double kp = .85;
-        double kd = .4;
-        turn = turn * Math.abs(turn) * Math.abs(turn) * Math.abs(turn);
-//        if(Math.abs(turn) < .005){
-//            turn = 0;
-//        }
+        double kp = .80;
+        double kd = .75;
+        turn = turn * Math.abs(turn) * Math.abs(turn);
         double yawRate = Robot.navx.getRate();
-        if(Math.abs(turn) < .05){
+        if(Math.abs(turn) < .15){
             turn =  0;
         }
-        double error = (yawRate - (turn * 8));
+        double error = (yawRate - (turn * 7));
         double RM = 0;
         double LM = 0;
         turn = -turn;
-        RM = (throttle + turn) - ((error * kp) - kd * (error + previousError) / 2);
-        LM = (throttle - turn) + ((error * kp) + kd * (error + previousError) / 2);
-        if(turn == 0 && Math.abs(throttle) < .05){
+        RM = (throttle + .4*turn) - ((error * kp) - kd * (error + previousError) / 2);
+        LM = (throttle - .4*turn) + ((error * kp) + kd * (error + previousError) / 2);
+        if(turn == 0 && Math.abs(throttle) < .1){
             LM = 0;
             RM = 0;
         }
