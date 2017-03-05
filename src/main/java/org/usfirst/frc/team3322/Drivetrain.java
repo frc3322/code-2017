@@ -93,7 +93,7 @@ public class Drivetrain {
         drive.arcadeDrive(move, rotate);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .05);
+        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .03);
         double angle = Robot.navx.getYaw();
         double turn = (targetAngle - angle) * pTerm;
         drive.arcadeDrive(speed, turn);
@@ -174,7 +174,7 @@ public class Drivetrain {
         cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
     }
     public void closedLoopDrive(double throttle, double turn){
-        double kp = .80;
+        double kp = .70;
         double kd = .75;
         turn = turn * Math.abs(turn) * Math.abs(turn);
         double yawRate = Robot.navx.getRate();
@@ -185,8 +185,8 @@ public class Drivetrain {
         double RM = 0;
         double LM = 0;
         turn = -turn;
-        RM = (throttle + .4*turn) - ((error * kp) - kd * (error + previousError) / 2);
-        LM = (throttle - .4*turn) + ((error * kp) + kd * (error + previousError) / 2);
+        RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
+        LM = (throttle - .4*turn) + ((error * kp) - kd * (error - previousError));
         if(turn == 0 && Math.abs(throttle) < .1){
             LM = 0;
             RM = 0;

@@ -21,6 +21,7 @@ public class Robot extends IterativeRobot {
     boolean holderForward;
     boolean climbing;
     boolean drivingStraight = false;
+    DigitalInput gearSensor;
     double xLength,
         yLength,
         driveStraightAngle,
@@ -43,10 +44,12 @@ public class Robot extends IterativeRobot {
         auton = new Auton();
         startPos = 0;
 
+       // gearSensor = new DigitalInput(1);
+
         // Component init
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kMXP);
-        SmartDashboard.putNumber("auton",0);
+        SmartDashboard.putNumber("auton",1);
         LEDWrite("RobotInit");
     }
 
@@ -57,14 +60,14 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("y_length", 132);
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
-        SmartDashboard.putNumber("auton",0);
+        SmartDashboard.putNumber("auton",1);
         LEDWrite("DisabledInit");
         SmartDashboard.putBoolean("enabled",false);
     }
 
     @Override
     public void teleopInit() {
-        SmartDashboard.putNumber("auton",0);
+        SmartDashboard.putNumber("auton",1);
         LEDWrite("TeleopInit");
         SmartDashboard.putBoolean("enabled",true);
     }
@@ -90,14 +93,14 @@ public class Robot extends IterativeRobot {
         drivetrain.resetEncs();
         compressor.start();
         auton.initVars(xLength, yLength);
-        SmartDashboard.putNumber("auton", 1);
+        SmartDashboard.putNumber("auton", 0);
         LEDWrite("AutonInit");
         SmartDashboard.putBoolean("enabled",true);
     }
 
     @Override
     public void autonomousPeriodic() {
-        SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("auton",0);
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
@@ -111,7 +114,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("auton", 0);
+        SmartDashboard.putNumber("auton", 1);
         SmartDashboard.putNumber("yaw",navx.getYaw());
         System.out.println(navx.getYaw());
         SmartDashboard.putBoolean("enabled",true);
@@ -119,6 +122,8 @@ public class Robot extends IterativeRobot {
         drivetrain.direction(xbox.isToggled(OI.LBUMPER));
 //        drivetrain.drive(throttleValue, turnValue);
         drivetrain.autoShift();
+        SmartDashboard.putNumber("Left",drivetrain.getLeftEncValue());
+        SmartDashboard.putNumber("Right",drivetrain.getRightEncValue());
         clamp();
 //        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
 //            if(!drivingStraight) {
@@ -159,6 +164,10 @@ public class Robot extends IterativeRobot {
         else{
             LEDWrite("HolderBack");
         }
+//        if(gearSensor.get()){
+//            SmartDashboard.putBoolean("blegh",false);
+//            xbox.setVibrate(1,1);
+//        }
 
     }
     private void clamp(){
