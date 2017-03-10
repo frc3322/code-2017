@@ -23,7 +23,6 @@ public class Climber {
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
         climb_talon_2 = new CANTalon(RobotMap.climbTalon_2);
-        climbEncoder = new Encoder(RobotMap.encClimb_1, RobotMap.encClimb_2);
         current = new double[] {0,0,0,0,0};
     }
 

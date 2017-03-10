@@ -30,8 +30,6 @@ public class RobotMap {
         encLeft_1 = 0,
         encLeft_2 = 1,
         encRight_1 = 2,
-        encRight_2 = 3,
+        encRight_2 = 3;
 
-        encClimb_1 = 4,
-        encClimb_2 = 5;
 }

@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
         auton = new Auton();
         startPos = 0;
 
-       // gearSensor = new DigitalInput(1);
+        gearSensor = new DigitalInput(4);
 
         // Component init
         compressor = new Compressor(0);
@@ -67,7 +67,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("teleop",0);
+        SmartDashboard.putNumber("auton",0);
         LEDWrite("TeleopInit");
         SmartDashboard.putBoolean("enabled",true);
     }
@@ -93,14 +94,14 @@ public class Robot extends IterativeRobot {
         drivetrain.resetEncs();
         compressor.start();
         auton.initVars(xLength, yLength);
-        SmartDashboard.putNumber("auton", 0);
+        SmartDashboard.putNumber("auton", 2);
         LEDWrite("AutonInit");
         SmartDashboard.putBoolean("enabled",true);
     }
 
     @Override
     public void autonomousPeriodic() {
-        SmartDashboard.putNumber("auton",0);
+        SmartDashboard.putNumber("auton",1);
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
@@ -114,7 +115,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("auton", 1);
+        SmartDashboard.putNumber("teleop", 0);
+        SmartDashboard.putNumber("auton",0);
         SmartDashboard.putNumber("yaw",navx.getYaw());
         System.out.println(navx.getYaw());
         SmartDashboard.putBoolean("enabled",true);
@@ -164,10 +166,15 @@ public class Robot extends IterativeRobot {
         else{
             LEDWrite("HolderBack");
         }
-//        if(gearSensor.get()){
-//            SmartDashboard.putBoolean("blegh",false);
-//            xbox.setVibrate(1,1);
-//        }
+        if(!gearSensor.get()){
+            SmartDashboard.putBoolean("blegh",false);
+            xbox.setVibrate(.5,.5);
+        }
+        else{
+            SmartDashboard.putBoolean("blegh",true);
+            xbox.setVibrate(0,0);
+        }
+
 
     }
     private void clamp(){
