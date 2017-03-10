@@ -50,6 +50,7 @@ public class Robot extends IterativeRobot {
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kMXP);
         SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("start_pos", 0);
         LEDWrite("RobotInit");
     }
 
