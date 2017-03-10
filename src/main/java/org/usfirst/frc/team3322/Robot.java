@@ -60,6 +60,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("y_length", 132);
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
+        SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putNumber("auton",1);
         LEDWrite("DisabledInit");
         SmartDashboard.putBoolean("enabled",false);
@@ -109,6 +110,9 @@ public class Robot extends IterativeRobot {
         } else if (startPos == 3 || startPos == 6) {
             auton.rightPos();
         }
+        else{
+            auton.leftPos();
+        }
         LEDWrite("AutonPeriodic");
         SmartDashboard.putBoolean("enabled",true);
     }
@@ -139,7 +143,7 @@ public class Robot extends IterativeRobot {
 //        else {
 //            drivetrain.drive(throttleValue,turnValue);
 
-            drivetrain.closedLoopDrive(throttleValue,turnValue);
+            drivetrain.drive(throttleValue,turnValue);
             drivingStraight = false;
 //        }
        // drivetrain.closedLoopDrive(throttleValue,turnValue);
