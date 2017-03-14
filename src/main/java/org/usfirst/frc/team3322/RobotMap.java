@@ -20,11 +20,11 @@ public class RobotMap {
         climbTalon_2 = 2,
 
         // Solenoids
-        shifter_1 = 3,
-        shifter_2 = 2,
+        shifter_1 = 0,
+        shifter_2 = 1,
 
-        gearHolder_1 = 0,
-        gearHolder_2 = 1,
+        gearHolder_1 = 3,
+        gearHolder_2 = 2,
 
         // Sensors
         encLeft_1 = 0,

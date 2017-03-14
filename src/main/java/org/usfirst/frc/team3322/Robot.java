@@ -17,10 +17,10 @@ public class Robot extends IterativeRobot {
     static Compressor compressor;
     static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
     byte[] WriteData;
-    int startPos;
     boolean holderForward;
     boolean climbing;
     boolean drivingStraight = false;
+    int startPos;
     DigitalInput gearSensor;
     double xLength,
         yLength,
@@ -42,14 +42,12 @@ public class Robot extends IterativeRobot {
         holder = new Holder();
         climber = new Climber();
         auton = new Auton();
-        startPos = 0;
-
         gearSensor = new DigitalInput(4);
 
         // Component init
         compressor = new Compressor(0);
         navx = new AHRS(SerialPort.Port.kMXP);
-        SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("auton", 1);
         SmartDashboard.putNumber("start_pos", 0);
         LEDWrite("RobotInit");
     }
@@ -59,9 +57,7 @@ public class Robot extends IterativeRobot {
         drivetrain.shiftLow();
         SmartDashboard.putNumber("x_length", 100);
         SmartDashboard.putNumber("y_length", 132);
-        SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "L to R, B in 1-3, R in 4-6");
-        SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putNumber("auton",1);
         LEDWrite("DisabledInit");
         SmartDashboard.putBoolean("enabled",false);
@@ -72,7 +68,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("teleop",0);
         SmartDashboard.putNumber("auton",0);
         LEDWrite("TeleopInit");
-        SmartDashboard.putBoolean("enabled",true);
+        SmartDashboard.putBoolean("enabled", true);
     }
 
     @Override
@@ -86,24 +82,28 @@ public class Robot extends IterativeRobot {
         startPos = (int) SmartDashboard.getNumber("start_pos", 0);
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
-        SmartDashboard.putBoolean("auton_ready", startPos != 0);
         LEDWrite("DisabledPeriodic");
+        SmartDashboard.putBoolean("auton_ready", auton.startPos != 0);
+        SmartDashboard.putNumber("StartPosInCode",startPos);
         SmartDashboard.putBoolean("enabled",false);
     }
     @Override
     public void autonomousInit() {
+        Robot.holder.retract();
         navx.reset();
         drivetrain.resetEncs();
         compressor.start();
-        auton.initVars(xLength, yLength);
+        SmartDashboard.putNumber("StartPosInCode",startPos);
+        auton.init(xLength, yLength);
         SmartDashboard.putNumber("auton", 2);
         LEDWrite("AutonInit");
-        SmartDashboard.putBoolean("enabled",true);
+        SmartDashboard.putBoolean("enabled", true);
     }
 
     @Override
     public void autonomousPeriodic() {
         SmartDashboard.putNumber("auton",1);
+        SmartDashboard.putNumber("StartPosInCode",startPos);
         if(startPos == 1 || startPos == 4) {
             auton.leftPos();
         } else if (startPos == 2 || startPos == 5) {
@@ -126,7 +126,7 @@ public class Robot extends IterativeRobot {
         System.out.println(navx.getYaw());
         SmartDashboard.putBoolean("enabled",true);
         // Drivetrain
-        drivetrain.direction(xbox.isToggled(OI.LBUMPER));
+       drivetrain.direction(true);
 //        drivetrain.drive(throttleValue, turnValue);
         drivetrain.autoShift();
         SmartDashboard.putNumber("Left",drivetrain.getLeftEncValue());
@@ -144,7 +144,7 @@ public class Robot extends IterativeRobot {
 //        else {
 //            drivetrain.drive(throttleValue,turnValue);
 
-            drivetrain.drive(throttleValue,turnValue);
+            drivetrain.drive(-throttleValue,turnValue);
             drivingStraight = false;
 //        }
        // drivetrain.closedLoopDrive(throttleValue,turnValue);
@@ -152,14 +152,14 @@ public class Robot extends IterativeRobot {
 //        }
 
         // Controls
-        climber.climb(xbox.isToggled(OI.LBUMPER));
-        climber.climbManually(xbox.heldDown(OI.ABUTTON));
+        //climber.climb(xbox.isToggled(OI.));
+        climber.climbManually(xbox.heldDown(OI.LBUMPER));
 
         if (xbox.isToggled(OI.RBUMPER)) {
-            holder.extend();
+            holder.retract();
             holderForward = true;
         } else {
-            holder.retract();
+            holder.extend();
             holderForward = false;
         }
         if(xbox.isToggled(OI.LBUMPER) || xbox.heldDown(OI.ABUTTON)){
@@ -167,17 +167,15 @@ public class Robot extends IterativeRobot {
         }
         else if(holderForward) {
             LEDWrite("HolderForward");
-        }
-        else{
+        } else {
             LEDWrite("HolderBack");
         }
-        if(!gearSensor.get()){
-            SmartDashboard.putBoolean("blegh",false);
-            xbox.setVibrate(.5,.5);
-        }
-        else{
+        if (!gearSensor.get()) {
+            SmartDashboard.putBoolean("blegh", false);
+            xbox.setVibrate(.5, .5);
+        } else {
             SmartDashboard.putBoolean("blegh",true);
-            xbox.setVibrate(0,0);
+            xbox.setVibrate(0, 0);
         }
 
 

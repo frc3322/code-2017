@@ -1,6 +1,9 @@
 package org.usfirst.frc.team3322;
 
 import java.lang.Math;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -14,11 +17,14 @@ public class Drivetrain {
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2,indenturedServantL,indenturedServantR;
     private Encoder enc_left, enc_right;
-    double previousError = 0;
+    private double previous = 0;
+    private int iterator = 0;
+    private double[] error_over_time = new double[10];
+    double robotSpeed, lowThreshold, highThreshold,
+            previousError = 0;
 
-    double robotSpeed, lowThreshold, highThreshold;
-    int numSamples, cooldown, invert;
-    int shiftCounter = 0;
+    int numSamples, cooldown, invert,
+            shiftCounter = 0;
 
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
@@ -88,15 +94,30 @@ public class Drivetrain {
     public void direction(boolean inverted) {
         invert = inverted ? -1 : 1;
     }
-    public void drive(double move, double rotate) {
-        move *= invert;
-        drive.arcadeDrive(move, rotate);
+    public void drive(double throttle, double turn) {
+        throttle *= invert;
+        drive.arcadeDrive(throttle, turn);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .03);
+        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .022);
         double angle = Robot.navx.getYaw();
-        double turn = (targetAngle - angle) * pTerm;
+        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.003);
+        double error = targetAngle - angle;
+        error_over_time[iterator] = error;
+        if(iterator < 8){
+            iterator++;
+        }
+        else{
+            iterator = 0;
+        }
+        double totalError = 0;
+        for(double d : error_over_time){
+            totalError += d;
+        }
+        double dTerm = .1;
+        double turn = (targetAngle - angle) * pTerm + totalError * iTerm + (dTerm * (error - previousError));
         drive.arcadeDrive(speed, turn);
+        previousError = error;
     }
 
     public double encoderRPS(Encoder e) {
