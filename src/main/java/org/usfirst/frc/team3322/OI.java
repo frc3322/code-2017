@@ -81,8 +81,8 @@ public class OI {
         }
         return 0 != (toggleState & (1 << button));
     }
-    public void setVibrate(double leftVibrate, double rightVibrate) {
-        joystick.setRumble(GenericHID.RumbleType.kLeftRumble , leftVibrate);
-        joystick.setRumble(GenericHID.RumbleType.kRightRumble , rightVibrate);
+    public void setVibrate(double left, double right) {
+        joystick.setRumble(GenericHID.RumbleType.kLeftRumble, left);
+        joystick.setRumble(GenericHID.RumbleType.kRightRumble, right);
     }
 }

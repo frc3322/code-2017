@@ -153,7 +153,7 @@ public class Robot extends IterativeRobot {
 
         // Controls
         //climber.climb(xbox.isToggled(OI.));
-        climber.climbManually(xbox.heldDown(OI.LBUMPER));
+        climber.forceClimb(xbox.heldDown(OI.LBUMPER));
 
         if (xbox.isToggled(OI.RBUMPER)) {
             holder.retract();
@@ -201,7 +201,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("turn_value",turnValue);
         SmartDashboard.putNumber("joystick", currentTurn);
     }
-    private void LEDWrite(String data){
+
+    private void LEDWrite(String data) {
         WriteData = data.getBytes(StandardCharsets.UTF_8);
         LEDs.transaction(WriteData, WriteData.length, null, 0);
     }
