@@ -3,11 +3,12 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
+import java.nio.charset.StandardCharsets;
+
 
 public class OI {
     static Joystick joystick;
 
-    // Assign vague integers to variables
     public static final int
             // Buttons
             ABUTTON = 1,
@@ -37,17 +38,37 @@ public class OI {
 
 	// Track button states for pressedOnce
     private void setButtonDown(int button) {
+        // Set binary value of button to (0 or 1) or (1 or 1) - which means down
         buttonState |= (1 << button);
     }
     private void setButtonUp(int button) {
+        // Set binary value of button to (0 and 0) or (1 and 0) - which means up
+        // NOTE: ~ represents the opposite binary integer
         buttonState &= ~(1 << button);
     }
     private boolean isDown(int button) {
         return 0 != (buttonState & (1 << button));
     }
 
-    void toggleButtonState(int button) {
+    public void toggleButtonState(int button) {
         toggleState ^= (1 << button);
+    }
+
+    public void setToggled(int button, boolean value) {
+        if (value) {
+            // Toggle down
+            toggleState |= (1 << button);
+        } else {
+            // Toggle up
+            toggleState &= ~(1 << button);
+        }
+    }
+
+    public boolean isToggled(int button) {
+        if (pressedOnce(button)) {
+            toggleButtonState(button);
+        }
+        return 0 != (toggleState & (1 << button));
     }
 
     public boolean heldDown(int button) {
@@ -75,14 +96,13 @@ public class OI {
         return Math.abs(Math.pow(joystick.getRawAxis(axis), pow - 1)) * joystick.getRawAxis(axis);
     }
 
-    public boolean isToggled(int button) {
-        if (pressedOnce(button)) {
-            toggleButtonState(button);
-        }
-        return 0 != (toggleState & (1 << button));
-    }
     public void setVibrate(double left, double right) {
         joystick.setRumble(GenericHID.RumbleType.kLeftRumble, left);
         joystick.setRumble(GenericHID.RumbleType.kRightRumble, right);
+    }
+
+    public static void LEDWrite(String data) {
+        byte[] writeData = data.getBytes(StandardCharsets.UTF_8);
+        Robot.LEDs.transaction(writeData, writeData.length, null, 0);
     }
 }

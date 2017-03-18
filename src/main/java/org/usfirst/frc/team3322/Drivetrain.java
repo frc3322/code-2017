@@ -12,15 +12,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Drivetrain {
-
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
     private Encoder enc_left, enc_right;
+
     private double previous = 0;
     private int iterator = 0;
     private double[] error_over_time = new double[10];
-    double robotSpeed, lowThreshold, highThreshold,
+    double robotSpeed,
+            lowThreshold,
+            highThreshold,
             previousError = 0;
 
     int numSamples, cooldown, invert,
@@ -159,11 +161,11 @@ public class Drivetrain {
             sampleIndex = 0;
 
         double leftAvg = 0.0, rightAvg = 0.0;
-        for (int i = 0; i < leftSamples.length; ++i) {
-            leftAvg += Math.abs(leftSamples[i]);
+        for (double leftSample : leftSamples) {
+            leftAvg += Math.abs(leftSample);
         }
-        for (int i = 0; i < rightSamples.length; ++i) {
-            rightAvg += Math.abs(rightSamples[i]);
+        for (double rightSample : rightSamples) {
+            rightAvg += Math.abs(rightSample);
         }
 
         leftAvg /= (double)numSamples;
