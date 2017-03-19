@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 
         auton.init(xLength, yLength);
 
-        SmartDashboard.putNumber("StartPosInCode", startPos);
+        SmartDashboard.putNumber("start_pos_in_code", startPos);
         SmartDashboard.putNumber("auton", 2);
         SmartDashboard.putBoolean("enabled", true);
         OI.LEDWrite("AutonInit");
@@ -113,8 +113,8 @@ public class Robot extends IterativeRobot {
             auton.leftPos();
         }
 
-        SmartDashboard.putNumber("auton",1);
-        SmartDashboard.putNumber("StartPosInCode", startPos);
+        SmartDashboard.putNumber("auton", 1);
+        SmartDashboard.putNumber("start_pos_in_code", startPos);
         OI.LEDWrite("AutonPeriodic");
     }
 
