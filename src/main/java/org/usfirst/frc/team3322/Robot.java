@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Object init
         xbox = new OI();
-        drivetrain = new Drivetrain(8.75, 12.5, 3, 50);
+        drivetrain = new Drivetrain(6.75, 8.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
         auton = new Auton();
@@ -181,8 +181,8 @@ public class Robot extends IterativeRobot {
 
     }
     private void clamp(){
-        currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 2);
-        currentTurn = xbox.getFineAxis(OI.R_XAXIS, 2);
+        currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 3);
+        currentTurn = xbox.getFineAxis(OI.R_XAXIS, 3);
 
         double deltaTurn = currentTurn - previousTurn;
         double deltaThrottle = currentThrottle - previousThrottle;
