@@ -6,18 +6,21 @@ import edu.wpi.first.wpilibj.Encoder;
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
     Encoder climbEncoder;
-    boolean climbStatus = false,
-            climbStartStatus = true,
-            currentSpike = false,
-            override = false;
+    ClimbState climbStatus;
     // value from 0.00 to 1.00
     double climbRate = 1.0,
-            climbDistance = 0,
             totalCurrent = 0,
             avgCurrent = 0,
             vibration = 0;
     double[] current;
-    int timer = 0;
+    int timer = 0,
+            i = 0;
+
+    public enum ClimbState {
+        STOP,
+        CLIMB,
+        FORCE_CLIMB
+    }
 
     public Climber() {
         climb_talon_1 = new CANTalon(RobotMap.climbTalon_1);
@@ -25,49 +28,57 @@ public class Climber {
         current = new double[] {0,0,0,0,0};
     }
 
-    public void climb(boolean climbStatus) {
-        // Pull holder back to prevent interference with ground
-        if (climbStatus) {
-            Robot.holder.retract();
-        }
+    // Climbs if the climb button is toggled, and can be force-enabled by pressing and holding down the force climb button.
+    public void climb(int climbButton, int forceClimbButton) {
+        boolean climb = Robot.xbox.isToggled(climbButton),
+                forceClimb = Robot.xbox.heldDown(forceClimbButton);
 
         avgCurrent();
 
-        // Climb using only current
-        if (climbStatus && avgCurrent < 50) {
-            climb_talon_1.set(climbRate);
-            climb_talon_2.set(climbRate);
+        if (forceClimb) {
+            climbStatus = ClimbState.FORCE_CLIMB;
+        } else if (climb) {
+            climbStatus = ClimbState.CLIMB;
+        } else {
+            climbStatus = ClimbState.STOP;
         }
-        else if (!override) {
-            climb_talon_1.set(0);
-            climb_talon_2.set(0);
+
+        switch (climbStatus) {
+            case STOP:
+                climb_talon_1.set(0);
+                climb_talon_2.set(0);
+                break;
+            case CLIMB:
+                // Pull holder back to prevent interference with ground
+                Robot.holder.retract();
+
+                // Climbing with current threshold
+                if (avgCurrent < 50) {
+                    climb_talon_1.set(climbRate);
+                    climb_talon_2.set(climbRate);
+                } else {
+                    climbStatus = ClimbState.STOP;
+                }
+                break;
+            case FORCE_CLIMB:
+                Robot.xbox.setToggled(climbButton, false);
+                climb_talon_1.set(climbRate);
+                climb_talon_2.set(climbRate);
+                break;
         }
 
         // Vibrate controller based on motor current
-        if (climbStatus == true) {
-            Robot.xbox.setVibrate(avgCurrent * .6, avgCurrent * .6);
+        if (climbStatus != ClimbState.STOP && avgCurrent > 5) {
+            Robot.xbox.setVibrate(avgCurrent * .01, avgCurrent * .01);
         } else {
             Robot.xbox.setVibrate(0, 0);
         }
     }
 
-    public void forceClimb(boolean buttonPressed) {
-        if (buttonPressed) {
-            climb_talon_1.set(climbRate);
-            climb_talon_2.set(climbRate);
-            override = true;
-        } else {
-            climb_talon_1.set(0);
-            climb_talon_2.set(0);
-            override = false;
-        }
-    }
-
     private void avgCurrent() {
-        int i = 0;
-        // Get the moving average of the current
+        i = 0;
         current[i] = (climb_talon_1.getOutputCurrent() + climb_talon_2.getOutputCurrent()) / 2;
-        if (i < 4){
+        if (i < 4) {
             i++;
         } else {
             i = 0;

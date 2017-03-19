@@ -9,11 +9,11 @@ public class Auton {
     private double angleLift;
     private double autonD1;
     private double autonD2;
-    public int autonState,
-            startPos = 0;
     private double correctionAngle = 0;
+    public int autonState;
 
     public Auton() {
+        // TODO verify the difference of the auton turning angles with the trig calculation angle used (20deg vs 30deg respectively)
         angleLift = 30; // degrees
         startDorT = 0;
     }
@@ -28,15 +28,24 @@ public class Auton {
     }
 
     public void run() {
-        startPos = (int) SmartDashboard.getNumber("start_pos", 0);
+        int startPos = (int)SmartDashboard.getNumber("start_pos", 0);
         switch (startPos) {
-            case 0:
+            case 1:
                 leftPos();
                 break;
-            case 1:
+            case 2:
                 middlePos();
                 break;
-            case 2:
+            case 3:
+                rightPos();
+                break;
+            case 4:
+                leftPos();
+                break;
+            case 5:
+                middlePos();
+                break;
+            case 6:
                 rightPos();
                 break;
             default:
@@ -45,7 +54,8 @@ public class Auton {
         }
     }
 
-    public void leftPos() { //uses vision
+    // Uses vision
+    public void leftPos() {
         switch (autonState) {
             case 0:
                 if (Robot.drivetrain.getLeftEncValue() < startDorT + autonD1 +2 ) {
