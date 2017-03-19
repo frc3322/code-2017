@@ -161,7 +161,7 @@ public class Robot extends IterativeRobot {
             //xbox.setVibrate(0, 0);
         }
 
-        if (climber.climbStatus) {
+        if (climber.climbStatus == Climber.ClimbState.CLIMB) {
             OI.LEDWrite("Climbing");
         } else if (holder.extended) {
             OI.LEDWrite("HolderForward");
