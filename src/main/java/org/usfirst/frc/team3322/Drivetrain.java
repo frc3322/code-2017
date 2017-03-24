@@ -101,9 +101,9 @@ public class Drivetrain {
         drive.arcadeDrive(throttle, turn);
     }
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .022);
+        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .00033);
         double angle = Robot.navx.getYaw();
-        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.003);
+        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.001);
         double error = targetAngle - angle;
         error_over_time[iterator] = error;
         if(iterator < 8){
@@ -117,7 +117,7 @@ public class Drivetrain {
             totalError += d;
         }
         double dTerm = .1;
-        double turn = (targetAngle - angle) * pTerm + totalError * iTerm + (dTerm * (error - previousError));
+        double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
         drive.arcadeDrive(speed, turn);
         previousError = error;
     }

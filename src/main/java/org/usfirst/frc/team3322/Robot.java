@@ -161,13 +161,14 @@ public class Robot extends IterativeRobot {
             //xbox.setVibrate(0, 0);
         }
 
-        if (climber.climbStatus) {
-            OI.LEDWrite("Climbing");
-        } else if (holder.extended) {
-            OI.LEDWrite("HolderForward");
-        } else {
-            OI.LEDWrite("HolderBack");
-        }
+//        if (climber.climbStatus) {
+//            OI.LEDWrite("Climbing");
+////        }
+//        else if (holder.extended) {
+//            OI.LEDWrite("HolderForward");
+//        } else {
+//            OI.LEDWrite("HolderBack");
+//        }
 
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);

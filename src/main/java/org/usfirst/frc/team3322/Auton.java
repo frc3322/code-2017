@@ -58,6 +58,7 @@ public class Auton {
     public void leftPos() {
         switch (autonState) {
             case 0:
+                Robot.holder.extend();
                 if (Robot.drivetrain.getLeftEncValue() < startDorT + autonD1 +2 ) {
                     Robot.drivetrain.driveAngle(0, -.8);
                 } else {
@@ -76,15 +77,15 @@ public class Auton {
                 if (System.currentTimeMillis() < startDorT + 5000) {
                     if (SmartDashboard.getBoolean("detected_target", false)) {
                         correctionAngle = SmartDashboard.getNumber("angle_to_target", 0);
-                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.5);
+                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.4);
                     } else {
-                        Robot.drivetrain.driveAngle(55, -.5);
+                        Robot.drivetrain.driveAngle(55, -.4);
                     }
-                    if(System.currentTimeMillis() > startDorT + 3000){
-                        Robot.holder.extend();
+                    if(System.currentTimeMillis() > startDorT + 4000){
+                       Robot.holder.retract();
                     }
                 } else {
-                    Robot.holder.extend();
+                    //Robot.holder.extend();
                 }
                 break;
         }
