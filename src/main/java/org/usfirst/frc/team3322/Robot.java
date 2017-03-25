@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
         startPos = (int)SmartDashboard.getNumber("start_pos", 0);
         xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
-
+        System.out.println("Nav X" + navx.getYaw());
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
         SmartDashboard.putNumber("start_pos_in_code", startPos);
         OI.LEDWrite("DisabledPeriodic");
@@ -153,20 +153,24 @@ public class Robot extends IterativeRobot {
             holder.retract();
         }
 
-        if (gearSensor.get()) {
-            SmartDashboard.putBoolean("gear_sensor", true);
-            //xbox.setVibrate(.5, .5);
-        } else {
-            SmartDashboard.putBoolean("gear_sensor", false);
-            //xbox.setVibrate(0, 0);
-        }
-
         if (climber.climbStatus == Climber.ClimbState.CLIMB) {
             OI.LEDWrite("Climbing");
         } else if (holder.extended) {
             OI.LEDWrite("HolderForward");
         } else {
             OI.LEDWrite("HolderBack");
+        }
+
+
+        // Vibrate controller based on motor current and sensor state
+        if (climber.climbStatus != Climber.ClimbState.STOP) {
+            Robot.xbox.setVibrate(climber.avgCurrent * .02, climber.avgCurrent * .02);
+        } else if (!gearSensor.get()) {
+            SmartDashboard.putBoolean("gear_sensor", true);
+            xbox.setVibrate(0.5,0.5);
+        } else {
+            SmartDashboard.putBoolean("gear_sensor", false);
+            xbox.setVibrate(0, 0);
         }
 
         SmartDashboard.putNumber("teleop", 0);

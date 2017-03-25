@@ -66,8 +66,8 @@ public class Auton {
                 }
                 break;
             case 1:
-                if (Robot.navx.getYaw() < 20) {
-                    Robot.drivetrain.drive(.4, 1);
+                if (Robot.navx.getAngle() < 20) {
+                    Robot.drivetrain.drive(.4, .8);
                 } else {
                     autonState++;
                     startDorT = System.currentTimeMillis();
@@ -77,15 +77,17 @@ public class Auton {
                 if (System.currentTimeMillis() < startDorT + 5000) {
                     if (SmartDashboard.getBoolean("detected_target", false)) {
                         correctionAngle = SmartDashboard.getNumber("angle_to_target", 0);
-                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.4);
+                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.6);
+                        SmartDashboard.putBoolean("lost_target",false);
                     } else {
-                        Robot.drivetrain.driveAngle(55, -.4);
+                        Robot.drivetrain.driveAngle(Robot.navx.getYaw(), -.5);
+                        SmartDashboard.putBoolean("lost_target",true);
                     }
-                    if(System.currentTimeMillis() > startDorT + 4000){
+                    if(System.currentTimeMillis() > startDorT + 1500){
                        Robot.holder.retract();
                     }
                 } else {
-                    //Robot.holder.extend();
+                    Robot.drivetrain.drive(0, 0);
                 }
                 break;
         }
@@ -158,15 +160,15 @@ public class Auton {
     public void rightPos() {
         switch (autonState) {
             case 0:
-                if (Robot.drivetrain.getLeftEncValue() < startDorT + autonD1 + 20) {
+                if (Robot.drivetrain.getLeftEncValue() < startDorT + autonD1 + 10) {
                     Robot.drivetrain.driveAngle(0, -.8);
                 } else {
                     autonState++;
                 }
                 break;
             case 1:
-                if (Robot.navx.getYaw() > -15) {
-                    Robot.drivetrain.drive(.4, -1);
+                if (Robot.navx.getYaw() < 30.5) {
+                    Robot.drivetrain.drive(.4, -.6);
                 } else {
                     autonState++;
                     startDorT = System.currentTimeMillis();
@@ -176,12 +178,12 @@ public class Auton {
                 if (System.currentTimeMillis() < startDorT + 5000) {
                     if (SmartDashboard.getBoolean("detected_target", false)) {
                         correctionAngle = SmartDashboard.getNumber("angle_to_target", 0);
-                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle, -.5);
+                        Robot.drivetrain.driveAngle(Robot.navx.getYaw() + correctionAngle + 10, -.5);
                     } else {
-                        Robot.drivetrain.driveAngle(-56, -.5);
+                        Robot.drivetrain.driveAngle(Robot.navx.getYaw(), -.5);
                     }
                 } else {
-                    Robot.holder.extend();
+                   // Robot.holder.extend();
                 }
 //            case 3:
 //                if (Robot.drivetrain.getRightEncValue() > startDorT - 50) {

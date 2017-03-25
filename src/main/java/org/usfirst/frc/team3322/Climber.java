@@ -66,13 +66,6 @@ public class Climber {
                 climb_talon_2.set(climbRate);
                 break;
         }
-
-        // Vibrate controller based on motor current
-        if (climbStatus != ClimbState.STOP && avgCurrent > 5) {
-            Robot.xbox.setVibrate(avgCurrent * .01, avgCurrent * .01);
-        } else {
-            Robot.xbox.setVibrate(0, 0);
-        }
     }
 
     private void avgCurrent() {
