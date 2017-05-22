@@ -4,8 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.nio.charset.StandardCharsets;
-
+import java.util.concurrent.*;
 
 public class Robot extends IterativeRobot {
     static OI xbox;
@@ -16,9 +15,11 @@ public class Robot extends IterativeRobot {
     static Auton auton;
     static Compressor compressor;
     static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
-
+    public double turn;
+    public double throttle;
     boolean drivingStraight = false;
     int startPos;
+    ScheduledExecutorService teleopDriveExecuter;
     DigitalInput gearSensor;
     double xLength,
         yLength,
@@ -69,6 +70,10 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("auton", 0);
         SmartDashboard.putBoolean("enabled", true);
         OI.LEDWrite("TeleopInit");
+        teleopDriveExecuter = Executors.newScheduledThreadPool(1);
+        teleopDriveExecuter.scheduleAtFixedRate(()->{
+            drivetrain.closedLoopDrive(Robot.xbox.getAxis(OI.L_YAXIS),Robot.xbox.getAxis(OI.R_XAXIS));
+        },0,5, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -124,7 +129,7 @@ public class Robot extends IterativeRobot {
         //drivetrain.drive(throttleValue, turnValue);
         drivetrain.autoShift();
 
-        clamp();
+        //clamp();
         /*
         if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
         if (!drivingStraight) {
@@ -138,8 +143,7 @@ public class Robot extends IterativeRobot {
           else {
             drivetrain.drive(throttleValue,turnValue);
         */
-
-            drivetrain.drive(-throttleValue, turnValue);
+        //    drivetrain.closedLoopDrive(xbox.getAxis(OI.L_YAXIS),xbox.getAxis(OI.R_XAXIS));
             drivingStraight = false;
 //      }
         //drivetrain.closedLoopDrive(throttleValue,turnValue);
@@ -171,7 +175,8 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);
-        SmartDashboard.putNumber("yaw", navx.getYaw());
+        SmartDashboard.putNumber("yaw rate", navx.getRate());
+        SmartDashboard.putNumber("turn",xbox.getAxis(OI.R_XAXIS));
         SmartDashboard.putNumber("left_enc", drivetrain.getLeftEncValue());
         SmartDashboard.putNumber("right_enc", drivetrain.getRightEncValue());
         System.out.println(navx.getYaw());
