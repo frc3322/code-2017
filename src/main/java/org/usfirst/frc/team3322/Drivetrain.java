@@ -205,10 +205,15 @@ public class Drivetrain {
 //            turn =  0;
 //        }
         double error = (yawRate - (turn * 9));
+        
+//      Let's test these
+//      if (Math.abs(error) < 0.05) error = 0;
+//      if (Math.abs(throttle) < 0.05) throttle = 0;
+        
         double RM = 0;
         double LM = 0;
         turn = -turn;
-        RM = (throttle + .4*turn) - ((error * kp) + kd * (error - previousError));
+        RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
         LM = (throttle - .4*turn) + ((error * kp) + kd * (error - previousError));
 //        if(turn == 0 && Math.abs(throttle) < .05){
 //            LM = 0;
