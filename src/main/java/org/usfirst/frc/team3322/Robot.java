@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
         OI.LEDWrite("TeleopInit");
         teleopDriveExecuter = Executors.newScheduledThreadPool(1);
         teleopDriveExecuter.scheduleAtFixedRate(()->{
-            drivetrain.closedLoopDrive(Robot.xbox.getAxis(OI.L_YAXIS),Robot.xbox.getAxis(OI.R_XAXIS));
+            teleopPeriodicFast();
         },0,5, TimeUnit.MILLISECONDS);
     }
 
@@ -181,6 +181,11 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("right_enc", drivetrain.getRightEncValue());
         System.out.println(navx.getYaw());
     }
+    
+    private void teleopPeriodicFast(){
+        drivetrain.closedLoopDrive(Robot.xbox.getAxis(OI.L_YAXIS),Robot.xbox.getAxis(OI.R_XAXIS));
+    }
+    
     private void clamp(){
         currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 3);
         currentTurn = xbox.getFineAxis(OI.R_XAXIS, 3);
