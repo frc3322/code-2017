@@ -65,7 +65,6 @@ public class Drivetrain {
         this.highThreshold = highThreshold;
         this.numSamples = numSamples;
         this.cooldown = cooldown;
-
         leftSamples = new double[numSamples];
         rightSamples = new double[numSamples];
         sampleIndex = 0;
@@ -79,6 +78,8 @@ public class Drivetrain {
         SmartDashboard.putNumber("high_gear", highThreshold);
         SmartDashboard.putNumber("num_samples", numSamples);
         SmartDashboard.putNumber("cooldown", cooldown);
+        SmartDashboard.putNumber("left encoder velocity", enc_left.getRate());
+        SmartDashboard.putNumber("right encoder velocity", enc_right.getRate());
     }
 
     public void resetEncs() {

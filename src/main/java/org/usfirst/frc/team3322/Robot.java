@@ -178,6 +178,9 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("yaw", navx.getYaw());
         SmartDashboard.putNumber("left_enc", drivetrain.getLeftEncValue());
         SmartDashboard.putNumber("right_enc", drivetrain.getRightEncValue());
+        SmartDashboard.putNumber("X Velocity",navx.getVelocityX());
+        SmartDashboard.putNumber("Y Velocity",navx.getVelocityY());
+        SmartDashboard.putNumber("Z Velocity",navx.getVelocityZ());
         System.out.println(navx.getYaw());
     }
     private void clamp(){
