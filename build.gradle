@@ -15,7 +15,8 @@ frc {
 dependencies {
     compile wpilib()
     compile talonSrx()
-    compile navx();
+    compile navx()
+    compile files('lib/Pathfinder-Java.jar')
 }
 
 def robotManifest = {

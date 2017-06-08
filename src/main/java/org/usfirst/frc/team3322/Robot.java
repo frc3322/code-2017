@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
         teleopDriveExecuter = Executors.newScheduledThreadPool(1);
         teleopDriveExecuter.scheduleAtFixedRate(()->{
             drivetrain.closedLoopDrive(Robot.xbox.getAxis(OI.L_YAXIS),Robot.xbox.getAxis(OI.R_XAXIS));
-        },0,5, TimeUnit.MILLISECONDS);
+        },0,7, TimeUnit.MILLISECONDS);
     }
 
     @Override

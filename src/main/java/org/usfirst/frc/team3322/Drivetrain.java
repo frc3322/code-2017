@@ -199,6 +199,7 @@ public class Drivetrain {
     public void closedLoopDrive(double throttle, double turn){
         double kp = .3;
         double kd = .8;
+        
         turn = turn * Math.abs(turn) * Math.abs(turn);
         double yawRate = Robot.navx.getRate();
 //        if(Math.abs(turn) < .05){
@@ -207,9 +208,8 @@ public class Drivetrain {
         double error = (yawRate - (turn * 9));
         double RM = 0;
         double LM = 0;
-        turn = -turn;
-        RM = (throttle + .4*turn) - ((error * kp) + kd * (error - previousError));
-        LM = (throttle - .4*turn) + ((error * kp) + kd * (error - previousError));
+        RM = (throttle - .4*turn) - ((error * kp) + kd * (error - previousError));
+        LM = (throttle + .4*turn) + ((error * kp) + kd * (error - previousError));
 //        if(turn == 0 && Math.abs(throttle) < .05){
 //            LM = 0;
 //            RM = 0;
