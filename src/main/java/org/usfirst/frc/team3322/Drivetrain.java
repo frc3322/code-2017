@@ -32,6 +32,22 @@ public class Drivetrain {
     private double leftSamples[], rightSamples[];
     public static final double DIAMETER_WHEEL = 0.5;
 
+    double kP = 1.0/15.0;
+    double kI = 0;
+    double kD = .0004666;
+
+    double rightTarget;
+    double leftTarget;
+    double rightError;
+    double leftError;
+    double previousRightError;
+    double previousLeftError;
+    double leftVelocity;
+    double rightVelocity;
+
+    double RM;
+    double LM;
+
     Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
         this(lowThreshold, highThreshold, numSamples, cooldown, false, false);
     }
@@ -206,8 +222,6 @@ public class Drivetrain {
 //            turn =  0;
 //        }
         double error = (yawRate - (turn * 9));
-        double RM = 0;
-        double LM = 0;
         RM = (throttle - .4*turn) - ((error * kp) + kd * (error - previousError));
         LM = (throttle + .4*turn) + ((error * kp) + kd * (error - previousError));
 //        if(turn == 0 && Math.abs(throttle) < .05){
@@ -219,5 +233,28 @@ public class Drivetrain {
         drive_right_1.set(-RM);
         drive_right_2.set(-RM);
         previousError = error;
+    }
+    public void newClosedLoopDrive(double throttle, double turn){
+        translate(throttle,turn);
+        leftVelocity = enc_left.getRate() /7.5/256*1.57;
+        SmartDashboard.putNumber("left velocity " , leftVelocity);
+        SmartDashboard.putNumber("right velocity ", rightVelocity);
+        rightVelocity = enc_right.getRate() /7.5/256*1.57;
+        leftError = (leftVelocity - leftTarget);
+        SmartDashboard.putNumber("left target ",leftTarget);
+        SmartDashboard.putNumber("right target " , rightTarget);
+        rightError = (rightVelocity - rightTarget);
+        RM = leftError * kP - kD * (leftError - previousLeftError);
+        LM = rightError * kP - kD * (rightError - previousRightError);
+        SmartDashboard.putNumber("rm",RM);
+        SmartDashboard.putNumber("lm",LM);
+        drive_left_1.set(-LM);
+        drive_left_2.set(-LM);
+        drive_right_1.set(RM);
+        drive_right_2.set(RM);
+    }
+    private void translate(double throttle,double turn){
+        rightTarget = throttle * 15 - turn * 10;
+        leftTarget = throttle * 15 + turn * 10;
     }
 }
