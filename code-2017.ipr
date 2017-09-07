@@ -255,6 +255,45 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Build" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="false" name="Robot Deploy" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--offline" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+            <option value="deploy" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+  </component>
   <component name="SvnBranchConfigurationManager">
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
@@ -298,25 +337,25 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibj/athena/2017.3.1/a5e6577370896b3666a1f99e900233e4240b5d27/athena-2017.3.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: org.opencv:opencv-java:3.1.0">
+    <library name="Gradle: org.opencv:opencv-java:3.2.0">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.1.0/2a534baab7f01c049ba9768adb645f9b0128f987/opencv-java-3.1.0.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.2.0/c65e242eaf6ff4b086d45b0254f4511b6a072a65/opencv-java-3.2.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.1.0/30ac314db3d3a30fae0e3dc2e1740466708f1c0/opencv-java-3.1.0-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.2.0/da5215ba2c023701a644802a1fcd93749061f90d/opencv-java-3.2.0-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: thirdparty.frc.ctre:Toolsuite-Java:4.4.1.11">
+    <library name="Gradle: thirdparty.frc.ctre:Toolsuite-Java:4.4.1.14">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.ctre/Toolsuite-Java/4.4.1.11/9f0af98f5cf4b983bc285f1d3f1f74dfff7a5178/Toolsuite-Java-4.4.1.11.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.ctre/Toolsuite-Java/4.4.1.14/bf276de29a4ac9d16150b748e546fb7ade1118d7/Toolsuite-Java-4.4.1.14.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: thirdparty.frc.kauai:Navx-Java:3.0.329">
+    <library name="Gradle: thirdparty.frc.kauai:Navx-Java:3.0.331">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.kauai/Navx-Java/3.0.329/7ddcece63fbe975286e549fe0a5db3f6a8a71f11/Navx-Java-3.0.329.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.kauai/Navx-Java/3.0.331/d537565ad049271168794cebc8c653c10a359254/Navx-Java-3.0.331.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

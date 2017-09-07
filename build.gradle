@@ -2,25 +2,23 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2017.1.5"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.2.3"
 }
 
 frc {
     team = "3322"
     robotClass = "org.usfirst.frc.team3322.Robot"
-    rioIP = "10.33.22.2"
-    rioHost = "10.33.22.2"
 }
 
 dependencies {
     compile wpilib()
     compile talonSrx()
-    compile navx();
+    compile navx()
 }
 
 def robotManifest = {
-  attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
-  attributes 'Robot-Class': frc.robotClass
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': frc.robotClass
 }
 
 jar {

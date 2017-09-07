@@ -19,7 +19,7 @@ public class Drivetrain {
 
     private double previous = 0;
     private int iterator = 0;
-    private List<Double> error_over_time = new ArrayList<Double>();
+    private List<Double> error_over_time = new ArrayList<>();
     double robotSpeed,
             lowThreshold,
             highThreshold,
@@ -200,11 +200,10 @@ public class Drivetrain {
             turn =  0;
         }
         double error = (yawRate - (turn * 7));
-        double RM = 0;
-        double LM = 0;
         turn = -turn;
-        RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
-        LM = (throttle - .4*turn) + ((error * kp) - kd * (error - previousError));
+        double RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
+        double LM = (throttle - .4*turn) + ((error * kp) - kd * (error - previousError));
+
         if(turn == 0 && Math.abs(throttle) < .1){
             LM = 0;
             RM = 0;

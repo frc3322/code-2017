@@ -4,9 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.nio.charset.StandardCharsets;
-
-
 public class Robot extends IterativeRobot {
     static OI xbox;
     static Drivetrain drivetrain;
@@ -183,6 +180,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Z Velocity",navx.getVelocityZ());
         System.out.println(navx.getYaw());
     }
+
     private void clamp(){
         currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 3);
         currentTurn = xbox.getFineAxis(OI.R_XAXIS, 3);
