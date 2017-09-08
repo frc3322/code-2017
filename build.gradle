@@ -8,6 +8,8 @@ plugins {
 frc {
     team = "3322"
     robotClass = "org.usfirst.frc.team3322.Robot"
+    // if deploy times are longer than expected, uncomment the following line
+    //frc.rioHost = 10.33.22.2
 }
 
 dependencies {
