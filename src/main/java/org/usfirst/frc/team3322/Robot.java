@@ -19,19 +19,11 @@ public class Robot extends IterativeRobot {
     DigitalInput gearSensor;
     double xLength,
         yLength,
-        driveStraightAngle,
-        previousThrottle = 0,
-        previousTurn = 0,
-        maxTurnDelta = .05,
-        maxThrottleDelta = .05,
-        turnValue,
-        throttleValue,
-        currentTurn,
-        currentThrottle;
+        driveStraightAngle;
 
     @Override
     public void robotInit() {
-        // Object init
+        // Subsystem init
         xbox = new OI();
         drivetrain = new Drivetrain(6.75, 8.5, 3, 50);
         holder = new Holder();
@@ -54,7 +46,7 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("x_length", 100);
         SmartDashboard.putNumber("y_length", 132);
-        SmartDashboard.putString("position_key", "1,4 = left | 2,5 = mid | 3,6 = right");
+        SmartDashboard.putString("position_key", "1 = left | 2= mid | 3 = right");
         SmartDashboard.putNumber("auton", 1);
         SmartDashboard.putBoolean("enabled", false);
         OI.LEDWrite("DisabledInit");
@@ -70,7 +62,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber("robot_speed", drivetrain.robotSpeed);
+        SmartDashboard.putNumber("robot_speed", drivetrain.getRobotSpeed());
     }
 
     @Override
@@ -80,7 +72,6 @@ public class Robot extends IterativeRobot {
         yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
         System.out.println("Nav X" + navx.getYaw());
         SmartDashboard.putBoolean("auton_ready", startPos != 0);
-        SmartDashboard.putNumber("start_pos_in_code", startPos);
         OI.LEDWrite("DisabledPeriodic");
     }
     @Override
@@ -92,7 +83,6 @@ public class Robot extends IterativeRobot {
 
         auton.init(xLength, yLength);
 
-        SmartDashboard.putNumber("start_pos_in_code", startPos);
         SmartDashboard.putNumber("auton", 2);
         SmartDashboard.putBoolean("enabled", true);
         OI.LEDWrite("AutonInit");
@@ -111,36 +101,13 @@ public class Robot extends IterativeRobot {
         }
 
         SmartDashboard.putNumber("auton", 1);
-        SmartDashboard.putNumber("start_pos_in_code", startPos);
         OI.LEDWrite("AutonPeriodic");
     }
 
     @Override
     public void teleopPeriodic() {
         drivetrain.direction(true);
-        //drivetrain.drive(throttleValue, turnValue);
-        drivetrain.autoShift();
-
-        clamp();
-        /*
-        if (Math.abs(xbox.getAxis(OI.R_XAXIS)) < .05) { //compare directly to stick, not clamped value
-        if (!drivingStraight) {
-            drivingStraight = true;
-            driveStraightAngle = navx.getYaw();
-        }
-            SmartDashboard.putNumber("Turn Angle",driveStraightAngle);
-            drivetrain.driveAngle(driveStraightAngle, throttleValue);
-            drivetrain.closedLoopDrive(throttleValue,turnValue);
-        }
-          else {
-            drivetrain.drive(throttleValue,turnValue);
-        */
-
-            drivetrain.drive(-throttleValue, turnValue);
-            drivingStraight = false;
-//      }
-        //drivetrain.closedLoopDrive(throttleValue,turnValue);
-//      }
+        drivetrain.driveClamped(OI.L_XAXIS, OI.R_YAXIS);
 
         climber.climb(OI.ABUTTON, OI.LBUMPER);
 
@@ -175,35 +142,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("yaw", navx.getYaw());
         SmartDashboard.putNumber("left_enc", drivetrain.getLeftEncValue());
         SmartDashboard.putNumber("right_enc", drivetrain.getRightEncValue());
-        SmartDashboard.putNumber("X Velocity",navx.getVelocityX());
-        SmartDashboard.putNumber("Y Velocity",navx.getVelocityY());
-        SmartDashboard.putNumber("Z Velocity",navx.getVelocityZ());
-        System.out.println(navx.getYaw());
-    }
-
-    private void clamp(){
-        currentThrottle = xbox.getFineAxis(OI.L_YAXIS, 3);
-        currentTurn = xbox.getFineAxis(OI.R_XAXIS, 3);
-
-        double deltaTurn = currentTurn - previousTurn;
-        double deltaThrottle = currentThrottle - previousThrottle;
-
-        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
-            turnValue = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
-        } else {
-            turnValue = currentTurn;
-        }
-
-        if (Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0) {
-            throttleValue = previousThrottle + ((deltaThrottle < 0)? -maxThrottleDelta : maxThrottleDelta);
-        } else {
-            throttleValue = currentThrottle;
-        }
-
-        previousThrottle = throttleValue;
-        previousTurn = turnValue;
-
-        SmartDashboard.putNumber("turn_value", turnValue);
-        SmartDashboard.putNumber("joystick", currentTurn);
+        SmartDashboard.putNumber("vel_x",navx.getVelocityX());
+        SmartDashboard.putNumber("vel_y",navx.getVelocityY());
+        SmartDashboard.putNumber("vel_z",navx.getVelocityZ());
     }
 }
