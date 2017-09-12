@@ -23,12 +23,12 @@ public class Drivetrain {
 
     int numSamples,
             cooldown,
-            invert,
+            invert = 1,
             shiftCounter = 0;
-    double lowThreshold,
+    double robotSpeed,
+            lowThreshold,
             highThreshold,
             previousError = 0;
-
     double previousThrottle = 0,
             previousTurn = 0,
             maxTurnDelta = .05,
@@ -87,11 +87,12 @@ public class Drivetrain {
         SmartDashboard.putNumber("cooldown", cooldown);
     }
 
-    public double getRobotSpeed() {
+    public void updateSpeed() {
         leftSamples[sampleIndex] = wheelFloorSpeed(enc_left);
         rightSamples[sampleIndex++] = wheelFloorSpeed(enc_right);
-        if (sampleIndex >= numSamples)
+        if (sampleIndex >= numSamples) {
             sampleIndex = 0;
+        }
 
         double leftAvg = 0.0, rightAvg = 0.0;
         for (double leftSample : leftSamples) {
@@ -104,7 +105,9 @@ public class Drivetrain {
         leftAvg /= (double)numSamples;
         rightAvg /= (double)numSamples;
 
-        return Math.max(leftAvg, rightAvg);
+        robotSpeed = Math.max(leftAvg, rightAvg);
+
+        SmartDashboard.putNumber("robot_speed", robotSpeed);
     }
 
     public void configFromDashboard() {
@@ -114,21 +117,17 @@ public class Drivetrain {
         cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
     }
 
-    public void resetEncs() {
+    public void resetEncDist() {
         enc_left.reset();
         enc_right.reset();
     }
 
-    public double getLeftEncValue() { //returns in inches
+    public double getLeftEncDist() { //returns in inches
         return enc_left.getDistance() / 67;
     }
 
-    public double getRightEncValue() { //returns in inches
+    public double getRightEncDist() { //returns in inches
         return enc_right.getDistance() / 67;
-    }
-
-    public void direction(boolean inverted) {
-        invert = inverted ? -1 : 1;
     }
 
     public double encoderRPS(Encoder e) {
@@ -162,18 +161,22 @@ public class Drivetrain {
         shiftCounter++;
 
         if (shiftCounter > cooldown) {
-            if (getRobotSpeed() > highThreshold) {
+            if (robotSpeed > highThreshold) {
                 if (!isHigh()) {
                     shiftHigh();
                     shiftCounter = 0;
                 }
-            } else if (getRobotSpeed() < lowThreshold) {
+            } else if (robotSpeed < lowThreshold) {
                 if (isHigh()) {
                     shiftLow();
                     shiftCounter = 0;
                 }
             }
         }
+    }
+
+    public void direction(boolean inverted) {
+        invert = inverted ? -1 : 1;
     }
 
     public void drive(double throttle, double turn) {
@@ -186,13 +189,16 @@ public class Drivetrain {
         double angle = Robot.navx.getYaw();
         double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
         double error = targetAngle - angle;
+
         error_over_time.add(error);
+
         double totalError = 0;
         for(double i : error_over_time){
             totalError += i;
         }
         double dTerm = .2;
         double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
+
         drive.arcadeDrive(speed, turn);
         previousError = error;
     }
@@ -200,8 +206,8 @@ public class Drivetrain {
     public void driveClosedLoop(double throttle, double turn){
         double kp = .70;
         double kd = .75;
-        turn = turn * Math.abs(turn) * Math.abs(turn);
         double yawRate = Robot.navx.getRate();
+
         if(Math.abs(turn) < .15){
             turn =  0;
         }
@@ -210,10 +216,11 @@ public class Drivetrain {
         double RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
         double LM = (throttle - .4*turn) + ((error * kp) - kd * (error - previousError));
 
-        if(turn == 0 && Math.abs(throttle) < .1){
+        if (turn == 0 && Math.abs(throttle) < .1) {
             LM = 0;
             RM = 0;
         }
+
         drive_left_1.set(LM);
         drive_left_2.set(LM);
         drive_right_1.set(-RM);
@@ -224,9 +231,6 @@ public class Drivetrain {
     public void driveClamped(double throttle, double turn){
         double deltaThrottle = throttle - previousThrottle;
         double deltaTurn = turn - previousTurn;
-
-        double newThrottle;
-        double newTurn;
 
         // Limit change in throttle value
         // if current change in throttle value exceeds max, clamp it

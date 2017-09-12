@@ -14,12 +14,7 @@ public class Robot extends IterativeRobot {
     static Compressor compressor;
     static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
 
-    boolean drivingStraight = false;
-    int startPos;
     DigitalInput gearSensor;
-    double xLength,
-        yLength,
-        driveStraightAngle;
 
     @Override
     public void robotInit() {
@@ -34,8 +29,8 @@ public class Robot extends IterativeRobot {
         compressor = new Compressor(0);
         gearSensor = new DigitalInput(4);
         navx = new AHRS(SerialPort.Port.kMXP);
+
         SmartDashboard.putNumber("auton", 1);
-        SmartDashboard.putNumber("start_pos", 0);
         OI.LEDWrite("RobotInit");
     }
 
@@ -44,9 +39,6 @@ public class Robot extends IterativeRobot {
         drivetrain.shiftLow();
         Robot.xbox.setVibrate(0, 0);
 
-        SmartDashboard.putNumber("x_length", 100);
-        SmartDashboard.putNumber("y_length", 132);
-        SmartDashboard.putString("position_key", "1 = left | 2= mid | 3 = right");
         SmartDashboard.putNumber("auton", 1);
         SmartDashboard.putBoolean("enabled", false);
         OI.LEDWrite("DisabledInit");
@@ -62,26 +54,23 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber("robot_speed", drivetrain.getRobotSpeed());
+        drivetrain.updateSpeed();
     }
 
     @Override
     public void disabledPeriodic() {
-        startPos = (int)SmartDashboard.getNumber("start_pos", 0);
-        xLength = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
-        yLength = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading station
-        System.out.println("Nav X" + navx.getYaw());
-        SmartDashboard.putBoolean("auton_ready", startPos != 0);
+        auton.init();
+
         OI.LEDWrite("DisabledPeriodic");
     }
     @Override
     public void autonomousInit() {
         holder.retract();
         navx.reset();
-        drivetrain.resetEncs();
+        drivetrain.resetEncDist();
         compressor.start();
 
-        auton.init(xLength, yLength);
+        auton.init();
 
         SmartDashboard.putNumber("auton", 2);
         SmartDashboard.putBoolean("enabled", true);
@@ -90,15 +79,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        if (startPos == 1 || startPos == 4) {
-            auton.leftPos();
-        } else if (startPos == 2 || startPos == 5) {
-            auton.middlePos();
-        } else if (startPos == 3 || startPos == 6) {
-            auton.rightPos();
-        } else {
-            auton.leftPos();
-        }
+        auton.run();
 
         SmartDashboard.putNumber("auton", 1);
         OI.LEDWrite("AutonPeriodic");
@@ -106,8 +87,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        drivetrain.direction(true);
-        drivetrain.driveClamped(OI.L_XAXIS, OI.R_YAXIS);
+        drivetrain.driveClamped(xbox.getFineAxis(OI.L_XAXIS, 3), xbox.getFineAxis(OI.R_YAXIS, 3));
 
         climber.climb(OI.ABUTTON, OI.LBUMPER);
 
@@ -115,6 +95,17 @@ public class Robot extends IterativeRobot {
             holder.extend();
         } else {
             holder.retract();
+        }
+
+        // Vibrate controller based on motor current and sensor state
+        if (climber.climbStatus != Climber.ClimbState.STOP) {
+            xbox.setVibrate(climber.avgCurrent * .02, climber.avgCurrent * .02);
+        } else if (!gearSensor.get()) {
+            SmartDashboard.putBoolean("gear_sensor", true);
+            xbox.setVibrate(0.5,0.5);
+        } else {
+            SmartDashboard.putBoolean("gear_sensor", false);
+            xbox.setVibrate(0, 0);
         }
 
         if (climber.climbStatus == Climber.ClimbState.CLIMB) {
@@ -125,23 +116,11 @@ public class Robot extends IterativeRobot {
             OI.LEDWrite("HolderBack");
         }
 
-
-        // Vibrate controller based on motor current and sensor state
-        if (climber.climbStatus != Climber.ClimbState.STOP) {
-            Robot.xbox.setVibrate(climber.avgCurrent * .02, climber.avgCurrent * .02);
-        } else if (!gearSensor.get()) {
-            SmartDashboard.putBoolean("gear_sensor", true);
-            xbox.setVibrate(0.5,0.5);
-        } else {
-            SmartDashboard.putBoolean("gear_sensor", false);
-            xbox.setVibrate(0, 0);
-        }
-
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);
+        SmartDashboard.putNumber("left_enc", drivetrain.getLeftEncDist());
+        SmartDashboard.putNumber("right_enc", drivetrain.getRightEncDist());
         SmartDashboard.putNumber("yaw", navx.getYaw());
-        SmartDashboard.putNumber("left_enc", drivetrain.getLeftEncValue());
-        SmartDashboard.putNumber("right_enc", drivetrain.getRightEncValue());
         SmartDashboard.putNumber("vel_x",navx.getVelocityX());
         SmartDashboard.putNumber("vel_y",navx.getVelocityY());
         SmartDashboard.putNumber("vel_z",navx.getVelocityZ());
