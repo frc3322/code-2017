@@ -228,7 +228,7 @@ public class Drivetrain {
         previousError = error;
     }
 
-    public void driveClamped(double throttle, double turn){
+    public void driveClamped(double throttle, double turn) {
         double deltaThrottle = throttle - previousThrottle;
         double deltaTurn = turn - previousTurn;
 
