@@ -23,8 +23,8 @@ public class RobotMap {
         shifter_1 = 3,
         shifter_2 = 2,
 
-        gearHolder_1 = 1,
-        gearHolder_2 = 0,
+        gearHolder_1 = 0,
+        gearHolder_2 = 1,
 
         // Sensors
         encLeft_1 = 0,
