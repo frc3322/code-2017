@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
-    private Encoder enc_left, enc_right;
+    Encoder enc_left, enc_right;
 
     private double previous = 0;
     private int iterator = 0;

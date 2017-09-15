@@ -3,10 +3,10 @@ package org.usfirst.frc.team3322;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auton {
-    private double startDorT,
+    private double startDorT = 0,
             ly,
             lx,
-            turnAngle,
+            turnAngle = 30,
             autonD1,
             autonD2,
             correctionAngle = 0;
@@ -14,16 +14,15 @@ public class Auton {
     private int startPos;
 
     public Auton() {
-        turnAngle = 30; // degrees
-        startDorT = 0;
-
         SmartDashboard.putNumber("x_length", 100);
         SmartDashboard.putNumber("y_length", 132);
-        SmartDashboard.putNumber("start_pos", 132);
+        SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putString("position_key", "1 = left | 2 = mid | 3 = right");
     }
 
     public void init() {
+        startPos = (int)SmartDashboard.getNumber("start_pos", 0);
+
         double xIn = SmartDashboard.getNumber("x_length", 100); //100x, 100y if starting on boiler
         double yIn = SmartDashboard.getNumber("y_length", 132); //84x, 100y if starting next to return loading st
 
@@ -58,7 +57,7 @@ public class Auton {
     public void leftPos() {
         switch (autonState) {
             case 0:
-                Robot.holder.extend();
+                Robot.holder.retract();
 
                 if (Robot.drivetrain.getLeftEncDist() < startDorT + autonD1 +2 ) {
                     Robot.drivetrain.driveAngle(0, -.8);
@@ -122,7 +121,7 @@ public class Auton {
                         Robot.drivetrain.driveAngle(Robot.navx.getYaw(), -.5);
                     }
                 } else {
-                   // Robot.holder.extend();
+                   Robot.holder.extend();
                 }
         }
     }
