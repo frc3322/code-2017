@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 
         // Component init
         compressor = new Compressor(0);
-        gearSensor = new DigitalInput(4);
+        gearSensor = new DigitalInput(RobotMap.gearSensor);
         navx = new AHRS(SerialPort.Port.kMXP);
 
         SmartDashboard.putNumber("auton", 1);
