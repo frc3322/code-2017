@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3322;
+package frc.team3322.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;

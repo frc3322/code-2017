@@ -6,7 +6,7 @@ plugins {
 }
 
 def TEAM = 3322
-def ROBOT_CLASS = "frc.team3322..robot.Robot"
+def ROBOT_CLASS = "frc.team3322.robot.Robot"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
@@ -14,6 +14,7 @@ deploy {
     targets {
         target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
             team = TEAM
+            //address = "10.33.22.2"
         }
     }
     artifacts {
