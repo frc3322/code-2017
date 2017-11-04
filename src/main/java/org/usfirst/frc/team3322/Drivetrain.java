@@ -10,23 +10,28 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
-    private Encoder enc_left, enc_right;
+    Encoder enc_left, enc_right;
 
     private double previous = 0;
     private int iterator = 0;
     private List<Double> error_over_time = new ArrayList<>();
+
+    int numSamples,
+            cooldown,
+            invert = 1,
+            shiftCounter = 0;
     double robotSpeed,
             lowThreshold,
             highThreshold,
             previousError = 0;
-
-    int numSamples, cooldown, invert,
-            shiftCounter = 0;
+    double previousThrottle = 0,
+            previousTurn = 0,
+            maxTurnDelta = .05,
+            maxThrottleDelta = .05;
 
     private int sampleIndex;
     private double leftSamples[], rightSamples[];
@@ -35,6 +40,7 @@ public class Drivetrain {
     Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
         this(lowThreshold, highThreshold, numSamples, cooldown, false, false);
     }
+
     Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
@@ -78,82 +84,14 @@ public class Drivetrain {
         SmartDashboard.putNumber("high_gear", highThreshold);
         SmartDashboard.putNumber("num_samples", numSamples);
         SmartDashboard.putNumber("cooldown", cooldown);
-        SmartDashboard.putNumber("left encoder velocity", enc_left.getRate());
-        SmartDashboard.putNumber("right encoder velocity", enc_right.getRate());
     }
 
-    public void resetEncs() {
-        enc_left.reset();
-        enc_right.reset();
-    }
-
-    public double getLeftEncValue() { //returns in inches
-        return enc_left.getDistance() / 67;
-    }
-    public double getRightEncValue() { //returns in inches
-        return enc_right.getDistance() / 67;
-    }
-
-    public void direction(boolean inverted) {
-        invert = inverted ? -1 : 1;
-    }
-    public void drive(double throttle, double turn) {
-        throttle *= invert;
-        drive.arcadeDrive(throttle, turn);
-    }
-    public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .00353);
-        double angle = Robot.navx.getYaw();
-        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
-        double error = targetAngle - angle;
-        error_over_time.add(error);
-        double totalError = 0;
-        for(double i : error_over_time){
-            totalError += i;
-        }
-        double dTerm = .2;
-        double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
-        drive.arcadeDrive(speed, turn);
-        previousError = error;
-    }
-
-    public double encoderRPS(Encoder e) {
-        return e.getRate() / 256.0;
-    }
-    public double motorRPS(Encoder e) {
-        return encoderRPS(e) / (isHigh() ? 1.0588 : 0.4896);
-    }
-    public double wheelRPS(Encoder e) {
-        return encoderRPS(e) / 3.0 * .55;
-    }
-    public double wheelFloorSpeed(Encoder e) {
-        return wheelRPS(e) * Math.PI * DIAMETER_WHEEL;
-    }
-
-    public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
-    public void shiftHigh() {
-        shifter.set(DoubleSolenoid.Value.kReverse);
-        SmartDashboard.putString("shift_state", "high");
-    }
-    public void shiftLow() {
-        shifter.set(DoubleSolenoid.Value.kForward);
-        SmartDashboard.putString("shift_state", "low");
-    }
-
-    public void configFromDashboard(double highThreshold, double lowThreshold, int numSamples, int cooldown) {
-        this.highThreshold = highThreshold;
-        this.lowThreshold = lowThreshold;
-        this.numSamples = numSamples;
-        this.cooldown = cooldown;
-    }
-
-    public void autoShift() {
-        shiftCounter++;
-
+    public void updateSpeed() {
         leftSamples[sampleIndex] = wheelFloorSpeed(enc_left);
         rightSamples[sampleIndex++] = wheelFloorSpeed(enc_right);
-        if (sampleIndex >= numSamples)
+        if (sampleIndex >= numSamples) {
             sampleIndex = 0;
+        }
 
         double leftAvg = 0.0, rightAvg = 0.0;
         for (double leftSample : leftSamples) {
@@ -168,6 +106,59 @@ public class Drivetrain {
 
         robotSpeed = Math.max(leftAvg, rightAvg);
 
+        SmartDashboard.putNumber("robot_speed", robotSpeed);
+    }
+
+    public void configFromDashboard() {
+        highThreshold = SmartDashboard.getNumber("high_gear", 0);
+        lowThreshold = SmartDashboard.getNumber("low_gear", 0);
+        numSamples = (int)SmartDashboard.getNumber("num_samples", 0);
+        cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
+    }
+
+    public void resetEncDist() {
+        enc_left.reset();
+        enc_right.reset();
+    }
+
+    public double getLeftEncDist() { //returns in inches
+        return enc_left.getDistance() / 67;
+    }
+
+    public double getRightEncDist() { //returns in inches
+        return enc_right.getDistance() / 67;
+    }
+
+    public double encoderRPS(Encoder e) {
+        return e.getRate() / 256.0;
+    }
+
+    public double motorRPS(Encoder e) {
+        return encoderRPS(e) / (isHigh() ? 1.0588 : 0.4896);
+    }
+
+    public double wheelRPS(Encoder e) {
+        return encoderRPS(e) / 3.0 * .55;
+    }
+
+    public double wheelFloorSpeed(Encoder e) {
+        return wheelRPS(e) * Math.PI * DIAMETER_WHEEL;
+    }
+
+    public boolean isHigh() { return shifter.get() == DoubleSolenoid.Value.kReverse; }
+
+    public void shiftHigh() {
+        shifter.set(DoubleSolenoid.Value.kReverse);
+        SmartDashboard.putString("shift_state", "high");
+    }
+    public void shiftLow() {
+        shifter.set(DoubleSolenoid.Value.kForward);
+        SmartDashboard.putString("shift_state", "low");
+    }
+
+    public void autoShift() {
+        shiftCounter++;
+
         if (shiftCounter > cooldown) {
             if (robotSpeed > highThreshold) {
                 if (!isHigh()) {
@@ -181,21 +172,41 @@ public class Drivetrain {
                 }
             }
         }
-
-        SmartDashboard.putNumber("robot_speed", robotSpeed);
     }
 
-    public void configFromDashboard() {
-        highThreshold = SmartDashboard.getNumber("high_gear", 0);
-        lowThreshold = SmartDashboard.getNumber("low_gear", 0);
-        numSamples = (int)SmartDashboard.getNumber("num_samples", 0);
-        cooldown = (int)SmartDashboard.getNumber("shift_threshold", 0);
+    public void direction(boolean inverted) {
+        invert = inverted ? -1 : 1;
     }
-    public void closedLoopDrive(double throttle, double turn){
+
+    public void drive(double throttle, double turn) {
+        throttle *= invert;
+        drive.arcadeDrive(throttle, turn);
+    }
+
+    public void driveAngle(double targetAngle, double speed) { // in degrees
+        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .00353);
+        double angle = Robot.navx.getYaw();
+        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
+        double error = targetAngle - angle;
+
+        error_over_time.add(error);
+
+        double totalError = 0;
+        for(double i : error_over_time){
+            totalError += i;
+        }
+        double dTerm = .2;
+        double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
+
+        drive.arcadeDrive(speed, turn);
+        previousError = error;
+    }
+
+    public void driveClosedLoop(double throttle, double turn){
         double kp = .70;
         double kd = .75;
-        turn = turn * Math.abs(turn) * Math.abs(turn);
         double yawRate = Robot.navx.getRate();
+
         if(Math.abs(turn) < .15){
             turn =  0;
         }
@@ -204,14 +215,37 @@ public class Drivetrain {
         double RM = (throttle + .4*turn) - ((error * kp) - kd * (error - previousError));
         double LM = (throttle - .4*turn) + ((error * kp) - kd * (error - previousError));
 
-        if(turn == 0 && Math.abs(throttle) < .1){
+        if (turn == 0 && Math.abs(throttle) < .1) {
             LM = 0;
             RM = 0;
         }
+
         drive_left_1.set(LM);
         drive_left_2.set(LM);
         drive_right_1.set(-RM);
         drive_right_2.set(-RM);
         previousError = error;
+    }
+
+    public void driveClamped(double throttle, double turn) {
+        double deltaThrottle = throttle - previousThrottle;
+        double deltaTurn = turn - previousTurn;
+
+        // Limit change in throttle value
+        // if current change in throttle value exceeds max, clamp it
+        if (Math.abs(deltaThrottle) > maxThrottleDelta && (previousThrottle / deltaThrottle) > 0) {
+            throttle = previousThrottle + ((deltaThrottle < 0)? -maxThrottleDelta : maxThrottleDelta);
+        }
+
+        // Limit change in turn value
+        // if current change in turn value exceeds max, clamp it
+        if(Math.abs(deltaTurn) > maxTurnDelta && (previousTurn / deltaTurn) > 0){
+            turn = previousTurn + ((deltaTurn < 0)? -maxTurnDelta : maxTurnDelta);
+        }
+
+        drive(throttle, turn);
+
+        previousThrottle = throttle;
+        previousTurn = turn;
     }
 }
