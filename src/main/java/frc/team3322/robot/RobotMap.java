@@ -26,7 +26,7 @@ public class RobotMap {
         gearHolder_1 = 0,
         gearHolder_2 = 1,
 
-        // Sensors
+        // DIGITAL INPUT
         encLeft_1 = 0,
         encLeft_2 = 1,
         encRight_1 = 2,
