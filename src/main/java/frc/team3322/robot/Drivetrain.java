@@ -16,13 +16,10 @@ public class Drivetrain {
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
     Encoder enc_left, enc_right;
 
-    private double previous = 0;
-    private int iterator = 0;
     private List<Double> error_over_time = new ArrayList<>();
 
     int numSamples,
             cooldown,
-            invert = 1,
             shiftCounter = 0;
     double robotSpeed,
             lowThreshold,
@@ -174,12 +171,7 @@ public class Drivetrain {
         }
     }
 
-    public void direction(boolean inverted) {
-        invert = inverted ? -1 : 1;
-    }
-
     public void drive(double throttle, double turn) {
-        throttle *= invert;
         drive.arcadeDrive(throttle, turn);
     }
 
