@@ -14,8 +14,6 @@ public class Robot extends IterativeRobot {
     static Compressor compressor;
     static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
 
-    DigitalInput gearSensor;
-
     @Override
     public void robotInit() {
         // Subsystem init
@@ -27,7 +25,6 @@ public class Robot extends IterativeRobot {
 
         // Component init
         compressor = new Compressor(0);
-        gearSensor = new DigitalInput(RobotMap.gearSensor);
         navx = new AHRS(SerialPort.Port.kMXP);
 
         SmartDashboard.putNumber("auton", 1);
@@ -100,7 +97,7 @@ public class Robot extends IterativeRobot {
         // Vibrate controller based on motor current and sensor state
         if (climber.climbStatus != Climber.ClimbState.STOP) {
             xbox.setVibrate(climber.avgCurrent * .02, climber.avgCurrent * .02);
-        } else if (!gearSensor.get()) {
+        } else if (!holder.gearSensor.get()) {
             SmartDashboard.putBoolean("gear_sensor", true);
             xbox.setVibrate(0.5,0.5);
         } else {

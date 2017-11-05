@@ -1,15 +1,18 @@
 package frc.team3322.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Holder {
-	DoubleSolenoid holder;
+	private DoubleSolenoid holder;
+	DigitalInput gearSensor;
 
-    boolean extended;
+	boolean extended;
 
 	public Holder() {
-        holder = new DoubleSolenoid(RobotMap.gearHolder_1, RobotMap.gearHolder_2);
+		holder = new DoubleSolenoid(RobotMap.gearHolder_1, RobotMap.gearHolder_2);
+		gearSensor = new DigitalInput(RobotMap.gearSensor);
 	}
 
 	public void extend() {

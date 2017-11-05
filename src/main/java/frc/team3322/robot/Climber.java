@@ -1,17 +1,15 @@
 package frc.team3322.robot;
 
 import com.ctre.CANTalon;
-import edu.wpi.first.wpilibj.Encoder;
 
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
-    Encoder climbEncoder;
     ClimbState climbStatus;
+
     // value from 0.00 to 1.00
     double climbRate = 1.0,
-            totalCurrent = 0,
-            avgCurrent = 0,
-            vibration = 0;
+		    totalCurrent = 0,
+            avgCurrent = 0;
     double[] current;
     int timer = 0,
             i = 0;
