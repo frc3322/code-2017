@@ -59,6 +59,8 @@ public class Climber {
                 }
                 break;
             case FORCE_CLIMB:
+                Robot.holder.retract();
+
                 Robot.xbox.setToggled(climbButton, false);
                 climb_talon_1.set(climbRate);
                 climb_talon_2.set(climbRate);
