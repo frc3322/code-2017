@@ -116,8 +116,8 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);
-        SmartDashboard.putNumber("left_speed", drivetrain.wheelFloorSpeed(drivetrain.enc_left));
-        SmartDashboard.putNumber("right_speed", drivetrain.wheelFloorSpeed(drivetrain.enc_right));
+        SmartDashboard.putNumber("left_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_left));
+        SmartDashboard.putNumber("right_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_right));
         SmartDashboard.putNumber("yaw", navx.getYaw());
         SmartDashboard.putNumber("vel_x",navx.getVelocityX());
         SmartDashboard.putNumber("vel_y",navx.getVelocityY());
