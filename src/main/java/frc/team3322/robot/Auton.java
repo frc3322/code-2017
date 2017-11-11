@@ -86,7 +86,7 @@ public class Auton {
                 break;
             case 1:
                 if (Robot.navx.getAngle() < turnAngle) {
-                    Robot.drivetrain.drive(.4, .8);
+                    Robot.drivetrain.drive(.4, .6);
                 } else {
                     autonState++;
                     startTime = System.currentTimeMillis();

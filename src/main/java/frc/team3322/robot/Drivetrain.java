@@ -16,7 +16,7 @@ public class Drivetrain {
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
     Encoder enc_left, enc_right;
 
-    private List<Double> error_over_time = new ArrayList<>();
+    private double totalError = 0;
 
     int numSamples,
             cooldown,
@@ -185,12 +185,8 @@ public class Drivetrain {
         double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
         double error = targetAngle - angle;
 
-        error_over_time.add(error);
+        totalError += error;
 
-        double totalError = 0;
-        for(double i : error_over_time){
-            totalError += i;
-        }
         double dTerm = .2;
         double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
 
