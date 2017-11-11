@@ -118,12 +118,16 @@ public class Drivetrain {
         enc_right.reset();
     }
 
-    public double getLeftEncDist() { //returns in inches
+    public double getLeftDisp() { //returns in inches
         return enc_left.getDistance() / 67;
     }
 
-    public double getRightEncDist() { //returns in inches
+    public double getRightDisp() { //returns in inches
         return enc_right.getDistance() / 67;
+    }
+
+    public double getRobotDisp() { //returns in inches
+        return Math.max(getLeftDisp(), getRightDisp());
     }
 
     public double encoderRPS(Encoder e) {
