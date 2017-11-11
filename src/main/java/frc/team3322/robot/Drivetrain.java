@@ -198,7 +198,7 @@ public class Drivetrain {
         previousError = error;
     }
 
-    public void driveClosedLoop(double throttle, double turn){
+    public void driveClosedLoop(double throttle, double turn) {
         double kp = .70;
         double kd = .75;
         double yawRate = Robot.navx.getRate();
