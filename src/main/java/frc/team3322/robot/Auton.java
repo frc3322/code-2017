@@ -60,7 +60,7 @@ public class Auton {
             case 0:
                 Robot.holder.retract();
 
-                if (Robot.drivetrain.getRobotDisp() < autonD1 ) {
+                if (Robot.drivetrain.getRobotDisp() < autonD1) {
                     Robot.drivetrain.driveAngle(0, -.8);
                 } else {
                     autonState++;
@@ -99,14 +99,14 @@ public class Auton {
             case 0:
                 Robot.holder.retract();
 
-                if (Robot.drivetrain.getLeftDisp() < startTime + autonD1 + 10) {
+                if (Robot.drivetrain.getRobotDisp() < autonD1 + 10) {
                     Robot.drivetrain.driveAngle(0, -.8);
                 } else {
                     autonState++;
                 }
                 break;
             case 1:
-                if (Robot.navx.getYaw() < 30.5) {
+                if (Robot.navx.getAngle() < -30.5) {
                     Robot.drivetrain.drive(.4, -.6);
                 } else {
                     autonState++;
