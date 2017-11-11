@@ -15,8 +15,6 @@ public class Auton {
     private int startSide;
 
     public Auton() {
-        SmartDashboard.putNumber("x_length", 100);
-        SmartDashboard.putNumber("y_length", 132);
         SmartDashboard.putNumber("start_pos", 0);
         SmartDashboard.putNumber("start_side", 0);
 
