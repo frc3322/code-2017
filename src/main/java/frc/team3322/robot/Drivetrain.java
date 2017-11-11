@@ -180,15 +180,16 @@ public class Drivetrain {
     }
 
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .00353);
+        double kp = .00353;
+        double ki = 0;
+        double kd = .2;
+
         double angle = Robot.navx.getYaw();
-        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
         double error = targetAngle - angle;
 
         totalError += error;
 
-        double dTerm = .2;
-        double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
+        double turn = (targetAngle - angle) * kp + totalError * ki - (kd * (error - previousError));
 
         drive.arcadeDrive(speed, turn);
         previousError = error;
