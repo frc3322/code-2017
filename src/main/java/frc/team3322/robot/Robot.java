@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("right_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_right));
         SmartDashboard.putNumber("left_disp", drivetrain.getLeftDisp());
         SmartDashboard.putNumber("right_disp", drivetrain.getRightDisp());
-        SmartDashboard.putNumber("nav_angle", navx.getAngle());
+        SmartDashboard.putNumber("yaw", navx.getYaw());
         SmartDashboard.putNumber("vel_x", navx.getVelocityX());
         SmartDashboard.putNumber("vel_y", navx.getVelocityY());
         SmartDashboard.putNumber("vel_z", navx.getVelocityZ());
@@ -70,11 +70,6 @@ public class Robot extends IterativeRobot {
     }
     @Override
     public void autonomousInit() {
-        holder.retract();
-        navx.reset();
-        drivetrain.resetEncDist();
-        compressor.start();
-
         auton.init();
 
         SmartDashboard.putNumber("auton", 2);
