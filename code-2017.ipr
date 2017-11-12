@@ -240,7 +240,7 @@
       </ExternalSystemSettings>
       <method />
     </configuration>
-    <configuration default="false" name="Robot Deploy" type="GradleRunConfiguration" factoryName="Gradle">
+    <configuration default="false" name="Deploy" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />

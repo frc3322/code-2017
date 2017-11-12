@@ -52,6 +52,14 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotPeriodic() {
         drivetrain.updateSpeed();
+        SmartDashboard.putNumber("left_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_left));
+        SmartDashboard.putNumber("right_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_right));
+        SmartDashboard.putNumber("left_disp", drivetrain.getLeftDisp());
+        SmartDashboard.putNumber("right_disp", drivetrain.getRightDisp());
+        SmartDashboard.putNumber("yaw", navx.getYaw());
+        SmartDashboard.putNumber("vel_x", navx.getVelocityX());
+        SmartDashboard.putNumber("vel_y", navx.getVelocityY());
+        SmartDashboard.putNumber("vel_z", navx.getVelocityZ());
     }
 
     @Override
@@ -62,11 +70,6 @@ public class Robot extends IterativeRobot {
     }
     @Override
     public void autonomousInit() {
-        holder.retract();
-        navx.reset();
-        drivetrain.resetEncDist();
-        compressor.start();
-
         auton.init();
 
         SmartDashboard.putNumber("auton", 2);
@@ -116,11 +119,5 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);
-        SmartDashboard.putNumber("left_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_left));
-        SmartDashboard.putNumber("right_vel", drivetrain.wheelFloorSpeed(drivetrain.enc_right));
-        SmartDashboard.putNumber("yaw", navx.getYaw());
-        SmartDashboard.putNumber("vel_x",navx.getVelocityX());
-        SmartDashboard.putNumber("vel_y",navx.getVelocityY());
-        SmartDashboard.putNumber("vel_z",navx.getVelocityZ());
     }
 }

@@ -16,7 +16,7 @@ public class Drivetrain {
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
     Encoder enc_left, enc_right;
 
-    private List<Double> error_over_time = new ArrayList<>();
+    private double totalError = 0;
 
     int numSamples,
             cooldown,
@@ -118,12 +118,16 @@ public class Drivetrain {
         enc_right.reset();
     }
 
-    public double getLeftEncDist() { //returns in inches
+    public double getLeftDisp() { //returns in inches
         return enc_left.getDistance() / 67;
     }
 
-    public double getRightEncDist() { //returns in inches
+    public double getRightDisp() { //returns in inches
         return enc_right.getDistance() / 67;
+    }
+
+    public double getRobotDisp() { //returns in inches
+        return Math.max(getLeftDisp(), getRightDisp());
     }
 
     public double encoderRPS(Encoder e) {
@@ -176,25 +180,22 @@ public class Drivetrain {
     }
 
     public void driveAngle(double targetAngle, double speed) { // in degrees
-        double pTerm = SmartDashboard.getNumber("drive_angle_p_term", .00353);
+        double kp = .00353;
+        double ki = 0;
+        double kd = .2;
+
         double angle = Robot.navx.getYaw();
-        double iTerm = SmartDashboard.getNumber("drive_angle_i_term",.000);
         double error = targetAngle - angle;
 
-        error_over_time.add(error);
+        totalError += error;
 
-        double totalError = 0;
-        for(double i : error_over_time){
-            totalError += i;
-        }
-        double dTerm = .2;
-        double turn = (targetAngle - angle) * pTerm + totalError * iTerm - (dTerm * (error - previousError));
+        double turn = (targetAngle - angle) * kp + totalError * ki - (kd * (error - previousError));
 
         drive.arcadeDrive(speed, turn);
         previousError = error;
     }
 
-    public void driveClosedLoop(double throttle, double turn){
+    public void driveClosedLoop(double throttle, double turn) {
         double kp = .70;
         double kd = .75;
         double yawRate = Robot.navx.getRate();
