@@ -98,6 +98,12 @@ public class Robot extends IterativeRobot {
             holder.retract();
         }
 
+        if (xbox.isToggled(OI.LSTICK)) {
+            drivetrain.shiftHigh();
+        } else {
+            drivetrain.shiftLow();
+        }
+
         // Vibrate controller based on motor current and sensor state
         if (climber.climbStatus != Climber.ClimbState.STOP) {
             xbox.setVibrate(climber.avgCurrent * .02, climber.avgCurrent * .02);
