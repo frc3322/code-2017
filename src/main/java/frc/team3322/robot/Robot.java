@@ -3,16 +3,18 @@ package frc.team3322.robot;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3322.robot.command.*;
+import frc.team3322.robot.subsystem.*;
 
 public class Robot extends IterativeRobot {
-    static OI xbox;
-    static Drivetrain drivetrain;
-    static Climber climber;
-    static Holder holder;
-    static AHRS navx;
-    static Auton auton;
-    static Compressor compressor;
-    static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
+    public static OI xbox;
+    public static Drivetrain drivetrain;
+    public static Climber climber;
+    public static Holder holder;
+    public static AHRS navx;
+//    public static Auton auton;
+    public static Compressor compressor;
+    public static I2C LEDs = new I2C(I2C.Port.kOnboard, 4);
 
     @Override
     public void robotInit() {
@@ -21,7 +23,7 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain(6.75, 8.5, 3, 50);
         holder = new Holder();
         climber = new Climber();
-        auton = new Auton();
+//        auton = new Auton();
 
         // Component init
         compressor = new Compressor(0);
@@ -31,23 +33,6 @@ public class Robot extends IterativeRobot {
         OI.LEDWrite("RobotInit");
     }
 
-    @Override
-    public void disabledInit() {
-        drivetrain.shiftLow();
-        Robot.xbox.setVibrate(0, 0);
-
-        SmartDashboard.putNumber("auton", 1);
-        SmartDashboard.putBoolean("enabled", false);
-        OI.LEDWrite("DisabledInit");
-    }
-
-    @Override
-    public void teleopInit() {
-        SmartDashboard.putNumber("teleop", 0);
-        SmartDashboard.putNumber("auton", 0);
-        SmartDashboard.putBoolean("enabled", true);
-        OI.LEDWrite("TeleopInit");
-    }
 
     @Override
     public void robotPeriodic() {
@@ -63,14 +48,8 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void disabledPeriodic() {
-        auton.init();
-
-        OI.LEDWrite("DisabledPeriodic");
-    }
-    @Override
     public void autonomousInit() {
-        auton.init();
+//        auton.init();
 
         SmartDashboard.putNumber("auton", 2);
         SmartDashboard.putBoolean("enabled", true);
@@ -79,10 +58,18 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        auton.run();
+//        auton.run();
 
         SmartDashboard.putNumber("auton", 1);
         OI.LEDWrite("AutonPeriodic");
+    }
+
+    @Override
+    public void teleopInit() {
+        SmartDashboard.putNumber("teleop", 0);
+        SmartDashboard.putNumber("auton", 0);
+        SmartDashboard.putBoolean("enabled", true);
+        OI.LEDWrite("TeleopInit");
     }
 
     @Override
@@ -126,4 +113,22 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("teleop", 0);
         SmartDashboard.putNumber("auton", 0);
     }
+
+    @Override
+    public void disabledInit() {
+        drivetrain.shiftLow();
+        Robot.xbox.setVibrate(0, 0);
+
+        SmartDashboard.putNumber("auton", 1);
+        SmartDashboard.putBoolean("enabled", false);
+        OI.LEDWrite("DisabledInit");
+    }
+
+    @Override
+    public void disabledPeriodic() {
+//        auton.init();
+
+        OI.LEDWrite("DisabledPeriodic");
+    }
+
 }

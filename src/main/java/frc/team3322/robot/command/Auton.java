@@ -1,6 +1,7 @@
-package frc.team3322.robot;
+package frc.team3322.robot.command;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3322.robot.Robot;
 
 public class Auton {
     private double startTime = 0,

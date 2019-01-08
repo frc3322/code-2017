@@ -1,4 +1,4 @@
-package frc.team3322.robot;
+package frc.team3322.robot.subsystem;
 
 import java.lang.Math;
 import java.util.ArrayList;
@@ -9,12 +9,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3322.robot.Robot;
+import frc.team3322.robot.RobotMap;
 
 public class Drivetrain {
     private RobotDrive drive;
     private DoubleSolenoid shifter;
     private CANTalon drive_left_1, drive_left_2, drive_right_1, drive_right_2, indenturedServantL, indenturedServantR;
-    Encoder enc_left, enc_right;
+    public Encoder enc_left, enc_right;
 
     private double totalError = 0;
 
@@ -34,11 +36,11 @@ public class Drivetrain {
     private double leftSamples[], rightSamples[];
     public static final double DIAMETER_WHEEL = 0.5;
 
-    Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
+    public Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown) {
         this(lowThreshold, highThreshold, numSamples, cooldown, false, false);
     }
 
-    Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown, boolean left_inv, boolean right_inv) {
+    public Drivetrain(double lowThreshold, double highThreshold, int numSamples, int cooldown, boolean left_inv, boolean right_inv) {
         drive_left_1 = new CANTalon(RobotMap.driveLeft_1);
         drive_left_2 = new CANTalon(RobotMap.driveLeft_2);
         drive_right_1 = new CANTalon(RobotMap.driveRight_1);

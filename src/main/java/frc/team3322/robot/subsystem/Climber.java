@@ -1,13 +1,15 @@
-package frc.team3322.robot;
+package frc.team3322.robot.subsystem;
 
 import com.ctre.CANTalon;
+import frc.team3322.robot.Robot;
+import frc.team3322.robot.RobotMap;
 
 public class Climber {
     CANTalon climb_talon_1, climb_talon_2;
-    ClimbState climbStatus;
+    public ClimbState climbStatus;
 
     // value from 0.00 to 1.00
-    double climbRate = 1.0,
+    public double climbRate = 1.0,
 		    totalCurrent = 0,
             avgCurrent = 0;
     double[] current;
